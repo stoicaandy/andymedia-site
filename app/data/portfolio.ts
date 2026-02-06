@@ -1,85 +1,82 @@
-// app/data/portfolio.ts
+import type { PortfolioItem } from "@/app/components/PortfolioCard";
 
-export type PortfolioCategory = "corporate" | "concert" | "conference" | "wedding";
-
-export type PortfolioMedia =
-  | {
-      type: "image";
-      src: string; // ex: "/portofoliu/demo-photo-1.jpg"
-      alt?: string;
-    }
-  | {
-      type: "video";
-      src: string; // ex: "/portofoliu/demo-video-landscape.mp4"
-      poster?: string; // ex: "/portofoliu/demo-video-landscape-poster.jpg"
-      orientation?: "landscape" | "portrait";
-      alt?: string;
-    };
-
-export type PortfolioItem = {
-  id: string;
-  title: string;
-  category: PortfolioCategory;
-  services: string[];
-  description: string;
-  media: PortfolioMedia;
-};
-
-export const PORTFOLIO: PortfolioItem[] = [
+export const portfolioItems: PortfolioItem[] = [
   {
-    id: "demo-photo-1",
-    title: "Eveniment Corporate – Soluție Audio Completă",
-    category: "corporate",
-    services: ["Sunet", "Lumini"],
-    description:
-      "Sistem audio optimizat pentru claritate și acoperire uniformă într-un spațiu corporate.",
+    slug: "demo-corporate-iasi",
+    title: "Eveniment corporate – Iași",
+    location: "Iași",
+    date: "2025-10",
+    category: "Corporate",
+    summary:
+      "Setup complet pentru prezentare și panel, cu sunet clar, lumină controlată și flux stabil pe tot parcursul evenimentului.",
+    services: [
+      "Sonorizare profesională (d&b audiotechnik)",
+      "Operator mixaj audio / sunetist",
+      "Lumini scenice & ambientale",
+    ],
     media: {
       type: "image",
-      src: "/portofoliu/demo-photo-1.jpg",
-      alt: "Eveniment corporate – soluție audio completă"
-    }
+      src: "/Portofoliu/demo-photo-1.jpg",
+      alt: "Eveniment corporate în Iași – sonorizare și lumini",
+    },
+    tags: ["sonorizare iași", "evenimente corporate", "lumini scenice"],
   },
   {
-    id: "demo-photo-2",
-    title: "Conferință – Setup Tehnic Integrat",
-    category: "conference",
-    services: ["Sunet", "LED", "Scenă"],
-    description:
-      "Configurație tehnică completă pentru conferință, cu focus pe inteligibilitate și flux tehnic stabil.",
+    slug: "demo-wedding-iasi",
+    title: "Nuntă – lumini ambientale & DJ",
+    location: "Iași",
+    date: "2025-09",
+    category: "Nuntă",
+    summary:
+      "Atmosferă elegantă cu lumini ambientale/arhitecturale, plus DJ și coordonare tehnică pentru un flow fără timpi morți.",
+    services: [
+      "DJ (program artistic cu fonograme)",
+      "Lumini ambientale & arhitecturale",
+      "Sonorizare pentru sală",
+    ],
     media: {
       type: "image",
-      src: "/portofoliu/demo-photo-2.jpg",
-      alt: "Conferință – setup tehnic integrat"
-    }
+      src: "/Portofoliu/demo-photo-2.jpg",
+      alt: "Nuntă în Iași – DJ și lumini ambientale",
+    },
+    tags: ["dj nuntă iași", "lumini ambientale", "sonorizare nuntă"],
   },
   {
-    id: "demo-video-1",
-    title: "Concert – Control și Presiune Sonoră",
-    category: "concert",
-    services: ["Sunet"],
-    description:
-      "Optimizare sistem și mix live, cu accent pe headroom, impact și coerență în sală.",
+    slug: "demo-video-landscape",
+    title: "Scenă & producție video – setup demo",
+    location: "Moldova",
+    date: "2025-08",
+    category: "Producție",
+    summary:
+      "Exemplu de integrare video pe eveniment: fișiere media, poster, control și randare fără blocaje.",
+    services: [
+      "Video / broadcast",
+      "Operator grafică vizuală (Resolume Arena)",
+      "Integrare surse media",
+    ],
     media: {
       type: "video",
-      src: "/portofoliu/demo-video-landscape.mp4",
-      poster: "/portofoliu/demo-video-landscape-poster.jpg",
-      orientation: "landscape",
-      alt: "Concert – video demonstrativ"
-    }
+      src: "/Portofoliu/demo-video-landscape.mp4",
+      poster: "/Portofoliu/demo-video-landscape-poster.jpg",
+      alt: "Video demo landscape – portofoliu ANDYmedia",
+    },
+    tags: ["broadcast", "resolume", "ecrane led"],
   },
   {
-    id: "demo-video-2",
-    title: "Behind the Scenes – Configurare Sunet",
-    category: "corporate",
-    services: ["Sunet"],
-    description:
-      "Setup și calibrare sistem audio în condiții reale de producție, pentru rezultate consistente.",
+    slug: "demo-video-portrait",
+    title: "Conținut vertical – demo",
+    location: "Iași",
+    date: "2025-07",
+    category: "Social / Reels",
+    summary:
+      "Video vertical ca exemplu pentru conținut promo, cu poster și încărcare ușoară.",
+    services: ["Producție video", "Editare / export", "Livrare fișiere"],
     media: {
       type: "video",
-      src: "/portofoliu/demo-video-portrait.mp4",
-      poster: "/portofoliu/demo-video-portrait-poster.jpg",
-      orientation: "portrait",
-      alt: "Configurare sunet – video demonstrativ"
-    }
-  }
+      src: "/Portofoliu/demo-video-portrait.mp4",
+      poster: "/Portofoliu/demo-video-portrait-poster.jpeg",
+      alt: "Video demo portrait – portofoliu ANDYmedia",
+    },
+    tags: ["video", "reels", "promo"],
+  },
 ];

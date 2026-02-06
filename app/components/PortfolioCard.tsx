@@ -1,198 +1,98 @@
-// app/components/PortfolioCard.tsx
-
 import Image from "next/image";
-import type { PortfolioItem } from "@/app/data/portfolio";
 
-function categoryLabel(cat: PortfolioItem["category"]) {
-  switch (cat) {
-    case "corporate":
-      return "Corporate";
-    case "concert":
-      return "Spectacol";
-    case "conference":
-      return "Conferință";
-    case "wedding":
-      return "Nuntă";
-    default:
-      return "Proiect";
-  }
-}
+type Media =
+  | { type: "image"; src: string; alt: string }
+  | { type: "video"; src: string; poster?: string; alt: string };
 
-/**
- * Aspect wrappers fără plugin Tailwind aspect-ratio (safe).
- * - landscape: 16:9 => pt-[56.25%]
- * - square: 1:1 => pt-[100%]
- * - portrait: 9:16 => pt-[177.78%]
- */
-function MediaFrame({
-  children,
-  ratioClass
-}: {
-  children: React.ReactNode;
-  ratioClass: string;
-}) {
-  return (
-    <div className={`relative w-full overflow-hidden rounded-2xl ${ratioClass}`}>
-      <div className="absolute inset-0">{children}</div>
-    </div>
-  );
-}
-
-function ServiceChips({ services }: { services: string[] }) {
-  return (
-    <div className="mt-3 flex flex-wrap gap-2">
-      {services.map((s) => (
-        <span
-          key={s}
-          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs tracking-wide text-white/80"
-        >
-          {s}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function ImageMedia({ src, alt }: { src: string; alt: string }) {
-  return (
-    <MediaFrame ratioClass="pt-[100%]">
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 25vw"
-        className="object-cover"
-        priority={false}
-      />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/60 to-transparent" />
-    </MediaFrame>
-  );
-}
-
-function LandscapeVideoMedia({
-  src,
-  poster,
-  alt
-}: {
-  src: string;
-  poster?: string;
-  alt: string;
-}) {
-  return (
-    <MediaFrame ratioClass="pt-[56.25%]">
-      <video
-        className="h-full w-full object-cover"
-        src={src}
-        poster={poster}
-        muted
-        playsInline
-        loop
-        autoPlay
-        preload="metadata"
-        aria-label={alt}
-      />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/60 to-transparent" />
-    </MediaFrame>
-  );
-}
-
-function PortraitVideoMedia({
-  src,
-  poster,
-  alt
-}: {
-  src: string;
-  poster?: string;
-  alt: string;
-}) {
-  return (
-    <MediaFrame ratioClass="pt-[177.78%]">
-      {/* fundal discret: poster blur */}
-      {poster ? (
-        <Image
-          src={poster}
-          alt={alt}
-          fill
-          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 25vw"
-          className="object-cover blur-2xl scale-110 opacity-50"
-          priority={false}
-        />
-      ) : (
-        <div className="absolute inset-0 bg-white/5" />
-      )}
-
-      {/* video centrat, fără stretch */}
-      <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="h-full w-full rounded-xl bg-black/30 p-2">
-          <video
-            className="h-full w-full rounded-lg object-contain"
-            src={src}
-            poster={poster}
-            muted
-            playsInline
-            loop
-            autoPlay
-            preload="metadata"
-            aria-label={alt}
-          />
-        </div>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 to-transparent" />
-    </MediaFrame>
-  );
-}
+export type PortfolioItem = {
+  slug: string;
+  title: string;
+  location?: string;
+  date?: string; // ex: "2025-09"
+  category?: string; // Corporate / Nuntă / Concert etc.
+  summary: string;
+  services: string[];
+  media: Media;
+  tags?: string[];
+};
 
 export default function PortfolioCard({ item }: { item: PortfolioItem }) {
-  const label = categoryLabel(item.category);
-
   return (
-    <article className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm transition hover:bg-white/[0.05]">
-      {/* Media */}
-      <div>
+    <article className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden">
+      {/* MEDIA */}
+      <div className="w-full">
         {item.media.type === "image" ? (
-          <ImageMedia src={item.media.src} alt={item.media.alt ?? item.title} />
-        ) : item.media.orientation === "portrait" ? (
-          <PortraitVideoMedia
+          <Image
             src={item.media.src}
-            poster={item.media.poster}
-            alt={item.media.alt ?? item.title}
+            alt={item.media.alt}
+            width={1600}
+            height={900}
+            className="w-full h-auto object-contain"
+            priority={false}
           />
         ) : (
-          <LandscapeVideoMedia
-            src={item.media.src}
+          <video
+            className="w-full h-auto"
+            controls
+            playsInline
+            preload="metadata"
             poster={item.media.poster}
-            alt={item.media.alt ?? item.title}
-          />
+          >
+            <source src={item.media.src} type="video/mp4" />
+            {item.media.alt}
+          </video>
         )}
       </div>
 
-      {/* Text */}
-      <div className="mt-4">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-base font-semibold leading-snug text-white">
-            {item.title}
-          </h3>
-          <span className="shrink-0 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs tracking-wide text-white/70">
-            {label}
-          </span>
+      {/* CONTENT */}
+      <div className="p-5 md:p-6">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-300">
+          {item.category ? (
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+              {item.category}
+            </span>
+          ) : null}
+          {item.location ? (
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+              {item.location}
+            </span>
+          ) : null}
+          {item.date ? (
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+              {item.date}
+            </span>
+          ) : null}
         </div>
 
-        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/75">
-          {item.description}
-        </p>
+        <h3 className="mt-3 text-lg md:text-xl font-medium">{item.title}</h3>
 
-        <ServiceChips services={item.services} />
-      </div>
+        <p className="mt-2 text-zinc-300 leading-relaxed">{item.summary}</p>
 
-      {/* micro-cta */}
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-xs text-white/50">
-          Livrat cap-coadă • focus pe stabilitate
-        </span>
-        <span className="text-xs text-white/60 transition group-hover:text-white/85">
-          Proiect similar? →
-        </span>
+        {item.services?.length ? (
+          <div className="mt-4">
+            <div className="text-sm font-medium text-white/90">
+              Servicii livrate
+            </div>
+            <ul className="mt-2 space-y-1 text-sm text-zinc-300 list-disc list-inside">
+              {item.services.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {item.tags?.length ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {item.tags.map((t) => (
+              <span
+                key={t}
+                className="text-xs text-zinc-300 rounded-full border border-white/10 bg-white/5 px-2.5 py-1"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
     </article>
   );

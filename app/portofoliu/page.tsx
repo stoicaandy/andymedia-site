@@ -1,55 +1,41 @@
-// app/portofoliu/page.tsx
-
 import type { Metadata } from "next";
+import Link from "next/link";
 import PortfolioGrid from "@/app/components/PortfolioGrid";
-import { PORTFOLIO } from "@/app/data/portfolio";
+import { portfolioItems } from "@/app/data/portfolio";
 
 export const metadata: Metadata = {
-  title: "Portofoliu — ANDYmedia",
+  title: "Portofoliu | ANDYmedia",
   description:
-    "Proiecte livrate cap-coadă: sunet, lumini, LED, scenă, broadcast. Focus pe execuție stabilă și rezultate consistente."
+    "Portofoliu ANDYmedia: evenimente corporate, nunți, spectacole, conferințe. Sonorizare, lumini, LED, DJ, broadcast – Iași și la nivel național.",
 };
 
-export default function PortofoliuPage() {
+export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 pb-20 pt-28">
-      <header className="max-w-3xl">
-        <p className="text-sm text-white/70">
-          Da — aici vezi cum arată munca în teren.
-        </p>
+    <main className="relative min-h-screen text-white">
+      <div className="relative z-10 pt-20 md:pt-24">
+        <section className="mx-auto max-w-6xl px-8 md:px-10 py-16">
+          <h1 className="text-3xl md:text-4xl font-medium">
+            Portofoliu <span className="text-amber-300">.</span>
+          </h1>
+          <p className="mt-4 text-zinc-300 max-w-3xl">
+            Selecție de evenimente livrate de ANDYmedia. Focus pe execuție: sunet,
+            lumini, LED, DJ, broadcast și echipă tehnică.
+          </p>
 
-        <h1 className="mt-3 font-[family-name:var(--font-bebas-neue)] text-4xl tracking-wide text-white sm:text-5xl">
-          Portofoliu
-        </h1>
+          <div className="mt-6">
+            <Link
+              href="/cere-oferta"
+              className="inline-flex items-center gap-2 rounded-md bg-amber-400 px-5 py-3 text-black font-medium hover:bg-amber-300 transition"
+            >
+              Cere ofertă
+            </Link>
+          </div>
+        </section>
 
-        <p className="mt-4 text-base leading-relaxed text-white/75">
-          Câteva exemple demonstrative (foto + video local). Structura e gândită
-          să fie ușor de multiplicat: adaugi item-uri în data și gata.
-        </p>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          <a
-            href="/cere-oferta"
-            className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition hover:bg-white/90"
-          >
-            Cere ofertă
-          </a>
-          <a
-            href="/echipamente"
-            className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-2 text-sm font-semibold text-white/85 transition hover:bg-white/10"
-          >
-            Vezi echipamente
-          </a>
-        </div>
-      </header>
-
-      <PortfolioGrid items={PORTFOLIO} />
-
-      <footer className="mt-10 max-w-3xl text-sm text-white/60">
-        Tip: copiezi obiectele din{" "}
-        <span className="text-white/75">app/data/portfolio.ts</span> ca să extinzi
-        rapid portofoliul.
-      </footer>
+        <section className="mx-auto max-w-6xl px-8 md:px-10 pb-20">
+          <PortfolioGrid items={portfolioItems} />
+        </section>
+      </div>
     </main>
   );
 }
