@@ -16,7 +16,7 @@ export const portfolioItems: PortfolioItem[] = [
     ],
     media: {
       type: "image",
-      src: "/Portofoliu/demo-photo-1.jpg",
+      src: "/portofoliu/demo-photo-1.jpg",
       alt: "Eveniment corporate în Iași – sonorizare și lumini",
     },
     tags: ["sonorizare iași", "evenimente corporate", "lumini scenice"],
@@ -36,7 +36,7 @@ export const portfolioItems: PortfolioItem[] = [
     ],
     media: {
       type: "image",
-      src: "/Portofoliu/demo-photo-2.jpg",
+      src: "/portofoliu/demo-photo-2.jpg",
       alt: "Nuntă în Iași – DJ și lumini ambientale",
     },
     tags: ["dj nuntă iași", "lumini ambientale", "sonorizare nuntă"],
@@ -56,8 +56,8 @@ export const portfolioItems: PortfolioItem[] = [
     ],
     media: {
       type: "video",
-      src: "/Portofoliu/demo-video-landscape.mp4",
-      poster: "/Portofoliu/demo-video-landscape-poster.jpg",
+      src: "/portofoliu/demo-video-landscape.mp4",
+      poster: "/portofoliu/demo-video-landscape-poster.jpg",
       alt: "Video demo landscape – portofoliu ANDYmedia",
     },
     tags: ["broadcast", "resolume", "ecrane led"],
@@ -73,8 +73,8 @@ export const portfolioItems: PortfolioItem[] = [
     services: ["Producție video", "Editare / export", "Livrare fișiere"],
     media: {
       type: "video",
-      src: "/Portofoliu/demo-video-portrait.mp4",
-      poster: "/Portofoliu/demo-video-portrait-poster.jpeg",
+      src: "/portofoliu/demo-video-portrait.mp4",
+      poster: "/portofoliu/demo-video-portrait-poster.jpeg",
       alt: "Video demo portrait – portofoliu ANDYmedia",
     },
     tags: ["video", "reels", "promo"],
