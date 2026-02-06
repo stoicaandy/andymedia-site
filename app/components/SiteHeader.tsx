@@ -58,24 +58,25 @@ export default function SiteHeader() {
 
   return (
     <header className={headerCls}>
-      {/* Header mai generos pe mobil */}
-      <div className="h-24 px-5 md:px-8 flex items-center gap-4">
-        {/* LOGO – mai înalt + mai lat pe mobil */}
-        <Link href="/" className="h-full flex items-center pr-4">
-          <img
-            src="/logo/logo.svg"
-            alt="ANDYmedia"
-            className="
-              h-full
-              w-auto
-              max-w-[220px] md:max-w-none
-              object-contain
-            "
-          />
-        </Link>
+      <div className="h-24 md:h-24 px-4 md:px-8 flex items-center gap-3">
+        {/* LOGO AREA: can shrink, never pushes the right controls out */}
+        <div className="min-w-0 flex-1">
+          <Link href="/" className="h-full flex items-center">
+            <img
+              src="/logo/logo.svg"
+              alt="ANDYmedia"
+              className="
+                h-[72px] md:h-[80px]
+                w-auto
+                max-w-[230px] sm:max-w-[280px] md:max-w-none
+                object-contain
+              "
+            />
+          </Link>
+        </div>
 
-        {/* Desktop nav */}
-        <nav className="ml-auto hidden md:flex items-center gap-3">
+        {/* Desktop */}
+        <nav className="ml-auto hidden md:flex items-center gap-3 shrink-0">
           {NAV.map((x) => (
             <Link key={x.label} href={x.href} className={linkCls(!!x.primary)}>
               {x.label}
@@ -83,8 +84,8 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        {/* Mobile */}
-        <div className="ml-auto flex md:hidden items-center gap-2">
+        {/* Mobile: never shrink/crop */}
+        <div className="ml-auto flex md:hidden items-center gap-2 shrink-0">
           <Link
             href="/cere-oferta"
             className="px-4 py-3 text-xs uppercase tracking-[0.22em] rounded-xl border border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 transition"
