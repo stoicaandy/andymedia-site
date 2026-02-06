@@ -12,7 +12,9 @@ export default function OffersSection({ standalone }: OffersSectionProps) {
   return (
     <section
       id={standalone ? undefined : "oferte"}
-      className={standalone ? "border-b border-white/5" : "scroll-mt-28 border-t border-white/5"}
+      className={
+        standalone ? "border-b border-white/5" : "scroll-mt-28 border-t border-white/5"
+      }
     >
       <div className="mx-auto max-w-6xl px-8 md:px-10 py-12 md:py-14">
         <h2 className="text-xl md:text-2xl font-medium tracking-wide">
@@ -29,7 +31,6 @@ export default function OffersSection({ standalone }: OffersSectionProps) {
               key={offer.id}
               className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]"
             >
-              {/* imagine: fără crop agresiv, păstrează 16:9 și object-contain */}
               <div className="relative aspect-[16/9] w-full bg-black/30">
                 <Image
                   src={offer.image}
@@ -57,7 +58,7 @@ export default function OffersSection({ standalone }: OffersSectionProps) {
                 </p>
 
                 <ul className="mt-4 space-y-2">
-                  {offer.bullets.map((b: string, idx: number) => (
+                  {offer.bullets.map((b, idx) => (
                     <li key={idx} className="flex gap-3 text-sm text-zinc-200/85 leading-snug">
                       <span className="mt-[7px] h-[7px] w-[7px] rounded-full bg-amber-300/80 shrink-0" />
                       <span>{b}</span>

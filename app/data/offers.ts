@@ -1,10 +1,9 @@
 export type OfferItem = {
   id: string; // oferta1, oferta2...
   title: string;
-  description: string; // paragraf scurt
+  description: string;
   bullets: string[];
-  imageSrc: string; // /oferte/oferta1.jpg
-  badge?: string;
+  image: string; // path din /public (ex: "/oferte/oferta1.jpg")
 };
 
 export const offers: OfferItem[] = [
@@ -19,8 +18,7 @@ export const offers: OfferItem[] = [
       "Mixer + procesare audio",
       "Cablaj & accesorii necesare",
     ],
-    imageSrc: "/oferte/oferta1.jpg",
-    badge: "POPULAR",
+    image: "/oferte/oferta1.jpg",
   },
   {
     id: "oferta2",
@@ -33,7 +31,7 @@ export const offers: OfferItem[] = [
       "Monitorizare scenă (opțional)",
       "Înregistrare / livestream (opțional)",
     ],
-    imageSrc: "/oferte/oferta2.jpg",
+    image: "/oferte/oferta2.jpg",
   },
   {
     id: "oferta3",
@@ -46,6 +44,6 @@ export const offers: OfferItem[] = [
       "Setup ring + cablaj",
       "Operator (opțional)",
     ],
-    imageSrc: "/oferte/oferta3.jpg",
+    image: "/oferte/oferta3.jpg",
   },
 ];
