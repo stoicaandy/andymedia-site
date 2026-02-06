@@ -10,7 +10,6 @@ export default function Page() {
   return (
     <main className="relative min-h-screen text-white">
       <div className="relative z-10 pt-20 md:pt-24">
-        {/* Folosim exact aceeași componentă ca pe homepage (stabil, fără JSX duplicat) */}
         <OffersSection standalone />
 
         <footer className="border-t border-white/5">
