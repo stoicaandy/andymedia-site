@@ -9,8 +9,6 @@ const NAV = [
   { href: "/portofoliu", label: "PORTOFOLIU" },
   { href: "/parteneri", label: "PARTENERI" },
   { href: "/echipamente", label: "ECHIPAMENTE" },
-
-  // IMPORTANT: pagina existentă e /cere-oferta (nu /oferta)
   { href: "/cere-oferta", label: "CERE OFERTĂ", primary: true },
 ];
 
@@ -61,16 +59,21 @@ export default function SiteHeader() {
   return (
     <header className={headerCls}>
       <div className="h-20 md:h-24 px-4 md:px-8 flex items-center gap-4">
-        {/* LOGO full height */}
-        <Link href="/" className="h-full flex items-center pr-2">
+        {/* LOGO – enlarged for mobile visibility */}
+        <Link href="/" className="h-full flex items-center pr-3">
           <img
             src="/logo/logo.svg"
             alt="ANDYmedia"
-            className="h-full max-h-[92%] w-auto object-contain"
+            className="
+              h-full
+              max-h-[88%] md:max-h-[92%]
+              w-auto
+              object-contain
+            "
           />
         </Link>
 
-        {/* Desktop */}
+        {/* Desktop nav */}
         <nav className="ml-auto hidden md:flex items-center gap-3">
           {NAV.map((x) => (
             <Link key={x.label} href={x.href} className={linkCls(!!x.primary)}>
@@ -79,10 +82,9 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        {/* Mobile */}
+        {/* Mobile actions */}
         <div className="ml-auto flex md:hidden items-center gap-2">
           <Link
-            // IMPORTANT: /cere-oferta (nu /oferta)
             href="/cere-oferta"
             className="px-4 py-3 text-xs uppercase tracking-[0.22em] rounded-xl border border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 transition"
           >
