@@ -58,18 +58,14 @@ export default function SiteHeader() {
 
   return (
     <header className={headerCls}>
-      <div className="h-20 md:h-24 px-4 md:px-8 flex items-center gap-4">
-        {/* LOGO – enlarged for mobile visibility */}
-        <Link href="/" className="h-full flex items-center pr-3">
+      {/* ⬇️ HEADER HEIGHT MAI MARE PE MOBIL */}
+      <div className="h-24 md:h-24 px-4 md:px-8 flex items-center gap-4">
+        {/* LOGO – FULL HEIGHT */}
+        <Link href="/" className="h-full flex items-center pr-4">
           <img
             src="/logo/logo.svg"
             alt="ANDYmedia"
-            className="
-              h-full
-              max-h-[88%] md:max-h-[92%]
-              w-auto
-              object-contain
-            "
+            className="h-full w-auto object-contain"
           />
         </Link>
 
@@ -82,7 +78,7 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        {/* Mobile actions */}
+        {/* Mobile */}
         <div className="ml-auto flex md:hidden items-center gap-2">
           <Link
             href="/cere-oferta"
