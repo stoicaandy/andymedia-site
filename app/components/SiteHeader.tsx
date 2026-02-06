@@ -58,14 +58,19 @@ export default function SiteHeader() {
 
   return (
     <header className={headerCls}>
-      {/* ⬇️ HEADER HEIGHT MAI MARE PE MOBIL */}
-      <div className="h-24 md:h-24 px-4 md:px-8 flex items-center gap-4">
-        {/* LOGO – FULL HEIGHT */}
+      {/* Header mai generos pe mobil */}
+      <div className="h-24 px-5 md:px-8 flex items-center gap-4">
+        {/* LOGO – mai înalt + mai lat pe mobil */}
         <Link href="/" className="h-full flex items-center pr-4">
           <img
             src="/logo/logo.svg"
             alt="ANDYmedia"
-            className="h-full w-auto object-contain"
+            className="
+              h-full
+              w-auto
+              max-w-[220px] md:max-w-none
+              object-contain
+            "
           />
         </Link>
 
