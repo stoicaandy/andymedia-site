@@ -18,7 +18,6 @@ function cx(...c: Array<string | false | undefined>) {
 
 export default function SiteHeader() {
   const pathname = usePathname();
-
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -48,7 +47,7 @@ export default function SiteHeader() {
 
   const linkCls = (primary?: boolean) =>
     cx(
-      "px-5 py-3 text-xs md:text-sm uppercase tracking-[0.22em]",
+      "px-4 py-2 text-xs uppercase tracking-[0.22em]",
       "border border-white/10 rounded-xl",
       "bg-white/5 hover:bg-white/10 hover:border-amber-300/50 transition",
       primary
@@ -58,25 +57,25 @@ export default function SiteHeader() {
 
   return (
     <header className={headerCls}>
-      <div className="h-24 md:h-24 px-4 md:px-8 flex items-center gap-3">
-        {/* LOGO AREA: can shrink, never pushes the right controls out */}
-        <div className="min-w-0 flex-1">
-          <Link href="/" className="h-full flex items-center">
+      <div className="h-20 lg:h-24 px-4 md:px-6 lg:px-8 flex items-center gap-3">
+        {/* LOGO */}
+        <div className="flex items-center min-w-0">
+          <Link href="/" className="flex items-center">
             <img
               src="/logo/logo.svg"
               alt="ANDYmedia"
               className="
-                h-[72px] md:h-[80px]
+                h-[56px] sm:h-[64px] lg:h-[80px]
                 w-auto
-                max-w-[230px] sm:max-w-[280px] md:max-w-none
+                max-w-[200px] sm:max-w-[220px] lg:max-w-none
                 object-contain
               "
             />
           </Link>
         </div>
 
-        {/* Desktop */}
-        <nav className="ml-auto hidden md:flex items-center gap-3 shrink-0">
+        {/* DESKTOP NAV — doar pe lg+ */}
+        <nav className="ml-auto hidden lg:flex items-center gap-3">
           {NAV.map((x) => (
             <Link key={x.label} href={x.href} className={linkCls(!!x.primary)}>
               {x.label}
@@ -84,11 +83,11 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        {/* Mobile: never shrink/crop */}
-        <div className="ml-auto flex md:hidden items-center gap-2 shrink-0">
+        {/* MOBILE / TABLET */}
+        <div className="ml-auto flex lg:hidden items-center gap-2">
           <Link
             href="/cere-oferta"
-            className="px-4 py-3 text-xs uppercase tracking-[0.22em] rounded-xl border border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 transition"
+            className="px-4 py-2 text-xs uppercase tracking-[0.22em] rounded-xl border border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 transition"
           >
             Ofertă
           </Link>
@@ -98,7 +97,7 @@ export default function SiteHeader() {
             aria-label="Deschide meniul"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="w-11 h-11 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-white"
+            className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-white"
           >
             <span className="text-xl leading-none">{open ? "×" : "≡"}</span>
           </button>
@@ -106,7 +105,7 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-white/10 bg-black/80 backdrop-blur-xl">
+        <div className="lg:hidden border-t border-white/10 bg-black/80 backdrop-blur-xl">
           <div className="px-4 py-3 flex flex-col gap-2">
             {NAV.map((x) => (
               <Link
