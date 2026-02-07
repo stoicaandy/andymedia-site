@@ -6,4 +6,4 @@ export const GEAR_IMAGE_EXTS = ["jpg", "jpeg", "png", "webp"] as const;
 export const GEAR_IMAGE_MAX = 120;
 
 // dacă lipsesc N poze la rând, se oprește scanarea (ca să nu caute până la MAX inutil)
-export const GEAR_IMAGE_STOP_AFTER_MISSES = 8;
+export const GEAR_IMAGE_STOP_AFTER_MISSES = 40;

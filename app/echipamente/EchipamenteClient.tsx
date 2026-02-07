@@ -11,19 +11,19 @@ function buildSrc(nr: number, ext: string) {
   return `${GEAR_IMAGE_DIR}/${nr}.${ext}`;
 }
 
-async function exists(src: string) {
-  return await new Promise<boolean>((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-    img.src = src;
-  });
+async function headExists(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { method: "HEAD", cache: "no-store" });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 export default function EchipamenteClient() {
   const [images, setImages] = useState<ImgItem[]>([]);
 
-  // Scanează doar echipamentele din tabel (nu 1..MAX)
+  // Scanează doar echipamentele din tabel (predictibil, fără oprire pe "găuri")
   useEffect(() => {
     let cancelled = false;
 
@@ -35,7 +35,7 @@ export default function EchipamenteClient() {
 
         for (const ext of GEAR_IMAGE_EXTS) {
           const src = buildSrc(row.nr, ext);
-          if (await exists(src)) {
+          if (await headExists(src)) {
             okSrc = src;
             break;
           }
@@ -88,18 +88,12 @@ export default function EchipamenteClient() {
               <table className="w-full text-sm">
                 <thead className="bg-white/5 text-zinc-200">
                   <tr>
-                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">
-                      #
-                    </th>
-                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">
-                      Denumire
-                    </th>
+                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">#</th>
+                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">Denumire</th>
                     <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs hidden md:table-cell">
                       Descriere
                     </th>
-                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">
-                      Stoc
-                    </th>
+                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">Stoc</th>
                     <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs hidden md:table-cell">
                       Mențiuni
                     </th>
@@ -141,13 +135,9 @@ export default function EchipamenteClient() {
                           <div className="mt-1 text-xs text-zinc-400 md:hidden">{it.notes}</div>
                         </td>
 
-                        <td className="px-5 py-4 text-zinc-300 hidden md:table-cell">
-                          {it.description}
-                        </td>
+                        <td className="px-5 py-4 text-zinc-300 hidden md:table-cell">{it.description}</td>
                         <td className="px-5 py-4 text-zinc-300">{it.stock}</td>
-                        <td className="px-5 py-4 text-zinc-300 hidden md:table-cell">
-                          {it.notes}
-                        </td>
+                        <td className="px-5 py-4 text-zinc-300 hidden md:table-cell">{it.notes}</td>
                       </tr>
                     );
                   })}
@@ -162,8 +152,7 @@ export default function EchipamenteClient() {
               </h2>
               <p className="mt-3 text-zinc-300/90">
                 Încarci poze în <span className="text-white">public/gear/</span> ca{" "}
-                <span className="text-white">1.jpg</span>,{" "}
-                <span className="text-white">2.jpg</span>… Apar automat.
+                <span className="text-white">1.jpg</span>, <span className="text-white">2.jpg</span>… Apar automat.
               </p>
 
               <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -210,8 +199,7 @@ export default function EchipamenteClient() {
 
                 {images.length === 0 && (
                   <div className="rounded-3xl border border-white/10 bg-black/35 p-8 text-zinc-300">
-                    Nu am găsit încă poze în{" "}
-                    <span className="text-white">public/gear/</span>.
+                    Nu am găsit încă poze în <span className="text-white">public/gear/</span>.
                   </div>
                 )}
               </div>
