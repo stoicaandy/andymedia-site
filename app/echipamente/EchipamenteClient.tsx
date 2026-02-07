@@ -3,12 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { GEAR_TABLE } from "../data/gear-table";
-import {
-  GEAR_IMAGE_DIR,
-  GEAR_IMAGE_EXTS,
-  GEAR_IMAGE_MAX,
-  GEAR_IMAGE_STOP_AFTER_MISSES,
-} from "../data/gear-images";
+import { GEAR_IMAGE_DIR, GEAR_IMAGE_EXTS } from "../data/gear-images";
 
 type ImgItem = { nr: number; src: string };
 
@@ -16,42 +11,37 @@ function buildSrc(nr: number, ext: string) {
   return `${GEAR_IMAGE_DIR}/${nr}.${ext}`;
 }
 
+async function exists(src: string) {
+  return await new Promise<boolean>((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = src;
+  });
+}
+
 export default function EchipamenteClient() {
   const [images, setImages] = useState<ImgItem[]>([]);
 
-  // Scanează automat pozele existente: 1.jpg, 2.jpg...
+  // Scanează doar echipamentele din tabel (nu 1..MAX)
   useEffect(() => {
     let cancelled = false;
 
     const run = async () => {
       const found: ImgItem[] = [];
-      let missesInRow = 0;
 
-      for (let nr = 1; nr <= GEAR_IMAGE_MAX; nr++) {
-        if (missesInRow >= GEAR_IMAGE_STOP_AFTER_MISSES) break;
-
+      for (const row of GEAR_TABLE) {
         let okSrc: string | null = null;
 
         for (const ext of GEAR_IMAGE_EXTS) {
-          const src = buildSrc(nr, ext);
-          const ok = await new Promise<boolean>((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = src;
-          });
-          if (ok) {
+          const src = buildSrc(row.nr, ext);
+          if (await exists(src)) {
             okSrc = src;
             break;
           }
         }
 
-        if (okSrc) {
-          found.push({ nr, src: okSrc });
-          missesInRow = 0;
-        } else {
-          missesInRow++;
-        }
+        if (okSrc) found.push({ nr: row.nr, src: okSrc });
       }
 
       if (!cancelled) setImages(found);
@@ -98,12 +88,18 @@ export default function EchipamenteClient() {
               <table className="w-full text-sm">
                 <thead className="bg-white/5 text-zinc-200">
                   <tr>
-                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">#</th>
-                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">Denumire</th>
+                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">
+                      #
+                    </th>
+                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">
+                      Denumire
+                    </th>
                     <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs hidden md:table-cell">
                       Descriere
                     </th>
-                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">Stoc</th>
+                    <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs">
+                      Stoc
+                    </th>
                     <th className="text-left px-5 py-4 uppercase tracking-[0.18em] text-xs hidden md:table-cell">
                       Mențiuni
                     </th>
@@ -167,8 +163,7 @@ export default function EchipamenteClient() {
               <p className="mt-3 text-zinc-300/90">
                 Încarci poze în <span className="text-white">public/gear/</span> ca{" "}
                 <span className="text-white">1.jpg</span>,{" "}
-                <span className="text-white">2.jpg</span>…
-                Apar automat.
+                <span className="text-white">2.jpg</span>… Apar automat.
               </p>
 
               <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -208,30 +203,6 @@ export default function EchipamenteClient() {
                         ) : (
                           <div className="mt-1 text-sm text-zinc-300">Detalii în curând</div>
                         )}
-
-                        <div className="mt-4 flex gap-3">
-                          <a
-                            href="#top"
-                            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.22em] hover:border-amber-300/50 hover:bg-white/10 transition"
-                          >
-                            Sus
-                          </a>
-
-                          {row && (
-                            <a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                document
-                                  .querySelector("table")
-                                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                              }}
-                              className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-xs uppercase tracking-[0.22em] hover:bg-amber-300/20 transition"
-                            >
-                              Tabel
-                            </a>
-                          )}
-                        </div>
                       </div>
                     </article>
                   );
