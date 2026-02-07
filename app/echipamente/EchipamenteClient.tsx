@@ -23,13 +23,13 @@ async function headExists(url: string): Promise<boolean> {
 export default function EchipamenteClient() {
   const [images, setImages] = useState<ImgItem[]>([]);
 
-  // Scanează doar echipamentele din tabel (predictibil, fără oprire pe "găuri")
   useEffect(() => {
     let cancelled = false;
 
     const run = async () => {
       const found: ImgItem[] = [];
 
+      // scanează doar echipamentele din tabel (fără "găuri" 10..29 etc.)
       for (const row of GEAR_TABLE) {
         let okSrc: string | null = null;
 
@@ -172,11 +172,9 @@ export default function EchipamenteClient() {
                           className="w-full h-auto block"
                           loading="lazy"
                         />
-
                         <div className="absolute top-4 left-4 rounded-xl border border-white/15 bg-black/45 px-3 py-2 text-xs tracking-[0.22em] uppercase text-zinc-200">
                           #{img.nr}
                         </div>
-
                         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                       </div>
 
