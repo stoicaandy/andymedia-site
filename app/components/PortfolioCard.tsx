@@ -1,16 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { PortfolioItem } from "@/app/data/portfolio";
 
 type Props = {
   item: PortfolioItem;
-  priority?: boolean;
+  priority?: boolean; // primele 2 carduri
 };
-
-// ✅ Sticky cache across re-mounts (super important)
-const ACTIVATED = new Set<string>();
 
 function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
   document.querySelectorAll('video[data-portfolio-video="1"]').forEach((v) => {
@@ -45,70 +42,6 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     [photos, item.title]
   );
 
-  const rootRef = useRef<HTMLElement | null>(null);
-
-  // ✅ init from cache so it does NOT "load again" when you scroll / remount
-  const [activated, setActivated] = useState(() => priority || ACTIVATED.has(item.slug));
-
-  // ✅ video orientation auto-detect
-  const [isPortraitVideo, setIsPortraitVideo] = useState(false);
-
-  useEffect(() => {
-    if (activated) {
-      ACTIVATED.add(item.slug);
-      return;
-    }
-
-    const el = rootRef.current;
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const e = entries[0];
-        if (!e) return;
-        if (e.isIntersecting) {
-          ACTIVATED.add(item.slug);
-          setActivated(true);
-          obs.disconnect();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "900px 0px", // load ahead of view
-        threshold: 0.01,
-      }
-    );
-
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [activated, item.slug]);
-
-  // Pause video when out of view (only after activated)
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  useEffect(() => {
-    if (!activated) return;
-
-    const v = videoRef.current;
-    const root = rootRef.current;
-    if (!v || !root) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const e = entries[0];
-        if (!e) return;
-        if (e.intersectionRatio < 0.35) {
-          try {
-            v.pause();
-          } catch {}
-        }
-      },
-      { threshold: [0, 0.15, 0.35, 0.6, 1] }
-    );
-
-    obs.observe(root);
-    return () => obs.disconnect();
-  }, [activated]);
-
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -117,9 +50,12 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     setLightboxOpen(true);
   };
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPortraitVideo, setIsPortraitVideo] = useState(false);
+
   const THUMBS_MAX = 6;
   const thumbs = useMemo(() => {
-    const arr = photos.slice(1); // thumbs from 2..N
+    const arr = photos.slice(1);
     const shown = arr.slice(0, THUMBS_MAX);
     const remaining = arr.length - shown.length;
     return { shown, remaining };
@@ -128,23 +64,18 @@ export default function PortfolioCard({ item, priority = false }: Props) {
   return (
     <>
       <article
-        ref={rootRef as any}
         className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:p-5 backdrop-blur-sm"
+        style={{
+          // ✅ super eficient pentru liste lungi (nu “reîncarcă”, doar reduce costul de paint)
+          contentVisibility: "auto",
+          containIntrinsicSize: "900px",
+        }}
       >
         {/* MAIN MEDIA */}
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
           <div className="relative w-full pt-[56.25%]">
             <div className="absolute inset-0">
-              {/* BEFORE activation: only poster/cover (fast, stable) */}
-              {!activated ? (
-                <img
-                  src={posterSrc}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
-                  loading={priority ? "eager" : "lazy"}
-                  decoding="async"
-                />
-              ) : item.media.hasVideo ? (
+              {item.media.hasVideo ? (
                 <video
                   ref={videoRef}
                   data-portfolio-video="1"
@@ -152,19 +83,21 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   poster={posterSrc}
                   controls
                   playsInline
-                  preload="metadata"
+                  // ✅ doar primele carduri pregătesc metadata
+                  preload={priority ? "metadata" : "none"}
                   className={[
                     "h-full w-full",
-                    // ✅ portrait = contain (no crop), landscape = cover
+                    // ✅ portrait = contain (fără crop)
                     isPortraitVideo ? "object-contain bg-black" : "object-cover",
                   ].join(" ")}
                   onLoadedMetadata={(e) => {
                     const v = e.currentTarget;
-                    // auto detect portrait vs landscape
-                    const portrait = v.videoHeight > v.videoWidth;
-                    setIsPortraitVideo(portrait);
+                    setIsPortraitVideo(v.videoHeight > v.videoWidth);
                   }}
                   onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
+                  onTimeUpdate={() => {
+                    // nothing
+                  }}
                 />
               ) : (
                 <img
@@ -190,7 +123,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
           </div>
         </div>
 
-        {/* THUMBS — layout ALWAYS present; content appears after activation */}
+        {/* THUMBS — mereu acolo, lazy, fără pop-in “logic” */}
         {photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
             {thumbs.shown.map((src, i) => {
@@ -203,17 +136,13 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
                   aria-label="Deschide poza"
                 >
-                  {activated ? (
-                    <img
-                      src={src}
-                      alt=""
-                      className="h-full w-full object-cover opacity-95"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-white/5" />
-                  )}
+                  <img
+                    src={src}
+                    alt=""
+                    className="h-full w-full object-cover opacity-95"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </button>
               );
             })}
