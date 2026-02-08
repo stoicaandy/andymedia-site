@@ -133,11 +133,26 @@ export default function PhotoLightbox({
 
   const stop = (e: any) => e.stopPropagation();
 
+  const safeSetPointerCapture = (el: HTMLElement, pointerId: number) => {
+    // iOS Safari can throw on multi-touch / cancel; safest is:
+    // - use capture only for mouse
+    try {
+      el.setPointerCapture(pointerId);
+    } catch {}
+  };
+
   // === gestures on image box only ===
   const onBoxPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
 
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    const target = e.currentTarget as HTMLElement;
+
+    // ✅ IMPORTANT: on iOS, pointer capture can be unstable for touch pinch.
+    // Use it only for mouse (desktop drag) – it’s not needed for touch.
+    if (e.pointerType === "mouse") {
+      safeSetPointerCapture(target, e.pointerId);
+    }
+
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     // double-tap only for touch/pen
@@ -193,7 +208,8 @@ export default function PhotoLightbox({
       const dy = pts[1].y - pts[0].y;
       const dist = Math.hypot(dx, dy);
 
-      const factor = dist / (pinch.current.dist || dist);
+      const baseDist = pinch.current.dist || dist;
+      const factor = dist / baseDist;
       const nextScale = clamp(pinch.current.scale * factor, 1, 4);
 
       const midX = (pts[0].x + pts[1].x) / 2;
@@ -206,10 +222,12 @@ export default function PhotoLightbox({
         setTy((prev) => clamp(prev + (midY - pinch.current!.midY), -2400, 2400));
       }
 
+      // update baseline for smooth continuous pinch
       pinch.current.dist = dist;
       pinch.current.scale = nextScale;
       pinch.current.midX = midX;
       pinch.current.midY = midY;
+
       return;
     }
 
@@ -224,7 +242,6 @@ export default function PhotoLightbox({
         }
       }
 
-      // no visual drag; decide on release
       return;
     }
 
@@ -251,17 +268,15 @@ export default function PhotoLightbox({
 
       const isTouchLike = swipeBase.current.pointerType !== "mouse";
 
-      // thresholds
       const fast = dt < 320;
       const farH = absDx > 80;
       const farV = absDy > 90;
 
-      // ✅ MOBILE/TABLET: swipe up/down closes
-      // only for touch/pen so desktop wheel scroll isn't treated as close
+      // vertical close (touch/pen only)
       if (isTouchLike && swipeLock.current === "v" && (farV || (fast && absDy > 60))) {
         onClose();
       }
-      // ✅ horizontal: next/prev
+      // horizontal nav
       else if (canNav && swipeLock.current === "h" && (farH || (fast && absDx > 50))) {
         if (dx < 0) nextImage();
         else prevImage();
