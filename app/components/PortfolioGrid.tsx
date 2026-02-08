@@ -1,14 +1,11 @@
-import PortfolioCard, { PortfolioItem } from "./PortfolioCard";
+import PortfolioCard from "./PortfolioCard";
+import type { PortfolioItem } from "@/app/data/portfolio";
 
-export default function PortfolioGrid({
-  items,
-}: {
-  items: PortfolioItem[];
-}) {
+export default function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
   return (
-    <div className="grid gap-6 md:gap-8 md:grid-cols-2">
-      {items.map((item) => (
-        <PortfolioCard key={item.slug} item={item} />
+    <div className="grid gap-6 md:gap-7 md:grid-cols-2">
+      {items.map((it) => (
+        <PortfolioCard key={it.slug} item={it} />
       ))}
     </div>
   );

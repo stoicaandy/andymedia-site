@@ -1,82 +1,89 @@
-import type { PortfolioItem } from "@/app/components/PortfolioCard";
+export type PortfolioMediaAuto = {
+  folder: string;        // ex: "portf1"
+  photosCount: number;   // ex: 4 => 1.jpg..4.jpg
+  hasVideo?: boolean;    // dacă există video.mp4 în folder
+  poster?: boolean;      // dacă există poster.jpg în folder (pentru video)
+};
+
+export type PortfolioItem = {
+  slug: string;
+  title: string;
+  location: string;
+  date: string;      // ex: "2025-10"
+  category: string;  // ex: "Corporate"
+  summary: string;
+  services: string[];
+  tags: string[];
+  media: PortfolioMediaAuto;
+};
 
 export const portfolioItems: PortfolioItem[] = [
   {
-    slug: "demo-corporate-iasi",
-    title: "Eveniment corporate – Iași",
-    location: "Iași",
-    date: "2025-10",
-    category: "Corporate",
-    summary:
-      "Setup complet pentru prezentare și panel, cu sunet clar, lumină controlată și flux stabil pe tot parcursul evenimentului.",
-    services: [
-      "Sonorizare profesională (d&b audiotechnik)",
-      "Operator mixaj audio / sunetist",
-      "Lumini scenice & ambientale",
-    ],
-    media: {
-      type: "image",
-      src: "/portofoliu/demo-photo-1.jpg",
-      alt: "Eveniment corporate în Iași – sonorizare și lumini",
-    },
-    tags: ["sonorizare iași", "evenimente corporate", "lumini scenice"],
-  },
-  {
-    slug: "demo-wedding-iasi",
-    title: "Nuntă – lumini ambientale & DJ",
+    slug: "portf1-eveniment-x",
+    title: "Balul Vietii – Andra Maruta , SoundCheck Band",
     location: "Iași",
     date: "2025-09",
-    category: "Nuntă",
+    category: "Corporate",
     summary:
-      "Atmosferă elegantă cu lumini ambientale/arhitecturale, plus DJ și coordonare tehnică pentru un flow fără timpi morți.",
-    services: [
-      "DJ (program artistic cu fonograme)",
-      "Lumini ambientale & arhitecturale",
-      "Sonorizare pentru sală",
-    ],
+      "Colaborare impecabila, montaj rapid, control complet în sală. Execuție stabilă, fără improvizații.",
+    services: ["Instalatie PA", "Lumini Scena", "Ecrane LED"],
+    tags: ["sonorizare iași", "corporate", "lumini"],
     media: {
-      type: "image",
-      src: "/portofoliu/demo-photo-2.jpg",
-      alt: "Nuntă în Iași – DJ și lumini ambientale",
+      folder: "portf1",
+      photosCount: 3,
+      hasVideo: true,
+      poster: false, // pune true dacă ai /portofoliu/portf1/poster.jpg
     },
-    tags: ["dj nuntă iași", "lumini ambientale", "sonorizare nuntă"],
   },
   {
-    slug: "demo-video-landscape",
-    title: "Scenă & producție video – setup demo",
-    location: "Moldova",
+    slug: "portf2-eveniment-x",
+    title: "Concert De Craciun – Pepe , Mioara Velicu , Mirela Vaida",
+    location: "Ion Neculce",
     date: "2025-08",
     category: "Producție",
     summary:
-      "Exemplu de integrare video pe eveniment: fișiere media, poster, control și randare fără blocaje.",
-    services: [
-      "Video / broadcast",
-      "Operator grafică vizuală (Resolume Arena)",
-      "Integrare surse media",
-    ],
+      "O colaborare impecabila cu partenerii nostri Prestige. Multumim Bogdan Ivan!",
+    services: ["Instalatie PA", "Lumini& Ecrane LED", "Scena - Regie" ],
+    tags: ["broadcast", "led", "workflow"],
     media: {
-      type: "video",
-      src: "/portofoliu/demo-video-landscape.mp4",
-      poster: "/portofoliu/demo-video-landscape-poster.jpg",
-      alt: "Video demo landscape – portofoliu ANDYmedia",
+      folder: "portf2",
+      photosCount: 5,
+      hasVideo: true,
+      poster: false,
     },
-    tags: ["broadcast", "resolume", "ecrane led"],
   },
   {
-    slug: "demo-video-portrait",
-    title: "Conținut vertical – demo",
+    slug: "portf3-eveniment-x",
+    title: "Zilele Tomesti – Voltaj , Ionut Gallani",
     location: "Iași",
     date: "2025-07",
-    category: "Social / Reels",
+    category: "Nuntă",
     summary:
-      "Video vertical ca exemplu pentru conținut promo, cu poster și încărcare ușoară.",
-    services: ["Producție video", "Editare / export", "Livrare fișiere"],
+      "O colaborare impecabila cu partenerii nostri Prestige. Multumim Bogdan Ivan!",
+    services: ["Regie Sunet"],
+    tags: ["nuntă", "lumini", "sunet"],
     media: {
-      type: "video",
-      src: "/portofoliu/demo-video-portrait.mp4",
-      poster: "/portofoliu/demo-video-portrait-poster.jpeg",
-      alt: "Video demo portrait – portofoliu ANDYmedia",
+      folder: "portf3",
+      photosCount: 5,
+      hasVideo: true,
+      poster: false,
     },
-    tags: ["video", "reels", "promo"],
+  },
+  {
+    slug: "portf4-eveniment-x",
+    title: "GALA K1 – Competitie Sportiva",
+    location: "Iași",
+    date: "2025-07",
+    category: "Nuntă",
+    summary:
+      "O colaborare impecabila cu partenerii nostri Sincroline. ",
+    services: ["Regie Sunet"],
+    tags: ["Instalatie PA", "Lumini & Ecrane LED", "Scena - Regie"],
+    media: {
+      folder: "portf4",
+      photosCount: 5,
+      hasVideo: true,
+      poster: false,
+    },
   },
 ];
