@@ -8,11 +8,11 @@ type Props = {
   open: boolean;
   onClose: () => void;
 
-  // backward compatible (single image)
+  // compat: single image
   src?: string;
   alt?: string;
 
-  // new: gallery support
+  // gallery mode
   images?: LightboxImage[];
   startIndex?: number;
 };
@@ -20,7 +20,6 @@ type Props = {
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
-
 function clampIndex(i: number, len: number) {
   if (len <= 0) return 0;
   return Math.max(0, Math.min(len - 1, i));
@@ -36,7 +35,6 @@ export default function PhotoLightbox({
 }: Props) {
   const boxRef = useRef<HTMLDivElement | null>(null);
 
-  // gallery
   const gallery: LightboxImage[] = useMemo(() => {
     if (images && images.length) return images;
     if (src) return [{ src, alt }];
@@ -50,16 +48,16 @@ export default function PhotoLightbox({
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
 
-  // pointer maps for pinch/pan on IMAGE BOX only
+  // gesture refs (ONLY on box)
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
-  // swipe for gallery (only when NOT zoomed)
+  // swipe nav (only when not zoomed)
   const swipeBase = useRef<{ x: number; y: number; t: number } | null>(null);
   const swipeLock = useRef<"none" | "h" | "v">("none");
 
-  // double-tap (touch/pen only)
+  // double-tap (touch/pen)
   const lastTap = useRef<number>(0);
 
   const current = gallery[index];
@@ -108,16 +106,10 @@ export default function PhotoLightbox({
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
-      pointers.current.clear();
-      pinch.current = null;
-      panBase.current = null;
-      swipeBase.current = null;
-      swipeLock.current = "none";
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onClose, startIndex, gallery.length]);
 
-  // recenter when returning to 1x
   useEffect(() => {
     if (scale <= 1.001) {
       setTx(0);
@@ -134,16 +126,22 @@ export default function PhotoLightbox({
     else setScale(1);
   };
 
-  // ✅ Close ONLY when clicking the backdrop itself
-  const onBackdropClick = (e: React.MouseEvent) => {
+  // ✅ Close ONLY when clicking backdrop itself
+  // (and we ensure the centering wrapper does NOT capture pointer events)
+  const onBackdropMouseDown = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) onClose();
   };
 
-  // === Pointer handlers attached ONLY to the image box ===
+  const stop = (e: any) => e.stopPropagation();
+
+  // === gestures on image box only ===
   const onBoxPointerDown = (e: React.PointerEvent) => {
+    e.stopPropagation();
+
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
+    // double-tap only for touch/pen
     if (e.pointerType !== "mouse") {
       const now = Date.now();
       if (now - lastTap.current < 280) {
@@ -183,6 +181,8 @@ export default function PhotoLightbox({
   };
 
   const onBoxPointerMove = (e: React.PointerEvent) => {
+    e.stopPropagation();
+
     if (!pointers.current.has(e.pointerId)) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -213,7 +213,7 @@ export default function PhotoLightbox({
       return;
     }
 
-    // swipe (only when not zoomed)
+    // swipe nav (only when not zoomed)
     if (pointers.current.size === 1 && scale <= 1.001 && swipeBase.current && canNav) {
       const dx = e.clientX - swipeBase.current.x;
       const dy = e.clientY - swipeBase.current.y;
@@ -224,11 +224,10 @@ export default function PhotoLightbox({
         }
       }
 
-      // no visual drag; decide on release
       if (swipeLock.current === "h") return;
     }
 
-    // pan (only when zoomed)
+    // pan when zoomed
     if (pointers.current.size === 1 && panBase.current && scale > 1.001) {
       const dx = e.clientX - panBase.current.x;
       const dy = e.clientY - panBase.current.y;
@@ -238,6 +237,8 @@ export default function PhotoLightbox({
   };
 
   const onBoxPointerUp = (e: React.PointerEvent) => {
+    e.stopPropagation();
+
     // swipe finish
     if (scale <= 1.001 && swipeBase.current && canNav && pointers.current.size === 1) {
       const dx = e.clientX - swipeBase.current.x;
@@ -268,18 +269,18 @@ export default function PhotoLightbox({
       className="fixed inset-0 z-[200] bg-black/20"
       role="dialog"
       aria-modal="true"
-      onClick={onBackdropClick}
-      // IMPORTANT: do NOT put pointer handlers here
-      style={{ touchAction: "auto" }}
+      onMouseDown={onBackdropMouseDown}
     >
       {/* Close */}
       <button
         type="button"
+        onMouseDown={stop}
+        onPointerDown={stop}
         onClick={(e) => {
           e.stopPropagation();
           onClose();
         }}
-        className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
+        className="pointer-events-auto z-20 absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
       >
         Închide ✕
       </button>
@@ -289,11 +290,13 @@ export default function PhotoLightbox({
         <>
           <button
             type="button"
+            onMouseDown={stop}
+            onPointerDown={stop}
             onClick={(e) => {
               e.stopPropagation();
               prevImage();
             }}
-            className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
+            className="pointer-events-auto z-20 hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
             aria-label="Imaginea anterioară"
           >
             ←
@@ -301,11 +304,13 @@ export default function PhotoLightbox({
 
           <button
             type="button"
+            onMouseDown={stop}
+            onPointerDown={stop}
             onClick={(e) => {
               e.stopPropagation();
               nextImage();
             }}
-            className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
+            className="pointer-events-auto z-20 hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
             aria-label="Imaginea următoare"
           >
             →
@@ -315,25 +320,26 @@ export default function PhotoLightbox({
 
       {/* Counter */}
       {canNav && (
-        <div className="pointer-events-none absolute left-4 top-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white/85">
+        <div className="pointer-events-none z-20 absolute left-4 top-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white/85">
           {index + 1} / {gallery.length}
         </div>
       )}
 
-      {/* Centered image box */}
-      <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
+      {/* IMPORTANT:
+          Wrapper must NOT capture pointer events, otherwise backdrop-close never triggers.
+      */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-6">
+        {/* Image box must capture gestures */}
         <div
           ref={boxRef}
-          className="relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
-          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-auto relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
+          onMouseDown={stop}
+          onClick={stop}
           onPointerDown={onBoxPointerDown}
           onPointerMove={onBoxPointerMove}
           onPointerUp={onBoxPointerUp}
           onPointerCancel={onBoxPointerUp}
-          style={{
-            // gestures ONLY inside the box
-            touchAction: "none",
-          }}
+          style={{ touchAction: "none" }}
           onDoubleClick={(e) => {
             e.stopPropagation();
             toggleZoom();
@@ -359,11 +365,11 @@ export default function PhotoLightbox({
       <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
         {canNav ? (
           <>
-            Swipe stânga/dreapta • ←/→ pe PC • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Tap în afara pozei pentru închidere
+            Swipe stânga/dreapta • ←/→ pe PC • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Click în afara pozei pentru închidere
           </>
         ) : (
           <>
-            Pinch zoom • Dublu-tap / dublu-click pentru 2× • Tap în afara pozei pentru închidere
+            Pinch zoom • Dublu-tap / dublu-click pentru 2× • Click în afara pozei pentru închidere
           </>
         )}
       </div>
