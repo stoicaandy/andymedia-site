@@ -21,6 +21,11 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
+function clampIndex(i: number, len: number) {
+  if (len <= 0) return 0;
+  return Math.max(0, Math.min(len - 1, i));
+}
+
 export default function PhotoLightbox({
   open,
   onClose,
@@ -38,26 +43,27 @@ export default function PhotoLightbox({
     return [];
   }, [images, src, alt]);
 
-  const [index, setIndex] = useState(() => clamp(startIndex, 0, Math.max(0, gallery.length - 1)));
+  const [index, setIndex] = useState(() => clampIndex(startIndex, gallery.length));
 
-  // zoom/pan state
+  // zoom/pan
   const [scale, setScale] = useState(1);
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
 
-  // pointer handling
+  // pointer maps for pinch/pan on IMAGE BOX only
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
-  // swipe (gallery) handling — only when not zoomed
+  // swipe for gallery (only when NOT zoomed)
   const swipeBase = useRef<{ x: number; y: number; t: number } | null>(null);
   const swipeLock = useRef<"none" | "h" | "v">("none");
 
-  // double-tap support (mobile)
+  // double-tap (touch/pen only)
   const lastTap = useRef<number>(0);
 
   const current = gallery[index];
+  const canNav = gallery.length > 1;
 
   const resetView = () => {
     setScale(1);
@@ -71,10 +77,22 @@ export default function PhotoLightbox({
     lastTap.current = 0;
   };
 
+  const prevImage = () => {
+    if (!canNav) return;
+    setIndex((i) => (i - 1 + gallery.length) % gallery.length);
+    resetView();
+  };
+
+  const nextImage = () => {
+    if (!canNav) return;
+    setIndex((i) => (i + 1) % gallery.length);
+    resetView();
+  };
+
   useEffect(() => {
     if (!open) return;
 
-    const prev = document.body.style.overflow;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     const onKey = (e: KeyboardEvent) => {
@@ -84,13 +102,11 @@ export default function PhotoLightbox({
     };
     window.addEventListener("keydown", onKey);
 
-    // when opened, ensure index is valid + reset
-    const safe = clamp(startIndex, 0, Math.max(0, gallery.length - 1));
-    setIndex(safe);
+    setIndex(clampIndex(startIndex, gallery.length));
     resetView();
 
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
       pointers.current.clear();
       pinch.current = null;
@@ -101,7 +117,7 @@ export default function PhotoLightbox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onClose, startIndex, gallery.length]);
 
-  // if user returns to 1x, recenter
+  // recenter when returning to 1x
   useEffect(() => {
     if (scale <= 1.001) {
       setTx(0);
@@ -111,46 +127,23 @@ export default function PhotoLightbox({
 
   const transform = useMemo(() => `translate(${tx}px, ${ty}px) scale(${scale})`, [tx, ty, scale]);
 
-  if (!open) return null;
-  if (!current) return null;
-
-  const canNav = gallery.length > 1;
-
-  const prevImage = () => {
-    if (!canNav) return;
-    setIndex((i) => {
-      const next = (i - 1 + gallery.length) % gallery.length;
-      return next;
-    });
-    resetView();
-  };
-
-  const nextImage = () => {
-    if (!canNav) return;
-    setIndex((i) => {
-      const next = (i + 1) % gallery.length;
-      return next;
-    });
-    resetView();
-  };
+  if (!open || !current) return null;
 
   const toggleZoom = () => {
     if (scale < 1.5) setScale(2);
     else setScale(1);
   };
 
+  // ✅ Close ONLY when clicking the backdrop itself
   const onBackdropClick = (e: React.MouseEvent) => {
-    // close if click is outside image box
-    const box = boxRef.current;
-    if (!box) return onClose();
-    if (!box.contains(e.target as Node)) onClose();
+    if (e.target === e.currentTarget) onClose();
   };
 
-  const onPointerDown = (e: React.PointerEvent) => {
+  // === Pointer handlers attached ONLY to the image box ===
+  const onBoxPointerDown = (e: React.PointerEvent) => {
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-    // double-tap ONLY for touch/pen (avoid accidental desktop rapid clicks)
     if (e.pointerType !== "mouse") {
       const now = Date.now();
       if (now - lastTap.current < 280) {
@@ -164,7 +157,6 @@ export default function PhotoLightbox({
     if (pointers.current.size === 1) {
       panBase.current = { x: e.clientX, y: e.clientY, tx, ty };
 
-      // swipe tracking starts only when NOT zoomed
       if (scale <= 1.001) {
         swipeBase.current = { x: e.clientX, y: e.clientY, t: Date.now() };
         swipeLock.current = "none";
@@ -190,11 +182,11 @@ export default function PhotoLightbox({
     }
   };
 
-  const onPointerMove = (e: React.PointerEvent) => {
+  const onBoxPointerMove = (e: React.PointerEvent) => {
     if (!pointers.current.has(e.pointerId)) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-    // pinch zoom
+    // pinch
     if (pointers.current.size === 2 && pinch.current) {
       const pts = Array.from(pointers.current.values());
       const dx = pts[1].x - pts[0].x;
@@ -214,32 +206,26 @@ export default function PhotoLightbox({
         setTy((prev) => clamp(prev + (midY - pinch.current!.midY), -2400, 2400));
       }
 
-      // update pinch baseline for smooth continuous gesture
       pinch.current.dist = dist;
       pinch.current.scale = nextScale;
       pinch.current.midX = midX;
       pinch.current.midY = midY;
-
       return;
     }
 
-    // swipe navigation (only when NOT zoomed)
+    // swipe (only when not zoomed)
     if (pointers.current.size === 1 && scale <= 1.001 && swipeBase.current && canNav) {
       const dx = e.clientX - swipeBase.current.x;
       const dy = e.clientY - swipeBase.current.y;
 
-      // decide lock direction
       if (swipeLock.current === "none") {
         if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
           swipeLock.current = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
         }
       }
 
-      // if horizontal swipe, prevent page from "feeling" weird (touchAction none already)
-      if (swipeLock.current === "h") {
-        // We don't visually drag the image (keeps premium calm). We only detect on release.
-        return;
-      }
+      // no visual drag; decide on release
+      if (swipeLock.current === "h") return;
     }
 
     // pan (only when zoomed)
@@ -251,13 +237,12 @@ export default function PhotoLightbox({
     }
   };
 
-  const onPointerUp = (e: React.PointerEvent) => {
-    // swipe finish (only when NOT zoomed)
+  const onBoxPointerUp = (e: React.PointerEvent) => {
+    // swipe finish
     if (scale <= 1.001 && swipeBase.current && canNav && pointers.current.size === 1) {
       const dx = e.clientX - swipeBase.current.x;
       const dt = Date.now() - swipeBase.current.t;
 
-      // threshold: calm but responsive
       const absDx = Math.abs(dx);
       const fast = dt < 280 && absDx > 40;
       const far = absDx > 80;
@@ -284,11 +269,8 @@ export default function PhotoLightbox({
       role="dialog"
       aria-modal="true"
       onClick={onBackdropClick}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      style={{ touchAction: "none" }}
+      // IMPORTANT: do NOT put pointer handlers here
+      style={{ touchAction: "auto" }}
     >
       {/* Close */}
       <button
@@ -302,7 +284,7 @@ export default function PhotoLightbox({
         Închide ✕
       </button>
 
-      {/* Nav buttons (desktop friendly) */}
+      {/* Nav buttons */}
       {canNav && (
         <>
           <button
@@ -338,11 +320,20 @@ export default function PhotoLightbox({
         </div>
       )}
 
-      {/* Image */}
+      {/* Centered image box */}
       <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
         <div
           ref={boxRef}
           className="relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={onBoxPointerDown}
+          onPointerMove={onBoxPointerMove}
+          onPointerUp={onBoxPointerUp}
+          onPointerCancel={onBoxPointerUp}
+          style={{
+            // gestures ONLY inside the box
+            touchAction: "none",
+          }}
           onDoubleClick={(e) => {
             e.stopPropagation();
             toggleZoom();
