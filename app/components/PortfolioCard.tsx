@@ -9,6 +9,9 @@ type Props = {
   priority?: boolean;
 };
 
+// ✅ Sticky cache across re-mounts (super important)
+const ACTIVATED = new Set<string>();
+
 function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
   document.querySelectorAll('video[data-portfolio-video="1"]').forEach((v) => {
     const vid = v as HTMLVideoElement;
@@ -42,12 +45,17 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     [photos, item.title]
   );
 
-  // Sticky activation: once true, stays true (no "load again" feeling)
   const rootRef = useRef<HTMLElement | null>(null);
-  const [activated, setActivated] = useState(priority);
+
+  // ✅ init from cache so it does NOT "load again" when you scroll / remount
+  const [activated, setActivated] = useState(() => priority || ACTIVATED.has(item.slug));
 
   useEffect(() => {
-    if (activated) return;
+    if (activated) {
+      ACTIVATED.add(item.slug);
+      return;
+    }
+
     const el = rootRef.current;
     if (!el) return;
 
@@ -56,21 +64,21 @@ export default function PortfolioCard({ item, priority = false }: Props) {
         const e = entries[0];
         if (!e) return;
         if (e.isIntersecting) {
+          ACTIVATED.add(item.slug);
           setActivated(true);
           obs.disconnect();
         }
       },
       {
         root: null,
-        // start loading before it becomes visible => smooth
-        rootMargin: "900px 0px",
+        rootMargin: "900px 0px", // load ahead of view
         threshold: 0.01,
       }
     );
 
     obs.observe(el);
     return () => obs.disconnect();
-  }, [activated]);
+  }, [activated, item.slug]);
 
   // Pause video when out of view (only after activated)
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -124,7 +132,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
           <div className="relative w-full pt-[56.25%]">
             <div className="absolute inset-0">
-              {/* Before activation: show only cover image (fast, no video element cost) */}
+              {/* BEFORE activation: only poster/cover (fast, stable) */}
               {!activated ? (
                 <img
                   src={posterSrc}
@@ -141,7 +149,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   poster={posterSrc}
                   controls
                   playsInline
-                  preload={priority ? "metadata" : "metadata"}
+                  preload="metadata"
                   className="h-full w-full object-cover"
                   onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
                 />
@@ -169,8 +177,8 @@ export default function PortfolioCard({ item, priority = false }: Props) {
           </div>
         </div>
 
-        {/* THUMBS: load only after activated (prevents initial heavy load) */}
-        {activated && photos.length > 1 && (
+        {/* THUMBS — layout ALWAYS present; content appears after activation */}
+        {photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
             {thumbs.shown.map((src, i) => {
               const realIndex = i + 1;
@@ -182,13 +190,17 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
                   aria-label="Deschide poza"
                 >
-                  <img
-                    src={src}
-                    alt=""
-                    className="h-full w-full object-cover opacity-95"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {activated ? (
+                    <img
+                      src={src}
+                      alt=""
+                      className="h-full w-full object-cover opacity-95"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-white/5" />
+                  )}
                 </button>
               );
             })}
