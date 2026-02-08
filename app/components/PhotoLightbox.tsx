@@ -33,8 +33,6 @@ export default function PhotoLightbox({
   images,
   startIndex = 0,
 }: Props) {
-  const boxRef = useRef<HTMLDivElement | null>(null);
-
   const gallery: LightboxImage[] = useMemo(() => {
     if (images && images.length) return images;
     if (src) return [{ src, alt }];
@@ -48,7 +46,7 @@ export default function PhotoLightbox({
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
 
-  // gesture refs (ONLY on box)
+  // gesture refs
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
@@ -110,8 +108,10 @@ export default function PhotoLightbox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onClose, startIndex, gallery.length]);
 
+  // Snap back when close to 1 (prevents stuck at 1.02 etc.)
   useEffect(() => {
-    if (scale <= 1.001) {
+    if (scale < 1.06) {
+      setScale(1);
       setTx(0);
       setTy(0);
     }
@@ -133,25 +133,9 @@ export default function PhotoLightbox({
 
   const stop = (e: any) => e.stopPropagation();
 
-  const safeSetPointerCapture = (el: HTMLElement, pointerId: number) => {
-    // iOS Safari can throw on multi-touch / cancel; safest is:
-    // - use capture only for mouse
-    try {
-      el.setPointerCapture(pointerId);
-    } catch {}
-  };
-
   // === gestures on image box only ===
   const onBoxPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
-
-    const target = e.currentTarget as HTMLElement;
-
-    // ✅ IMPORTANT: on iOS, pointer capture can be unstable for touch pinch.
-    // Use it only for mouse (desktop drag) – it’s not needed for touch.
-    if (e.pointerType === "mouse") {
-      safeSetPointerCapture(target, e.pointerId);
-    }
 
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -183,12 +167,15 @@ export default function PhotoLightbox({
       const pts = Array.from(pointers.current.values());
       const dx = pts[1].x - pts[0].x;
       const dy = pts[1].y - pts[0].y;
+      const dist = Math.hypot(dx, dy);
+
       pinch.current = {
-        dist: Math.hypot(dx, dy),
+        dist: dist || 0.0001, // avoid 0
         scale,
         midX: (pts[0].x + pts[1].x) / 2,
         midY: (pts[0].y + pts[1].y) / 2,
       };
+
       panBase.current = null;
       swipeBase.current = null;
       swipeLock.current = "none";
@@ -202,31 +189,39 @@ export default function PhotoLightbox({
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     // pinch
-    if (pointers.current.size === 2 && pinch.current) {
+    if (pointers.current.size === 2) {
+      const p = pinch.current;
+      if (!p) return;
+
       const pts = Array.from(pointers.current.values());
       const dx = pts[1].x - pts[0].x;
       const dy = pts[1].y - pts[0].y;
-      const dist = Math.hypot(dx, dy);
+      const dist = Math.hypot(dx, dy) || 0.0001;
 
-      const baseDist = pinch.current.dist || dist;
-      const factor = dist / baseDist;
-      const nextScale = clamp(pinch.current.scale * factor, 1, 4);
+      const factor = dist / (p.dist || dist);
+      const nextScale = clamp(p.scale * factor, 1, 4);
 
       const midX = (pts[0].x + pts[1].x) / 2;
       const midY = (pts[0].y + pts[1].y) / 2;
 
       setScale(nextScale);
 
+      // IMPORTANT: use captured p.midX/p.midY, NOT pinch.current inside setState
       if (nextScale > 1.001) {
-        setTx((prev) => clamp(prev + (midX - pinch.current!.midX), -2400, 2400));
-        setTy((prev) => clamp(prev + (midY - pinch.current!.midY), -2400, 2400));
+        const dmx = midX - p.midX;
+        const dmy = midY - p.midY;
+        setTx((prev) => clamp(prev + dmx, -2400, 2400));
+        setTy((prev) => clamp(prev + dmy, -2400, 2400));
+      } else {
+        setTx(0);
+        setTy(0);
       }
 
-      // update baseline for smooth continuous pinch
-      pinch.current.dist = dist;
-      pinch.current.scale = nextScale;
-      pinch.current.midX = midX;
-      pinch.current.midY = midY;
+      // update pinch baseline smoothly
+      p.dist = dist;
+      p.scale = nextScale;
+      p.midX = midX;
+      p.midY = midY;
 
       return;
     }
@@ -241,7 +236,6 @@ export default function PhotoLightbox({
           swipeLock.current = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
         }
       }
-
       return;
     }
 
@@ -290,6 +284,13 @@ export default function PhotoLightbox({
       panBase.current = null;
       swipeBase.current = null;
       swipeLock.current = "none";
+
+      // ✅ snap to 1 when gesture ends close to 1
+      setScale((s) => (s < 1.06 ? 1 : s));
+      if (scale < 1.06) {
+        setTx(0);
+        setTy(0);
+      }
     }
   };
 
@@ -357,7 +358,6 @@ export default function PhotoLightbox({
       {/* Wrapper must NOT capture pointer events (backdrop close must work) */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-6">
         <div
-          ref={boxRef}
           className="pointer-events-auto relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
           onMouseDown={stop}
           onClick={stop}
@@ -391,11 +391,11 @@ export default function PhotoLightbox({
       <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
         {canNav ? (
           <>
-            Swipe stânga/dreapta = next/prev • Swipe sus/jos = închide • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Tap pe fundal pentru închidere
+            Swipe stânga/dreapta = next/prev • Swipe sus/jos = închide • Pinch zoom • Dublu-tap pentru 2× • Tap pe fundal pentru închidere
           </>
         ) : (
           <>
-            Swipe sus/jos = închide • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Tap pe fundal pentru închidere
+            Swipe sus/jos = închide • Pinch zoom • Dublu-tap pentru 2× • Tap pe fundal pentru închidere
           </>
         )}
       </div>
