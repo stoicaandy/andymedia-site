@@ -21,10 +21,16 @@ export default function PhotoLightbox({ open, onClose, src, alt }: Props) {
   const [ty, setTy] = useState(0);
 
   const pointers = useRef(new Map<number, { x: number; y: number }>());
-  const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
+  const pinch = useRef<{
+    dist: number;
+    scale: number;
+    midX: number;
+    midY: number;
+  } | null>(null);
+
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
-  // double-tap support (mobile)
+  // double-tap support (touch/pen only)
   const lastTap = useRef<number>(0);
 
   useEffect(() => {
@@ -64,16 +70,15 @@ export default function PhotoLightbox({ open, onClose, src, alt }: Props) {
     }
   }, [scale]);
 
-  const transform = useMemo(() => `translate(${tx}px, ${ty}px) scale(${scale})`, [tx, ty, scale]);
+  const transform = useMemo(
+    () => `translate(${tx}px, ${ty}px) scale(${scale})`,
+    [tx, ty, scale]
+  );
 
   if (!open) return null;
 
   const toggleZoom = () => {
-    if (scale < 1.5) {
-      setScale(2);
-    } else {
-      setScale(1);
-    }
+    setScale((prev) => (prev < 1.5 ? 2 : 1));
   };
 
   const onBackdropClick = (e: React.MouseEvent) => {
@@ -84,17 +89,18 @@ export default function PhotoLightbox({ open, onClose, src, alt }: Props) {
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
-    // allow gestures on the whole overlay; image box will be the main target anyway
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-    // double-tap detector (works on touch too)
-    const now = Date.now();
-    if (now - lastTap.current < 280) {
-      toggleZoom();
-      lastTap.current = 0;
-    } else {
-      lastTap.current = now;
+    // double-tap detector (touch/pen only; mouse uses onDoubleClick)
+    if (e.pointerType !== "mouse") {
+      const now = Date.now();
+      if (now - lastTap.current < 280) {
+        toggleZoom();
+        lastTap.current = 0;
+      } else {
+        lastTap.current = now;
+      }
     }
 
     if (pointers.current.size === 1) {
@@ -105,12 +111,14 @@ export default function PhotoLightbox({ open, onClose, src, alt }: Props) {
       const pts = Array.from(pointers.current.values());
       const dx = pts[1].x - pts[0].x;
       const dy = pts[1].y - pts[0].y;
+
       pinch.current = {
-        dist: Math.hypot(dx, dy),
+        dist: Math.hypot(dx, dy) || 1,
         scale,
         midX: (pts[0].x + pts[1].x) / 2,
         midY: (pts[0].y + pts[1].y) / 2,
       };
+
       panBase.current = null;
     }
   };
@@ -124,21 +132,30 @@ export default function PhotoLightbox({ open, onClose, src, alt }: Props) {
       const pts = Array.from(pointers.current.values());
       const dx = pts[1].x - pts[0].x;
       const dy = pts[1].y - pts[0].y;
-      const dist = Math.hypot(dx, dy);
+      const dist = Math.hypot(dx, dy) || 1;
 
       const factor = dist / (pinch.current.dist || dist);
       const nextScale = clamp(pinch.current.scale * factor, 1, 4);
 
-      // small pan follows midpoint movement
       const midX = (pts[0].x + pts[1].x) / 2;
       const midY = (pts[0].y + pts[1].y) / 2;
 
       setScale(nextScale);
 
       if (nextScale > 1.001) {
-        setTx(clamp(tx + (midX - pinch.current.midX), -2400, 2400));
-        setTy(clamp(ty + (midY - pinch.current.midY), -2400, 2400));
+        // Use functional updates to avoid stale tx/ty during fast pointer events
+        const dxMid = midX - pinch.current.midX;
+        const dyMid = midY - pinch.current.midY;
+
+        setTx((prev) => clamp(prev + dxMid, -2400, 2400));
+        setTy((prev) => clamp(prev + dyMid, -2400, 2400));
       }
+
+      // Update pinch baseline for smooth continuous pinch (no drift)
+      pinch.current.dist = dist;
+      pinch.current.scale = nextScale;
+      pinch.current.midX = midX;
+      pinch.current.midY = midY;
 
       return;
     }
@@ -155,12 +172,8 @@ export default function PhotoLightbox({ open, onClose, src, alt }: Props) {
   const onPointerUp = (e: React.PointerEvent) => {
     pointers.current.delete(e.pointerId);
 
-    if (pointers.current.size < 2) {
-      pinch.current = null;
-    }
-    if (pointers.current.size === 0) {
-      panBase.current = null;
-    }
+    if (pointers.current.size < 2) pinch.current = null;
+    if (pointers.current.size === 0) panBase.current = null;
   };
 
   return (
