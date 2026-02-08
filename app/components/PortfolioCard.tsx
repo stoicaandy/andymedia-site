@@ -4,7 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { PortfolioItem } from "@/app/data/portfolio";
 
-// Pause only portfolio videos (not background videos / other sections)
+type Props = {
+  item: PortfolioItem;
+};
+
+// Pause only portfolio videos
 function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
   document.querySelectorAll('video[data-portfolio-video="1"]').forEach((v) => {
     const vid = v as HTMLVideoElement;
@@ -43,7 +47,7 @@ function usePauseOnOutOfView(
   }, [videoRef, rootRef]);
 }
 
-export default function PortfolioCard({ item }: { item: PortfolioItem }) {
+export default function PortfolioCard({ item }: Props) {
   const base = `/portofoliu/${item.media.folder}`;
   const videoSrc = `${base}/video.mp4`;
   const posterSrc = item.media.poster ? `${base}/poster.jpg` : `${base}/1.jpg`;
@@ -55,7 +59,6 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
     return arr;
   }, [base, item.media.photosCount]);
 
-  // Build gallery for lightbox
   const gallery = useMemo(
     () => photos.map((src) => ({ src, alt: item.title })),
     [photos, item.title]
@@ -75,7 +78,7 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
 
   const THUMBS_MAX = 6;
   const thumbs = useMemo(() => {
-    const arr = photos.slice(1); // thumbs from 2..N (1 is cover)
+    const arr = photos.slice(1);
     const shown = arr.slice(0, THUMBS_MAX);
     const remaining = arr.length - shown.length;
     return { shown, remaining };
@@ -126,38 +129,28 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
           </div>
         </div>
 
-        {/* THUMBS — fără scroll */}
+        {/* THUMBS */}
         {photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
-            {thumbs.shown.map((src, i) => {
-              const realIndex = i + 1; // because thumbs start at photos[1]
-              return (
-                <button
-                  key={src}
-                  type="button"
-                  onClick={() => openPhotoAt(realIndex)}
-                  className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
-                  aria-label="Deschide poza"
-                >
-                  <img
-                    src={src}
-                    alt=""
-                    className="h-full w-full object-cover opacity-95"
-                    loading="lazy"
-                  />
-                </button>
-              );
-            })}
+            {thumbs.shown.map((src, i) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => openPhotoAt(i + 1)}
+                className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
+              >
+                <img src={src} className="h-full w-full object-cover" />
+              </button>
+            ))}
 
             {thumbs.remaining > 0 && (
               <button
                 type="button"
                 onClick={() => openPhotoAt(thumbs.shown.length + 1)}
-                className="relative overflow-hidden rounded-xl border border-white/10 bg-white/10 aspect-[3/2] hover:bg-white/15 transition"
-                aria-label={`Încă ${thumbs.remaining} poze`}
+                className="relative overflow-hidden rounded-xl border border-white/10 bg-white/10 aspect-[3/2]"
               >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-white font-medium">+{thumbs.remaining}</div>
+                <div className="absolute inset-0 flex items-center justify-center text-white font-medium">
+                  +{thumbs.remaining}
                 </div>
               </button>
             )}
@@ -166,11 +159,11 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
 
         {/* TEXT */}
         <div className="mt-4">
-          <h3 className="text-lg md:text-xl font-medium text-white">
+          <h3 className="text-lg md:text-xl font-medium">
             {item.title} <span className="text-amber-300">.</span>
           </h3>
 
-          <div className="mt-2 flex flex-wrap gap-2 text-xs text-white/70">
+          <div className="mt-2 flex gap-2 text-xs text-white/70">
             <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
               {item.location}
             </span>
@@ -179,31 +172,28 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
             </span>
           </div>
 
-          <p className="mt-3 text-sm md:text-base text-zinc-300 leading-relaxed">
-            {item.summary}
-          </p>
+          <p className="mt-3 text-zinc-300">{item.summary}</p>
 
-          {/* SERVICES – bullets simple (opționale), fără chenare */}
-          {item.services?.length ? (
-            <ul className="mt-4 list-disc pl-5 space-y-1 text-sm text-white/80">
+          {item.services?.length > 0 && (
+            <ul className="mt-4 list-disc pl-5 text-sm text-white/80">
               {item.services.map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
-          ) : null}
+          )}
 
-          <div className="mt-5 flex flex-wrap items-center gap-3">
+          <div className="mt-5 flex gap-3">
             <button
               type="button"
               onClick={() => openPhotoAt(0)}
-              className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 hover:bg-white/10 transition"
+              className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm"
             >
-              Vezi poze (zoom)
+              Vezi poze
             </button>
 
             <a
               href="/cere-oferta"
-              className="rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-black hover:bg-amber-300 transition"
+              className="rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-black"
             >
               Cere ofertă
             </a>
