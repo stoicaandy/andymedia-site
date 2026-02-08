@@ -50,6 +50,9 @@ export default function PortfolioCard({ item, priority = false }: Props) {
   // ✅ init from cache so it does NOT "load again" when you scroll / remount
   const [activated, setActivated] = useState(() => priority || ACTIVATED.has(item.slug));
 
+  // ✅ video orientation auto-detect
+  const [isPortraitVideo, setIsPortraitVideo] = useState(false);
+
   useEffect(() => {
     if (activated) {
       ACTIVATED.add(item.slug);
@@ -150,7 +153,17 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   controls
                   playsInline
                   preload="metadata"
-                  className="h-full w-full object-cover"
+                  className={[
+                    "h-full w-full",
+                    // ✅ portrait = contain (no crop), landscape = cover
+                    isPortraitVideo ? "object-contain bg-black" : "object-cover",
+                  ].join(" ")}
+                  onLoadedMetadata={(e) => {
+                    const v = e.currentTarget;
+                    // auto detect portrait vs landscape
+                    const portrait = v.videoHeight > v.videoWidth;
+                    setIsPortraitVideo(portrait);
+                  }}
                   onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
                 />
               ) : (
