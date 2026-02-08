@@ -1,8 +1,9 @@
 export type PortfolioMediaAuto = {
   folder: string;        // ex: "portf1"
   photosCount: number;   // ex: 4 => 1.jpg..4.jpg
-  hasVideo?: boolean;    // dacă există video.mp4 în folder
+  hasVideo?: boolean;    // dacă există video.mp4 în folder (rulat direct în card)
   poster?: boolean;      // dacă există poster.jpg în folder (pentru video)
+  youtubeId?: string;    // ✅ dacă vrei YouTube DOAR în lightbox (ex: "dQw4w9WgXcQ")
 };
 
 export type PortfolioItem = {
@@ -32,7 +33,7 @@ export const portfolioItems: PortfolioItem[] = [
       folder: "portf1",
       photosCount: 3,
       hasVideo: true,
-      poster: false, // pune true dacă ai /portofoliu/portf1/poster.jpg
+      poster: false,
     },
   },
   {
@@ -43,7 +44,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Producție",
     summary:
       "O colaborare impecabila cu partenerii nostri Prestige. Multumim Bogdan Ivan!",
-    services: ["Instalatie PA", "Lumini& Ecrane LED", "Scena - Regie" ],
+    services: ["Instalatie PA", "Lumini& Ecrane LED", "Scena - Regie"],
     tags: ["broadcast", "led", "workflow"],
     media: {
       folder: "portf2",
@@ -57,7 +58,7 @@ export const portfolioItems: PortfolioItem[] = [
     title: "Zilele Tomesti – Voltaj , Ionut Gallani",
     location: "Iași",
     date: "2025-07",
-    category: "Nuntă",
+    category: "Coproductii",
     summary:
       "O colaborare impecabila cu partenerii nostri Prestige. Multumim Bogdan Ivan!",
     services: ["Regie Sunet"],
@@ -75,14 +76,17 @@ export const portfolioItems: PortfolioItem[] = [
     location: "Iași",
     date: "2025-07",
     category: "Nuntă",
-    summary:
-      "O colaborare impecabila cu partenerii nostri Sincroline. ",
+    summary: "O colaborare impecabila cu partenerii nostri Sincroline.",
     services: ["Regie Sunet"],
     tags: ["Instalatie PA", "Lumini & Ecrane LED", "Scena - Regie"],
     media: {
       folder: "portf4",
       photosCount: 5,
-      hasVideo: true,
+      hasVideo: false,
+
+      // ✅ EXEMPLU: dacă vrei YouTube DOAR în lightbox
+      // youtubeId: "dQw4w9WgXcQ",
+
       poster: false,
     },
   },

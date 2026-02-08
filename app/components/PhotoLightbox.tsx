@@ -8,13 +8,17 @@ type Props = {
   open: boolean;
   onClose: () => void;
 
-  // compat: single image
+  // images mode
+  images?: LightboxImage[];
+  startIndex?: number;
+
+  // legacy single image (optional)
   src?: string;
   alt?: string;
 
-  // gallery mode
-  images?: LightboxImage[];
-  startIndex?: number;
+  // ✅ youtube mode
+  youtubeId?: string; // only ID
+  youtubeTitle?: string;
 };
 
 function clamp(n: number, min: number, max: number) {
@@ -28,17 +32,90 @@ function clampIndex(i: number, len: number) {
 export default function PhotoLightbox({
   open,
   onClose,
-  src,
-  alt,
   images,
   startIndex = 0,
+  src,
+  alt,
+  youtubeId,
+  youtubeTitle,
 }: Props) {
+  // ====== YOUTUBE MODE (iframe only in lightbox) ======
+  const isYouTube = !!youtubeId;
+
+  useEffect(() => {
+    if (!open) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  if (isYouTube) {
+    const embedSrc =
+      `https://www.youtube-nocookie.com/embed/${youtubeId}` +
+      `?autoplay=1&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3`;
+
+    return (
+      <div
+        className="fixed inset-0 z-[200] bg-black/40"
+        role="dialog"
+        aria-modal="true"
+        onMouseDown={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
+        >
+          Închide ✕
+        </button>
+
+        <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
+          <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl">
+            <div className="relative w-full pt-[56.25%]">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={embedSrc}
+                title={youtubeTitle ?? "YouTube video"}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
+          YouTube rulează doar în lightbox • Tap pe fundal sau ESC pentru închidere
+        </div>
+      </div>
+    );
+  }
+
+  // ====== IMAGES MODE (existing gestures) ======
   const gallery: LightboxImage[] = useMemo(() => {
     if (images && images.length) return images;
     if (src) return [{ src, alt }];
     return [];
   }, [images, src, alt]);
 
+  const canNav = gallery.length > 1;
   const [index, setIndex] = useState(() => clampIndex(startIndex, gallery.length));
 
   // zoom/pan
@@ -59,7 +136,6 @@ export default function PhotoLightbox({
   const lastTap = useRef<number>(0);
 
   const current = gallery[index];
-  const canNav = gallery.length > 1;
 
   const resetView = () => {
     setScale(1);
@@ -86,10 +162,9 @@ export default function PhotoLightbox({
   };
 
   useEffect(() => {
-    if (!open) return;
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // re-init on open
+    setIndex(clampIndex(startIndex, gallery.length));
+    resetView();
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -97,18 +172,11 @@ export default function PhotoLightbox({
       if (e.key === "ArrowRight") nextImage();
     };
     window.addEventListener("keydown", onKey);
-
-    setIndex(clampIndex(startIndex, gallery.length));
-    resetView();
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, onClose, startIndex, gallery.length]);
+  }, [startIndex, gallery.length, onClose]);
 
-  // Snap back when close to 1 (prevents stuck at 1.02 etc.)
+  // Snap back when close to 1
   useEffect(() => {
     if (scale < 1.06) {
       setScale(1);
@@ -119,21 +187,15 @@ export default function PhotoLightbox({
 
   const transform = useMemo(() => `translate(${tx}px, ${ty}px) scale(${scale})`, [tx, ty, scale]);
 
-  if (!open || !current) return null;
+  if (!current) return null;
 
   const toggleZoom = () => {
     if (scale < 1.5) setScale(2);
     else setScale(1);
   };
 
-  // close on backdrop click (PC + mobile tap)
-  const onBackdropMouseDown = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) onClose();
-  };
-
   const stop = (e: any) => e.stopPropagation();
 
-  // === gestures on image box only ===
   const onBoxPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
 
@@ -167,10 +229,10 @@ export default function PhotoLightbox({
       const pts = Array.from(pointers.current.values());
       const dx = pts[1].x - pts[0].x;
       const dy = pts[1].y - pts[0].y;
-      const dist = Math.hypot(dx, dy);
+      const dist = Math.hypot(dx, dy) || 0.0001;
 
       pinch.current = {
-        dist: dist || 0.0001, // avoid 0
+        dist,
         scale,
         midX: (pts[0].x + pts[1].x) / 2,
         midY: (pts[0].y + pts[1].y) / 2,
@@ -206,7 +268,6 @@ export default function PhotoLightbox({
 
       setScale(nextScale);
 
-      // IMPORTANT: use captured p.midX/p.midY, NOT pinch.current inside setState
       if (nextScale > 1.001) {
         const dmx = midX - p.midX;
         const dmy = midY - p.midY;
@@ -217,7 +278,6 @@ export default function PhotoLightbox({
         setTy(0);
       }
 
-      // update pinch baseline smoothly
       p.dist = dist;
       p.scale = nextScale;
       p.midX = midX;
@@ -259,7 +319,6 @@ export default function PhotoLightbox({
 
       const absDx = Math.abs(dx);
       const absDy = Math.abs(dy);
-
       const isTouchLike = swipeBase.current.pointerType !== "mouse";
 
       const fast = dt < 320;
@@ -284,13 +343,7 @@ export default function PhotoLightbox({
       panBase.current = null;
       swipeBase.current = null;
       swipeLock.current = "none";
-
-      // ✅ snap to 1 when gesture ends close to 1
       setScale((s) => (s < 1.06 ? 1 : s));
-      if (scale < 1.06) {
-        setTx(0);
-        setTy(0);
-      }
     }
   };
 
@@ -299,9 +352,10 @@ export default function PhotoLightbox({
       className="fixed inset-0 z-[200] bg-black/20"
       role="dialog"
       aria-modal="true"
-      onMouseDown={onBackdropMouseDown}
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
-      {/* Close */}
       <button
         type="button"
         onMouseDown={stop}
@@ -315,7 +369,6 @@ export default function PhotoLightbox({
         Închide ✕
       </button>
 
-      {/* Nav buttons */}
       {canNav && (
         <>
           <button
@@ -345,17 +398,13 @@ export default function PhotoLightbox({
           >
             →
           </button>
+
+          <div className="pointer-events-none z-20 absolute left-4 top-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white/85">
+            {index + 1} / {gallery.length}
+          </div>
         </>
       )}
 
-      {/* Counter */}
-      {canNav && (
-        <div className="pointer-events-none z-20 absolute left-4 top-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white/85">
-          {index + 1} / {gallery.length}
-        </div>
-      )}
-
-      {/* Wrapper must NOT capture pointer events (backdrop close must work) */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-6">
         <div
           className="pointer-events-auto relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"

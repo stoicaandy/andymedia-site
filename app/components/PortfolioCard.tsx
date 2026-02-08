@@ -42,8 +42,14 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     [photos, item.title]
   );
 
+  const hasLocalVideo = !!item.media.hasVideo;
+  const youtubeId = item.media.youtubeId?.trim();
+  const hasYouTube = !hasLocalVideo && !!youtubeId;
+
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const [youtubeOpen, setYoutubeOpen] = useState(false);
 
   const openPhotoAt = (idx: number) => {
     setLightboxIndex(clampIndex(idx, gallery.length));
@@ -66,7 +72,6 @@ export default function PortfolioCard({ item, priority = false }: Props) {
       <article
         className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:p-5 backdrop-blur-sm"
         style={{
-          // ✅ super eficient pentru liste lungi (nu “reîncarcă”, doar reduce costul de paint)
           contentVisibility: "auto",
           containIntrinsicSize: "900px",
         }}
@@ -75,7 +80,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
           <div className="relative w-full pt-[56.25%]">
             <div className="absolute inset-0">
-              {item.media.hasVideo ? (
+              {hasLocalVideo ? (
                 <video
                   ref={videoRef}
                   data-portfolio-video="1"
@@ -83,11 +88,9 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   poster={posterSrc}
                   controls
                   playsInline
-                  // ✅ doar primele carduri pregătesc metadata
                   preload={priority ? "metadata" : "none"}
                   className={[
                     "h-full w-full",
-                    // ✅ portrait = contain (fără crop)
                     isPortraitVideo ? "object-contain bg-black" : "object-cover",
                   ].join(" ")}
                   onLoadedMetadata={(e) => {
@@ -95,13 +98,10 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                     setIsPortraitVideo(v.videoHeight > v.videoWidth);
                   }}
                   onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
-                  onTimeUpdate={() => {
-                    // nothing
-                  }}
                 />
               ) : (
                 <img
-                  src={photos[0]}
+                  src={posterSrc}
                   alt={item.title}
                   className="h-full w-full object-cover"
                   loading={priority ? "eager" : "lazy"}
@@ -115,15 +115,16 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                 <div className="text-xs uppercase tracking-[0.22em] text-white/80">
                   {item.category}
                 </div>
+
                 <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/85">
-                  {item.media.hasVideo ? "VIDEO" : "FOTO"} • {item.media.photosCount} foto
+                  {(hasLocalVideo || hasYouTube) ? "VIDEO" : "FOTO"} • {item.media.photosCount} foto
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* THUMBS — mereu acolo, lazy, fără pop-in “logic” */}
+        {/* THUMBS */}
         {photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
             {thumbs.shown.map((src, i) => {
@@ -198,6 +199,16 @@ export default function PortfolioCard({ item, priority = false }: Props) {
               Vezi poze (zoom)
             </button>
 
+            {hasYouTube ? (
+              <button
+                type="button"
+                onClick={() => setYoutubeOpen(true)}
+                className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 hover:bg-white/10 transition"
+              >
+                Vezi video (YouTube)
+              </button>
+            ) : null}
+
             <a
               href="/cere-oferta"
               className="rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-black hover:bg-amber-300 transition"
@@ -208,11 +219,20 @@ export default function PortfolioCard({ item, priority = false }: Props) {
         </div>
       </article>
 
+      {/* Images lightbox */}
       <PhotoLightbox
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
         images={gallery}
         startIndex={lightboxIndex}
+      />
+
+      {/* YouTube lightbox (controlled, only when open) */}
+      <PhotoLightbox
+        open={youtubeOpen}
+        onClose={() => setYoutubeOpen(false)}
+        youtubeId={youtubeId}
+        youtubeTitle={item.title}
       />
     </>
   );
