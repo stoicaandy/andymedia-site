@@ -53,8 +53,8 @@ export default function PhotoLightbox({
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
-  // swipe nav (only when not zoomed)
-  const swipeBase = useRef<{ x: number; y: number; t: number } | null>(null);
+  // swipe base (for nav + close)
+  const swipeBase = useRef<{ x: number; y: number; t: number; pointerType: string } | null>(null);
   const swipeLock = useRef<"none" | "h" | "v">("none");
 
   // double-tap (touch/pen)
@@ -126,8 +126,7 @@ export default function PhotoLightbox({
     else setScale(1);
   };
 
-  // ✅ Close ONLY when clicking backdrop itself
-  // (and we ensure the centering wrapper does NOT capture pointer events)
+  // close on backdrop click (PC + mobile tap)
   const onBackdropMouseDown = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) onClose();
   };
@@ -155,8 +154,9 @@ export default function PhotoLightbox({
     if (pointers.current.size === 1) {
       panBase.current = { x: e.clientX, y: e.clientY, tx, ty };
 
+      // swipe tracking only when not zoomed
       if (scale <= 1.001) {
-        swipeBase.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+        swipeBase.current = { x: e.clientX, y: e.clientY, t: Date.now(), pointerType: e.pointerType };
         swipeLock.current = "none";
       } else {
         swipeBase.current = null;
@@ -213,8 +213,8 @@ export default function PhotoLightbox({
       return;
     }
 
-    // swipe nav (only when not zoomed)
-    if (pointers.current.size === 1 && scale <= 1.001 && swipeBase.current && canNav) {
+    // swipe lock detection (only when not zoomed)
+    if (pointers.current.size === 1 && scale <= 1.001 && swipeBase.current) {
       const dx = e.clientX - swipeBase.current.x;
       const dy = e.clientY - swipeBase.current.y;
 
@@ -224,7 +224,8 @@ export default function PhotoLightbox({
         }
       }
 
-      if (swipeLock.current === "h") return;
+      // no visual drag; decide on release
+      return;
     }
 
     // pan when zoomed
@@ -239,16 +240,29 @@ export default function PhotoLightbox({
   const onBoxPointerUp = (e: React.PointerEvent) => {
     e.stopPropagation();
 
-    // swipe finish
-    if (scale <= 1.001 && swipeBase.current && canNav && pointers.current.size === 1) {
+    // swipe finish (only when not zoomed)
+    if (scale <= 1.001 && swipeBase.current && pointers.current.size === 1) {
       const dx = e.clientX - swipeBase.current.x;
+      const dy = e.clientY - swipeBase.current.y;
       const dt = Date.now() - swipeBase.current.t;
 
       const absDx = Math.abs(dx);
-      const fast = dt < 280 && absDx > 40;
-      const far = absDx > 80;
+      const absDy = Math.abs(dy);
 
-      if (swipeLock.current === "h" && (fast || far)) {
+      const isTouchLike = swipeBase.current.pointerType !== "mouse";
+
+      // thresholds
+      const fast = dt < 320;
+      const farH = absDx > 80;
+      const farV = absDy > 90;
+
+      // ✅ MOBILE/TABLET: swipe up/down closes
+      // only for touch/pen so desktop wheel scroll isn't treated as close
+      if (isTouchLike && swipeLock.current === "v" && (farV || (fast && absDy > 60))) {
+        onClose();
+      }
+      // ✅ horizontal: next/prev
+      else if (canNav && swipeLock.current === "h" && (farH || (fast && absDx > 50))) {
         if (dx < 0) nextImage();
         else prevImage();
       }
@@ -325,11 +339,8 @@ export default function PhotoLightbox({
         </div>
       )}
 
-      {/* IMPORTANT:
-          Wrapper must NOT capture pointer events, otherwise backdrop-close never triggers.
-      */}
+      {/* Wrapper must NOT capture pointer events (backdrop close must work) */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-6">
-        {/* Image box must capture gestures */}
         <div
           ref={boxRef}
           className="pointer-events-auto relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
@@ -365,11 +376,11 @@ export default function PhotoLightbox({
       <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
         {canNav ? (
           <>
-            Swipe stânga/dreapta • ←/→ pe PC • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Click în afara pozei pentru închidere
+            Swipe stânga/dreapta = next/prev • Swipe sus/jos = închide • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Tap pe fundal pentru închidere
           </>
         ) : (
           <>
-            Pinch zoom • Dublu-tap / dublu-click pentru 2× • Click în afara pozei pentru închidere
+            Swipe sus/jos = închide • Pinch zoom • Dublu-tap / dublu-click pentru 2× • Tap pe fundal pentru închidere
           </>
         )}
       </div>
