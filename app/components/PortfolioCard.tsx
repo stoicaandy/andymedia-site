@@ -6,7 +6,7 @@ import type { PortfolioItem } from "@/app/data/portfolio";
 
 type Props = {
   item: PortfolioItem;
-  priority?: boolean; // for above-the-fold cards
+  priority?: boolean;
 };
 
 function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
@@ -18,33 +18,6 @@ function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
       } catch {}
     }
   });
-}
-
-function usePauseOnOutOfView(
-  videoRef: React.RefObject<HTMLVideoElement | null>,
-  rootRef: React.RefObject<HTMLElement | null>
-) {
-  useEffect(() => {
-    const v = videoRef.current;
-    const root = rootRef.current;
-    if (!v || !root) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const e = entries[0];
-        if (!e) return;
-        if (e.intersectionRatio < 0.35) {
-          try {
-            v.pause();
-          } catch {}
-        }
-      },
-      { threshold: [0, 0.15, 0.35, 0.6, 1] }
-    );
-
-    obs.observe(root);
-    return () => obs.disconnect();
-  }, [videoRef, rootRef]);
 }
 
 function clampIndex(i: number, len: number) {
@@ -69,6 +42,62 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     [photos, item.title]
   );
 
+  // Sticky activation: once true, stays true (no "load again" feeling)
+  const rootRef = useRef<HTMLElement | null>(null);
+  const [activated, setActivated] = useState(priority);
+
+  useEffect(() => {
+    if (activated) return;
+    const el = rootRef.current;
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        if (!e) return;
+        if (e.isIntersecting) {
+          setActivated(true);
+          obs.disconnect();
+        }
+      },
+      {
+        root: null,
+        // start loading before it becomes visible => smooth
+        rootMargin: "900px 0px",
+        threshold: 0.01,
+      }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [activated]);
+
+  // Pause video when out of view (only after activated)
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    if (!activated) return;
+
+    const v = videoRef.current;
+    const root = rootRef.current;
+    if (!v || !root) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        if (!e) return;
+        if (e.intersectionRatio < 0.35) {
+          try {
+            v.pause();
+          } catch {}
+        }
+      },
+      { threshold: [0, 0.15, 0.35, 0.6, 1] }
+    );
+
+    obs.observe(root);
+    return () => obs.disconnect();
+  }, [activated]);
+
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -77,23 +106,13 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     setLightboxOpen(true);
   };
 
-  const rootRef = useRef<HTMLElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  usePauseOnOutOfView(videoRef, rootRef);
-
   const THUMBS_MAX = 6;
   const thumbs = useMemo(() => {
-    const arr = photos.slice(1); // thumbs from 2..N (1 is cover)
+    const arr = photos.slice(1); // thumbs from 2..N
     const shown = arr.slice(0, THUMBS_MAX);
     const remaining = arr.length - shown.length;
     return { shown, remaining };
   }, [photos]);
-
-  // Media loading strategy:
-  // - first cards: eager images + preload metadata for video
-  // - rest: lazy images + preload none for video (loads on play)
-  const imgLoading: "eager" | "lazy" = priority ? "eager" : "lazy";
-  const videoPreload: "none" | "metadata" = priority ? "metadata" : "none";
 
   return (
     <>
@@ -105,7 +124,16 @@ export default function PortfolioCard({ item, priority = false }: Props) {
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
           <div className="relative w-full pt-[56.25%]">
             <div className="absolute inset-0">
-              {item.media.hasVideo ? (
+              {/* Before activation: show only cover image (fast, no video element cost) */}
+              {!activated ? (
+                <img
+                  src={posterSrc}
+                  alt={item.title}
+                  className="h-full w-full object-cover"
+                  loading={priority ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              ) : item.media.hasVideo ? (
                 <video
                   ref={videoRef}
                   data-portfolio-video="1"
@@ -113,7 +141,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   poster={posterSrc}
                   controls
                   playsInline
-                  preload={videoPreload}
+                  preload={priority ? "metadata" : "metadata"}
                   className="h-full w-full object-cover"
                   onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
                 />
@@ -122,7 +150,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                   src={photos[0]}
                   alt={item.title}
                   className="h-full w-full object-cover"
-                  loading={imgLoading}
+                  loading={priority ? "eager" : "lazy"}
                   decoding="async"
                 />
               )}
@@ -141,11 +169,11 @@ export default function PortfolioCard({ item, priority = false }: Props) {
           </div>
         </div>
 
-        {/* THUMBS — fără scroll */}
-        {photos.length > 1 && (
+        {/* THUMBS: load only after activated (prevents initial heavy load) */}
+        {activated && photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
             {thumbs.shown.map((src, i) => {
-              const realIndex = i + 1; // thumbs start at photos[1]
+              const realIndex = i + 1;
               return (
                 <button
                   key={src}
@@ -158,7 +186,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                     src={src}
                     alt=""
                     className="h-full w-full object-cover opacity-95"
-                    loading={imgLoading}
+                    loading="lazy"
                     decoding="async"
                   />
                 </button>
