@@ -16,7 +16,7 @@ type Props = {
   src?: string;
   alt?: string;
 
-  // ✅ youtube mode
+  // YouTube mode (ONLY in lightbox)
   youtubeId?: string; // only ID
   youtubeTitle?: string;
 };
@@ -39,9 +39,10 @@ export default function PhotoLightbox({
   youtubeId,
   youtubeTitle,
 }: Props) {
-  // ====== YOUTUBE MODE (iframe only in lightbox) ======
+  // ✅ IMPORTANT: hooks must be called unconditionally (no early returns before hooks)
   const isYouTube = !!youtubeId;
 
+  // body lock + ESC
   useEffect(() => {
     if (!open) return;
 
@@ -50,6 +51,10 @@ export default function PhotoLightbox({
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      if (!isYouTube) {
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "ArrowRight") nextImage();
+      }
     };
     window.addEventListener("keydown", onKey);
 
@@ -57,58 +62,10 @@ export default function PhotoLightbox({
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, onClose, isYouTube]);
 
-  if (!open) return null;
-
-  if (isYouTube) {
-    const embedSrc =
-      `https://www.youtube-nocookie.com/embed/${youtubeId}` +
-      `?autoplay=1&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3`;
-
-    return (
-      <div
-        className="fixed inset-0 z-[200] bg-black/40"
-        role="dialog"
-        aria-modal="true"
-        onMouseDown={(e) => {
-          if (e.target === e.currentTarget) onClose();
-        }}
-      >
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onClose();
-          }}
-          className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
-        >
-          Închide ✕
-        </button>
-
-        <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
-          <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl">
-            <div className="relative w-full pt-[56.25%]">
-              <iframe
-                className="absolute inset-0 h-full w-full"
-                src={embedSrc}
-                title={youtubeTitle ?? "YouTube video"}
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
-          YouTube rulează doar în lightbox • Tap pe fundal sau ESC pentru închidere
-        </div>
-      </div>
-    );
-  }
-
-  // ====== IMAGES MODE (existing gestures) ======
+  // ===== IMAGES MODE state (declared ALWAYS, even if YouTube mode) =====
   const gallery: LightboxImage[] = useMemo(() => {
     if (images && images.length) return images;
     if (src) return [{ src, alt }];
@@ -116,23 +73,19 @@ export default function PhotoLightbox({
   }, [images, src, alt]);
 
   const canNav = gallery.length > 1;
-  const [index, setIndex] = useState(() => clampIndex(startIndex, gallery.length));
 
-  // zoom/pan
+  const [index, setIndex] = useState(() => clampIndex(startIndex, gallery.length));
   const [scale, setScale] = useState(1);
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
 
-  // gesture refs
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
-  // swipe base (for nav + close)
   const swipeBase = useRef<{ x: number; y: number; t: number; pointerType: string } | null>(null);
   const swipeLock = useRef<"none" | "h" | "v">("none");
 
-  // double-tap (touch/pen)
   const lastTap = useRef<number>(0);
 
   const current = gallery[index];
@@ -161,33 +114,32 @@ export default function PhotoLightbox({
     resetView();
   };
 
+  // reset on open / startIndex changes (images mode)
   useEffect(() => {
-    // re-init on open
+    if (!open) return;
+    if (isYouTube) return;
+
     setIndex(clampIndex(startIndex, gallery.length));
     resetView();
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") prevImage();
-      if (e.key === "ArrowRight") nextImage();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startIndex, gallery.length, onClose]);
+  }, [open, isYouTube, startIndex, gallery.length]);
 
-  // Snap back when close to 1
+  // snap back near 1x
   useEffect(() => {
+    if (!open) return;
+    if (isYouTube) return;
+
     if (scale < 1.06) {
       setScale(1);
       setTx(0);
       setTy(0);
     }
-  }, [scale]);
+  }, [open, isYouTube, scale]);
 
-  const transform = useMemo(() => `translate(${tx}px, ${ty}px) scale(${scale})`, [tx, ty, scale]);
-
-  if (!current) return null;
+  const transform = useMemo(
+    () => `translate(${tx}px, ${ty}px) scale(${scale})`,
+    [tx, ty, scale]
+  );
 
   const toggleZoom = () => {
     if (scale < 1.5) setScale(2);
@@ -201,7 +153,7 @@ export default function PhotoLightbox({
 
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-    // double-tap only for touch/pen
+    // double-tap for touch/pen
     if (e.pointerType !== "mouse") {
       const now = Date.now();
       if (now - lastTap.current < 280) {
@@ -215,7 +167,6 @@ export default function PhotoLightbox({
     if (pointers.current.size === 1) {
       panBase.current = { x: e.clientX, y: e.clientY, tx, ty };
 
-      // swipe tracking only when not zoomed
       if (scale <= 1.001) {
         swipeBase.current = { x: e.clientX, y: e.clientY, t: Date.now(), pointerType: e.pointerType };
         swipeLock.current = "none";
@@ -278,6 +229,7 @@ export default function PhotoLightbox({
         setTy(0);
       }
 
+      // update baseline (smooth)
       p.dist = dist;
       p.scale = nextScale;
       p.midX = midX;
@@ -286,7 +238,7 @@ export default function PhotoLightbox({
       return;
     }
 
-    // swipe lock detection (only when not zoomed)
+    // swipe lock detect (only when not zoomed)
     if (pointers.current.size === 1 && scale <= 1.001 && swipeBase.current) {
       const dx = e.clientX - swipeBase.current.x;
       const dy = e.clientY - swipeBase.current.y;
@@ -325,12 +277,9 @@ export default function PhotoLightbox({
       const farH = absDx > 80;
       const farV = absDy > 90;
 
-      // vertical close (touch/pen only)
       if (isTouchLike && swipeLock.current === "v" && (farV || (fast && absDy > 60))) {
         onClose();
-      }
-      // horizontal nav
-      else if (canNav && swipeLock.current === "h" && (farH || (fast && absDx > 50))) {
+      } else if (canNav && swipeLock.current === "h" && (farH || (fast && absDx > 50))) {
         if (dx < 0) nextImage();
         else prevImage();
       }
@@ -346,6 +295,60 @@ export default function PhotoLightbox({
       setScale((s) => (s < 1.06 ? 1 : s));
     }
   };
+
+  // ✅ Only now we can early-return safely (after hooks)
+  if (!open) return null;
+
+  // ====== YOUTUBE RENDER ======
+  if (isYouTube) {
+    const embedSrc =
+      `https://www.youtube-nocookie.com/embed/${youtubeId}` +
+      `?autoplay=1&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3`;
+
+    return (
+      <div
+        className="fixed inset-0 z-[200] bg-black/40"
+        role="dialog"
+        aria-modal="true"
+        onMouseDown={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
+        >
+          Închide ✕
+        </button>
+
+        <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
+          <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl">
+            <div className="relative w-full pt-[56.25%]">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={embedSrc}
+                title={youtubeTitle ?? "YouTube video"}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
+          YouTube rulează doar în lightbox • Tap pe fundal sau ESC pentru închidere
+        </div>
+      </div>
+    );
+  }
+
+  // ====== IMAGES RENDER ======
+  if (!current) return null;
 
   return (
     <div
