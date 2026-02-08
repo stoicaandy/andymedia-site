@@ -6,9 +6,9 @@ import type { PortfolioItem } from "@/app/data/portfolio";
 
 type Props = {
   item: PortfolioItem;
+  priority?: boolean; // for above-the-fold cards
 };
 
-// Pause only portfolio videos
 function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
   document.querySelectorAll('video[data-portfolio-video="1"]').forEach((v) => {
     const vid = v as HTMLVideoElement;
@@ -47,7 +47,12 @@ function usePauseOnOutOfView(
   }, [videoRef, rootRef]);
 }
 
-export default function PortfolioCard({ item }: Props) {
+function clampIndex(i: number, len: number) {
+  if (len <= 0) return 0;
+  return Math.max(0, Math.min(len - 1, i));
+}
+
+export default function PortfolioCard({ item, priority = false }: Props) {
   const base = `/portofoliu/${item.media.folder}`;
   const videoSrc = `${base}/video.mp4`;
   const posterSrc = item.media.poster ? `${base}/poster.jpg` : `${base}/1.jpg`;
@@ -78,11 +83,17 @@ export default function PortfolioCard({ item }: Props) {
 
   const THUMBS_MAX = 6;
   const thumbs = useMemo(() => {
-    const arr = photos.slice(1);
+    const arr = photos.slice(1); // thumbs from 2..N (1 is cover)
     const shown = arr.slice(0, THUMBS_MAX);
     const remaining = arr.length - shown.length;
     return { shown, remaining };
   }, [photos]);
+
+  // Media loading strategy:
+  // - first cards: eager images + preload metadata for video
+  // - rest: lazy images + preload none for video (loads on play)
+  const imgLoading: "eager" | "lazy" = priority ? "eager" : "lazy";
+  const videoPreload: "none" | "metadata" = priority ? "metadata" : "none";
 
   return (
     <>
@@ -102,7 +113,7 @@ export default function PortfolioCard({ item }: Props) {
                   poster={posterSrc}
                   controls
                   playsInline
-                  preload="metadata"
+                  preload={videoPreload}
                   className="h-full w-full object-cover"
                   onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
                 />
@@ -111,7 +122,8 @@ export default function PortfolioCard({ item }: Props) {
                   src={photos[0]}
                   alt={item.title}
                   className="h-full w-full object-cover"
-                  loading="lazy"
+                  loading={imgLoading}
+                  decoding="async"
                 />
               )}
 
@@ -129,28 +141,39 @@ export default function PortfolioCard({ item }: Props) {
           </div>
         </div>
 
-        {/* THUMBS */}
+        {/* THUMBS — fără scroll */}
         {photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
-            {thumbs.shown.map((src, i) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => openPhotoAt(i + 1)}
-                className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
-              >
-                <img src={src} className="h-full w-full object-cover" />
-              </button>
-            ))}
+            {thumbs.shown.map((src, i) => {
+              const realIndex = i + 1; // thumbs start at photos[1]
+              return (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => openPhotoAt(realIndex)}
+                  className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
+                  aria-label="Deschide poza"
+                >
+                  <img
+                    src={src}
+                    alt=""
+                    className="h-full w-full object-cover opacity-95"
+                    loading={imgLoading}
+                    decoding="async"
+                  />
+                </button>
+              );
+            })}
 
             {thumbs.remaining > 0 && (
               <button
                 type="button"
                 onClick={() => openPhotoAt(thumbs.shown.length + 1)}
-                className="relative overflow-hidden rounded-xl border border-white/10 bg-white/10 aspect-[3/2]"
+                className="relative overflow-hidden rounded-xl border border-white/10 bg-white/10 aspect-[3/2] hover:bg-white/15 transition"
+                aria-label={`Încă ${thumbs.remaining} poze`}
               >
-                <div className="absolute inset-0 flex items-center justify-center text-white font-medium">
-                  +{thumbs.remaining}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-white font-medium">+{thumbs.remaining}</div>
                 </div>
               </button>
             )}
@@ -159,11 +182,11 @@ export default function PortfolioCard({ item }: Props) {
 
         {/* TEXT */}
         <div className="mt-4">
-          <h3 className="text-lg md:text-xl font-medium">
+          <h3 className="text-lg md:text-xl font-medium text-white">
             {item.title} <span className="text-amber-300">.</span>
           </h3>
 
-          <div className="mt-2 flex gap-2 text-xs text-white/70">
+          <div className="mt-2 flex flex-wrap gap-2 text-xs text-white/70">
             <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
               {item.location}
             </span>
@@ -172,28 +195,30 @@ export default function PortfolioCard({ item }: Props) {
             </span>
           </div>
 
-          <p className="mt-3 text-zinc-300">{item.summary}</p>
+          <p className="mt-3 text-sm md:text-base text-zinc-300 leading-relaxed">
+            {item.summary}
+          </p>
 
-          {item.services?.length > 0 && (
-            <ul className="mt-4 list-disc pl-5 text-sm text-white/80">
+          {item.services?.length ? (
+            <ul className="mt-4 list-disc pl-5 space-y-1 text-sm text-white/80">
               {item.services.map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
-          )}
+          ) : null}
 
-          <div className="mt-5 flex gap-3">
+          <div className="mt-5 flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => openPhotoAt(0)}
-              className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm"
+              className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 hover:bg-white/10 transition"
             >
-              Vezi poze
+              Vezi poze (zoom)
             </button>
 
             <a
               href="/cere-oferta"
-              className="rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-black"
+              className="rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-black hover:bg-amber-300 transition"
             >
               Cere ofertă
             </a>
@@ -209,9 +234,4 @@ export default function PortfolioCard({ item }: Props) {
       />
     </>
   );
-}
-
-function clampIndex(i: number, len: number) {
-  if (len <= 0) return 0;
-  return Math.max(0, Math.min(len - 1, i));
 }
