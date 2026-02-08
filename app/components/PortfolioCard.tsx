@@ -4,11 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { PortfolioItem } from "@/app/data/portfolio";
 
-function pauseAllOtherVideos(current: HTMLVideoElement) {
-  document.querySelectorAll("video").forEach((v) => {
-    if (v !== current && !v.paused) {
+// Pause only portfolio videos (not background videos / other sections)
+function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
+  document.querySelectorAll('video[data-portfolio-video="1"]').forEach((v) => {
+    const vid = v as HTMLVideoElement;
+    if (vid !== current && !vid.paused) {
       try {
-        v.pause();
+        vid.pause();
       } catch {}
     }
   });
@@ -86,13 +88,14 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
               {item.media.hasVideo ? (
                 <video
                   ref={videoRef}
+                  data-portfolio-video="1"
                   src={videoSrc}
                   poster={posterSrc}
                   controls
                   playsInline
                   preload="metadata"
                   className="h-full w-full object-cover"
-                  onPlay={(e) => pauseAllOtherVideos(e.currentTarget)}
+                  onPlay={(e) => pauseAllOtherPortfolioVideos(e.currentTarget)}
                 />
               ) : (
                 <img
