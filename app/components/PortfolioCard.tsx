@@ -55,11 +55,17 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
     return arr;
   }, [base, item.media.photosCount]);
 
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxSrc, setLightboxSrc] = useState("");
+  // Build gallery for lightbox
+  const gallery = useMemo(
+    () => photos.map((src) => ({ src, alt: item.title })),
+    [photos, item.title]
+  );
 
-  const openPhoto = (src: string) => {
-    setLightboxSrc(src);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openPhotoAt = (idx: number) => {
+    setLightboxIndex(clampIndex(idx, gallery.length));
     setLightboxOpen(true);
   };
 
@@ -123,27 +129,30 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
         {/* THUMBS — fără scroll */}
         {photos.length > 1 && (
           <div className="mt-3 grid grid-cols-6 gap-2">
-            {thumbs.shown.map((src) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => openPhoto(src)}
-                className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
-                aria-label="Deschide poza"
-              >
-                <img
-                  src={src}
-                  alt=""
-                  className="h-full w-full object-cover opacity-95"
-                  loading="lazy"
-                />
-              </button>
-            ))}
+            {thumbs.shown.map((src, i) => {
+              const realIndex = i + 1; // because thumbs start at photos[1]
+              return (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => openPhotoAt(realIndex)}
+                  className="relative overflow-hidden rounded-xl border border-white/10 bg-black aspect-[3/2]"
+                  aria-label="Deschide poza"
+                >
+                  <img
+                    src={src}
+                    alt=""
+                    className="h-full w-full object-cover opacity-95"
+                    loading="lazy"
+                  />
+                </button>
+              );
+            })}
 
             {thumbs.remaining > 0 && (
               <button
                 type="button"
-                onClick={() => openPhoto(photos[thumbs.shown.length + 1] ?? photos[0])}
+                onClick={() => openPhotoAt(thumbs.shown.length + 1)}
                 className="relative overflow-hidden rounded-xl border border-white/10 bg-white/10 aspect-[3/2] hover:bg-white/15 transition"
                 aria-label={`Încă ${thumbs.remaining} poze`}
               >
@@ -186,7 +195,7 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => openPhoto(photos[0])}
+              onClick={() => openPhotoAt(0)}
               className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 hover:bg-white/10 transition"
             >
               Vezi poze (zoom)
@@ -205,9 +214,14 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
       <PhotoLightbox
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
-        src={lightboxSrc}
-        alt={item.title}
+        images={gallery}
+        startIndex={lightboxIndex}
       />
     </>
   );
+}
+
+function clampIndex(i: number, len: number) {
+  if (len <= 0) return 0;
+  return Math.max(0, Math.min(len - 1, i));
 }
