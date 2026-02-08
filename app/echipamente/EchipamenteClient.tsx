@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { GEAR_TABLE } from "../data/gear-table";
 import { GEAR_IMAGE_DIR, GEAR_IMAGE_EXTS } from "../data/gear-images";
+import PhotoLightbox from "../components/PhotoLightbox";
 
 type ImgItem = { nr: number; src: string };
 
@@ -11,26 +12,71 @@ function buildSrc(nr: number, ext: string) {
   return `${GEAR_IMAGE_DIR}/${nr}.${ext}`;
 }
 
+/**
+ * HEAD check with caching.
+ * - avoid "no-store" because it slows scanning a lot and prevents caching
+ * - use "force-cache" so browser can reuse results
+ */
 async function headExists(url: string): Promise<boolean> {
   try {
-    const res = await fetch(url, { method: "HEAD", cache: "no-store" });
+    const res = await fetch(url, { method: "HEAD", cache: "force-cache" });
     return res.ok;
   } catch {
     return false;
   }
 }
 
+/**
+ * Limit concurrency so we don't spam the browser/network (important when you have many rows).
+ */
+async function runWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  const results: R[] = new Array(items.length) as any;
+  let nextIndex = 0;
+
+  const runners = new Array(Math.max(1, concurrency)).fill(0).map(async () => {
+    while (true) {
+      const i = nextIndex++;
+      if (i >= items.length) break;
+      results[i] = await worker(items[i], i);
+    }
+  });
+
+  await Promise.all(runners);
+  return results;
+}
+
 export default function EchipamenteClient() {
   const [images, setImages] = useState<ImgItem[]>([]);
+  const [scanning, setScanning] = useState(true);
+
+  // Lightbox (reuse same as portfolio)
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxSrc, setLightboxSrc] = useState("");
+  const [lightboxAlt, setLightboxAlt] = useState("");
+
+  const openPhoto = (src: string, alt: string) => {
+    setLightboxSrc(src);
+    setLightboxAlt(alt);
+    setLightboxOpen(true);
+  };
+
+  // prevent duplicates + allow progressive append
+  const seen = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
 
     const run = async () => {
-      const found: ImgItem[] = [];
+      setScanning(true);
+      setImages([]);
+      seen.current.clear();
 
-      // scanează doar echipamentele din tabel (fără "găuri" 10..29 etc.)
-      for (const row of GEAR_TABLE) {
+      // Worker for each row: find first existing image ext
+      const worker = async (row: (typeof GEAR_TABLE)[number]) => {
         let okSrc: string | null = null;
 
         for (const ext of GEAR_IMAGE_EXTS) {
@@ -41,10 +87,26 @@ export default function EchipamenteClient() {
           }
         }
 
-        if (okSrc) found.push({ nr: row.nr, src: okSrc });
-      }
+        // Progressive update: as soon as we find one, we append it
+        if (okSrc && !cancelled) {
+          if (!seen.current.has(row.nr)) {
+            seen.current.add(row.nr);
+            setImages((prev) => {
+              const next = [...prev, { nr: row.nr, src: okSrc! }];
+              next.sort((a, b) => a.nr - b.nr);
+              return next;
+            });
+          }
+        }
 
-      if (!cancelled) setImages(found);
+        return okSrc;
+      };
+
+      // Concurrency tuned for speed + stability
+      // 6 is a good balance on Vercel + mobile.
+      await runWithConcurrency(GEAR_TABLE, 6, worker);
+
+      if (!cancelled) setScanning(false);
     };
 
     run();
@@ -119,7 +181,7 @@ export default function EchipamenteClient() {
                           el.scrollIntoView({ behavior: "smooth", block: "start" });
                           history.replaceState(null, "", href);
                         }}
-                        title={href ? "Click → vezi imaginea" : "Imaginea nu este încă încărcată"}
+                        title={href ? "Click → vezi imaginea" : "Imaginea nu este încă disponibilă"}
                       >
                         <td className="px-5 py-4 text-zinc-200 font-medium">#{it.nr}</td>
 
@@ -147,17 +209,33 @@ export default function EchipamenteClient() {
 
             {/* GALERIE */}
             <div className="mt-12">
-              <h2 className="text-2xl md:text-3xl font-medium tracking-wide">
-                Galerie echipamente <span className="text-amber-300">#</span>
-              </h2>
-              <p className="mt-3 text-zinc-300/90">
-                Încarci poze în <span className="text-white">public/gear/</span> ca{" "}
-                <span className="text-white">1.jpg</span>, <span className="text-white">2.jpg</span>… Apar automat.
-              </p>
+              <div className="flex items-end justify-between gap-4 flex-wrap">
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-medium tracking-wide">
+                    Galerie echipamente <span className="text-amber-300">#</span>
+                  </h2>
+                  <p className="mt-3 text-zinc-300/90">
+                    Încarci poze în <span className="text-white">public/gear/</span> ca{" "}
+                    <span className="text-white">1.jpg</span>, <span className="text-white">2.jpg</span>… Apar automat.
+                  </p>
+                </div>
+
+                <div className="text-xs text-zinc-400">
+                  {scanning ? (
+                    <span>Se caută poze… ({images.length} găsite)</span>
+                  ) : (
+                    <span>Gata. ({images.length} găsite)</span>
+                  )}
+                </div>
+              </div>
 
               <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {images.map((img) => {
+                {images.map((img, idx) => {
                   const row = rowByNr.get(img.nr);
+                  const alt = row ? `${row.name} (#${img.nr})` : `Echipament #${img.nr}`;
+
+                  // Make first few images eager for "premium" feel, rest lazy
+                  const loadingMode: "eager" | "lazy" = idx < 4 ? "eager" : "lazy";
 
                   return (
                     <article
@@ -166,12 +244,21 @@ export default function EchipamenteClient() {
                       className="overflow-hidden rounded-3xl border border-white/10 bg-black/35 backdrop-blur scroll-mt-24 md:scroll-mt-28"
                     >
                       <div className="relative">
-                        <img
-                          src={img.src}
-                          alt={row ? `${row.name} (#${img.nr})` : `Echipament #${img.nr}`}
-                          className="w-full h-auto block"
-                          loading="lazy"
-                        />
+                        <button
+                          type="button"
+                          className="block w-full text-left"
+                          onClick={() => openPhoto(img.src, alt)}
+                          aria-label={`Deschide imaginea ${alt}`}
+                          title="Click → zoom"
+                        >
+                          <img
+                            src={img.src}
+                            alt={alt}
+                            className="w-full h-auto block cursor-zoom-in"
+                            loading={loadingMode}
+                          />
+                        </button>
+
                         <div className="absolute top-4 left-4 rounded-xl border border-white/15 bg-black/45 px-3 py-2 text-xs tracking-[0.22em] uppercase text-zinc-200">
                           #{img.nr}
                         </div>
@@ -195,7 +282,7 @@ export default function EchipamenteClient() {
                   );
                 })}
 
-                {images.length === 0 && (
+                {!scanning && images.length === 0 && (
                   <div className="rounded-3xl border border-white/10 bg-black/35 p-8 text-zinc-300">
                     Nu am găsit încă poze în <span className="text-white">public/gear/</span>.
                   </div>
@@ -211,6 +298,14 @@ export default function EchipamenteClient() {
           </div>
         </footer>
       </div>
+
+      {/* Lightbox (same behavior as portfolio) */}
+      <PhotoLightbox
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        src={lightboxSrc}
+        alt={lightboxAlt}
+      />
     </main>
   );
 }
