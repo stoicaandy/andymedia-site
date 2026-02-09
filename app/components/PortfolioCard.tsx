@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { PortfolioItem } from "@/app/data/portfolio";
 
@@ -43,13 +43,9 @@ export default function PortfolioCard({ item, priority = false }: Props) {
   );
 
   const hasLocalVideo = !!item.media.hasVideo;
-  const youtubeId = item.media.youtubeId?.trim();
-  const hasYouTube = !hasLocalVideo && !!youtubeId;
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-
-  const [youtubeOpen, setYoutubeOpen] = useState(false);
 
   const openPhotoAt = (idx: number) => {
     setLightboxIndex(clampIndex(idx, gallery.length));
@@ -58,6 +54,28 @@ export default function PortfolioCard({ item, priority = false }: Props) {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPortraitVideo, setIsPortraitVideo] = useState(false);
+
+  // ✅ content-visibility only on desktop/tablet wide (avoid iOS Safari weirdness)
+  const [enableContentVisibility, setEnableContentVisibility] = useState(false);
+  useEffect(() => {
+    try {
+      const mq = window.matchMedia("(min-width: 768px)");
+      const apply = () => setEnableContentVisibility(!!mq.matches);
+      apply();
+      mq.addEventListener?.("change", apply);
+      return () => mq.removeEventListener?.("change", apply);
+    } catch {
+      setEnableContentVisibility(false);
+    }
+  }, []);
+
+  const perfStyle = useMemo<React.CSSProperties | undefined>(() => {
+    if (!enableContentVisibility) return undefined;
+    return {
+      contentVisibility: "auto",
+      containIntrinsicSize: "900px",
+    };
+  }, [enableContentVisibility]);
 
   const THUMBS_MAX = 6;
   const thumbs = useMemo(() => {
@@ -71,10 +89,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
     <>
       <article
         className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:p-5 backdrop-blur-sm"
-        style={{
-          contentVisibility: "auto",
-          containIntrinsicSize: "900px",
-        }}
+        style={perfStyle}
       >
         {/* MAIN MEDIA */}
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
@@ -117,7 +132,7 @@ export default function PortfolioCard({ item, priority = false }: Props) {
                 </div>
 
                 <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/85">
-                  {(hasLocalVideo || hasYouTube) ? "VIDEO" : "FOTO"} • {item.media.photosCount} foto
+                  {hasLocalVideo ? "VIDEO" : "FOTO"} • {item.media.photosCount} foto
                 </div>
               </div>
             </div>
@@ -199,16 +214,6 @@ export default function PortfolioCard({ item, priority = false }: Props) {
               Vezi poze (zoom)
             </button>
 
-            {hasYouTube ? (
-              <button
-                type="button"
-                onClick={() => setYoutubeOpen(true)}
-                className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 hover:bg-white/10 transition"
-              >
-                Vezi video (YouTube)
-              </button>
-            ) : null}
-
             <a
               href="/cere-oferta"
               className="rounded-md bg-amber-400 px-4 py-2 text-sm font-medium text-black hover:bg-amber-300 transition"
@@ -219,20 +224,11 @@ export default function PortfolioCard({ item, priority = false }: Props) {
         </div>
       </article>
 
-      {/* Images lightbox */}
       <PhotoLightbox
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
         images={gallery}
         startIndex={lightboxIndex}
-      />
-
-      {/* YouTube lightbox (controlled, only when open) */}
-      <PhotoLightbox
-        open={youtubeOpen}
-        onClose={() => setYoutubeOpen(false)}
-        youtubeId={youtubeId}
-        youtubeTitle={item.title}
       />
     </>
   );
