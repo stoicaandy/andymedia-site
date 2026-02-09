@@ -68,24 +68,25 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "rC35YDt2nDI",
   },
-{
-  id: "soundcheck-band-iasi",
-  name: "SoundCheck Band",
-  city: "Iași",
-  category: "Trupe exclusive",
-  exclusive: true,
-  since: "2018",
-  priority: 2,
-  description:
-    "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. Booking: 0742 137 647 • trupasoundcheck@gmail.com.",
-  image: "/parteneri/soundcheck-band-iasi.jpg",
-  tags: ["live", "corporate", "nuntă", "cover band", "jazz", "rock", "disco", "reggae"],
-  links: {
-    website: "https://www.soundcheckband.ro/",
-    youtube: "https://www.youtube.com/c/soundcheckiasi/videos",
+  {
+    id: "soundcheck-band-iasi",
+    name: "SoundCheck Band",
+    city: "Iași",
+    category: "Trupe exclusive",
+    exclusive: true,
+    since: "2022",
+    priority: 2,
+    description:
+      "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. Booking: 0742 137 647 • trupasoundcheck@gmail.com.",
+    image: "/parteneri/soundcheck-band-iasi.jpg",
+    tags: ["live", "corporate", "nuntă", "cover band", "jazz", "rock", "disco", "reggae"],
+    links: {
+      website: "https://www.soundcheckband.ro/",
+      youtube: "https://www.youtube.com/c/soundcheckiasi/videos",
+      tiktok: "https://www.tiktok.com/@soundcheckband.ro",
+    },
+    youtubeEmbed: "4H0ZJeZGSJg",
   },
-  youtubeEmbed: "4H0ZJeZGSJg",
-},
   {
     id: "dj-jonny-black-iasi",
     name: "DJ Jonny Black",
@@ -94,18 +95,37 @@ const PARTNERS: Partner[] = [
     priority: 3,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
-    // IMPORTANT: la tine fișierul este .jpeg
-    image: "/parteneri/dj-jonny-black-iasi.jpg",
-    tags: ["nuntă", "corporate", "party", "botezuri"],
+    image: "/parteneri/dj-jonny-black-iasi.jpeg",
+    tags: ["nuntă", "corporate", "party", "open format"],
     links: {
-      
-      facebook: "https://facebook.com/eventiasi",
-      tiktok: "https://www.tiktok.com/@johnny.events?_r=1&_t=ZN-93mcjtQZu9W",
-      contact: "https://wa.me/",
+      instagram: "https://instagram.com/",
+      facebook: "https://facebook.com/",
+      youtube: "https://youtube.com/",
+      contact: "https://wa.me/40700000000",
     },
     youtubeEmbed: "",
   },
-
+  {
+  id: "smart-music-iasi",
+  name: "Smart Music",
+  city: "Iași",
+  category: "Trupe colaborări",
+  collaborated: true,
+  priority: 55,
+  description:
+    "Formație de evenimente (colaborare periodică). Repertoriu pentru petreceri / momente dedicate, livrat curat și adaptat publicului.",
+  image: "/parteneri/smart-music-iasi.jpg",
+  tags: ["formație", "evenimente", "colaborare", "Iași"],
+  links: {
+    instagram: "https://www.instagram.com/iasi.smartmusic/",
+    facebook: "https://www.facebook.com/iasi.smartmusic/",
+    youtube: "https://www.youtube.com/@smartmusiciasi",
+    tiktok: "https://www.tiktok.com/@smartmusic.iasi",
+    // WhatsApp: obligatoriu cu prefix țară și fără 0/space
+    contact: "https://wa.me/40742453047",
+  },
+  youtubeEmbed: "bRcEc5TpZ5c",
+},
   {
     id: "trupa-colaborare-exemplu",
     name: "Exemplu Trupă Colaborare",
@@ -197,6 +217,15 @@ function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm">
       {children}
+    </span>
+  );
+}
+
+function StatPill({ k, v }: { k: string; v: string | number }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/25 px-3 py-1.5 text-xs text-white/80 backdrop-blur-md">
+      <span className="text-white font-semibold">{v}</span>
+      <span className="text-white/60">{k}</span>
     </span>
   );
 }
@@ -311,7 +340,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
               <div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
             </div>
 
-            <div className="mx-auto max-w-6xl px-8 md:px-10 pt-6 pb-10 md:pt-7 md:pb-12">
+            <div className="mx-auto max-w-6xl px-8 md:px-10 pt-6 pb-8 md:pt-7 md:pb-9">
               <p className="text-[11px] uppercase tracking-[0.26em] text-zinc-200/70">
                 ANDYmedia • Parteneri & Booking
               </p>
@@ -326,50 +355,45 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                 descriere și linkuri oficiale — exact ce trebuie pentru decizie rapidă.
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-4">
+              <div className="mt-5 flex flex-wrap gap-4">
                 <Link
                   href="/cere-oferta"
-                  className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-7 py-4 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
+                  className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
                 >
                   Cere recomandare (client)
                 </Link>
 
                 <Link
                   href="/booking"
-                  className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                  className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
                 >
                   Aplică pentru Booking (artist)
                 </Link>
 
                 <Link
                   href="/#top"
-                  className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                  className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
                 >
                   Înapoi la Home
                 </Link>
               </div>
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-md">
-                  <div className="text-2xl font-bold">{stats.total}</div>
-                  <div className="text-sm text-white/75">profiluri în listă</div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-md">
-                  <div className="text-2xl font-bold">{stats.exclusiveCount}</div>
-                  <div className="text-sm text-white/75">trupe exclusive</div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-md">
-                  <div className="text-2xl font-bold">{stats.citiesCount}</div>
-                  <div className="text-sm text-white/75">orașe reprezentate</div>
-                </div>
+              {/* ✅ STATS COMPACT (în loc de 3 casete mari) */}
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <StatPill v={stats.total} k="profiluri" />
+                <StatPill v={stats.exclusiveCount} k="exclusive" />
+                <StatPill v={stats.citiesCount} k="orașe" />
+                <span className="ml-1 text-xs text-white/40 hidden sm:inline">
+                  • actualizăm constant lista
+                </span>
               </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/65 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/65 to-transparent" />
           </section>
 
           {/* FILTER BAR */}
-          <section className="mx-auto max-w-6xl px-8 md:px-10 pt-8 pb-6">
+          <section className="mx-auto max-w-6xl px-8 md:px-10 pt-6 pb-6">
             <div className="rounded-3xl border border-white/10 bg-black/30 p-4 sm:p-5 backdrop-blur-md">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 flex-col gap-3">
@@ -442,7 +466,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                     key={p.id}
                     className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30 transition hover:border-white/20 hover:bg-black/35 backdrop-blur-md"
                   >
-                    {/* Imagine: fără overlay cu badges (nu mai acoperim logo-uri/fețe) */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden">
                       <Image
                         src={p.image}
@@ -455,7 +478,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                     </div>
 
                     <div className="p-5">
-                      {/* Chips sub poză */}
                       <div className="mb-3 flex flex-wrap gap-2">
                         {p.priority && p.priority <= 10 ? <Chip>ANDYmedia Preferred</Chip> : null}
                         {p.exclusive ? <Chip>Exclusiv</Chip> : null}
