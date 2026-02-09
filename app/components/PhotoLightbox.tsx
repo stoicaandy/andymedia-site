@@ -36,9 +36,7 @@ function preloadUrl(url: string) {
   const img = new Image();
   img.decoding = "async";
   img.src = url;
-  img.onload = () => {
-    LOADED.add(url);
-  };
+  img.onload = () => LOADED.add(url);
 }
 
 export default function PhotoLightbox({
@@ -184,7 +182,7 @@ export default function PhotoLightbox({
     }
   }, [open, isYouTube, index, gallery]);
 
-  // snap to 1x when close
+  // snap to 1x when near
   useEffect(() => {
     if (!open) return;
     if (isYouTube) return;
@@ -200,18 +198,15 @@ export default function PhotoLightbox({
     [tx, ty, scale]
   );
 
-  const toggleZoom = () => {
-    setScale((s) => (s < 1.5 ? 2 : 1));
-  };
+  const toggleZoom = () => setScale((s) => (s < 1.5 ? 2 : 1));
 
-  // ✅ Ctrl + wheel zoom (desktop)
+  // ✅ Wheel zoom (NO Ctrl needed). Also supports trackpad pinch (ctrlKey true on some browsers)
   const onWheel = (e: React.WheelEvent) => {
     if (isYouTube) return;
 
-    // only Ctrl+wheel (pro, doesn't break normal scrolling)
-    if (!e.ctrlKey) return;
-
+    // prevent page scroll while wheel over lightbox
     e.preventDefault();
+    e.stopPropagation();
 
     const rect = boxRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -222,13 +217,12 @@ export default function PhotoLightbox({
     const dx = cursorX - rect.width / 2;
     const dy = cursorY - rect.height / 2;
 
-    const direction = e.deltaY > 0 ? -1 : 1; // wheel up => zoom in
+    // normalize: wheel up => zoom in
+    const direction = e.deltaY > 0 ? -1 : 1;
     const factor = direction > 0 ? 1.12 : 1 / 1.12;
 
     setScale((prevScale) => {
       const nextScale = clamp(prevScale * factor, 1, 4);
-
-      // keep zoom around cursor: adjust translation proportionally
       const ratio = nextScale / prevScale;
 
       setTx((prevTx) => clamp(prevTx - dx * (ratio - 1), -2400, 2400));
@@ -411,7 +405,7 @@ export default function PhotoLightbox({
             e.stopPropagation();
             onClose();
           }}
-          className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
+          className="absolute right-4 top-4 z-[230] rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
         >
           Închide ✕
         </button>
@@ -450,7 +444,7 @@ export default function PhotoLightbox({
           e.stopPropagation();
           onClose();
         }}
-        className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
+        className="absolute right-4 top-4 z-[230] rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
       >
         Închide ✕
       </button>
@@ -463,7 +457,7 @@ export default function PhotoLightbox({
               e.stopPropagation();
               prevImage();
             }}
-            className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
+            className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-[230] rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
             aria-label="Imaginea anterioară"
           >
             ←
@@ -475,7 +469,7 @@ export default function PhotoLightbox({
               e.stopPropagation();
               nextImage();
             }}
-            className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
+            className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-[230] rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
             aria-label="Imaginea următoare"
           >
             →
@@ -483,10 +477,11 @@ export default function PhotoLightbox({
         </>
       )}
 
-      <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
+      {/* ✅ IMPORTANT: wrapper doesn't steal clicks */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-6">
         <div
           ref={boxRef}
-          className="relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
+          className="pointer-events-auto relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
           onWheel={onWheel}
           onPointerDown={onBoxPointerDown}
           onPointerMove={onBoxPointerMove}
@@ -536,9 +531,8 @@ export default function PhotoLightbox({
             </>
           ) : null}
 
-          {/* hint: Ctrl+wheel */}
           <div className="pointer-events-none absolute bottom-3 left-0 right-0 text-center text-[11px] text-white/60">
-            PC: Ctrl + rotiță = zoom • Dublu-click = 2× • Drag când e zoom
+            Rotiță = zoom • Dublu-click = 2× • Drag când e zoom • Swipe st/dr (mobil) pentru galerie
           </div>
         </div>
       </div>
