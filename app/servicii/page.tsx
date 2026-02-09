@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   title:
     "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
   description:
-    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
+    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, conferințe, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
   alternates: { canonical: "/servicii" },
   openGraph: {
     title:
       "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
     description:
-      "Sunet calibrat (Smaart), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). DJ adaptat publicului + scenă dimensionată corect.",
+      "Sunet calibrat (Smaart/REW), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). DJ adaptat publicului + scenă dimensionată corect.",
     url: "/servicii",
     type: "website",
   },
@@ -37,6 +37,7 @@ type ServiceBlock = {
 
 const quickNav = [
   { href: "#sonorizare", label: "Sonorizare" },
+  { href: "#conferinte", label: "Conferințe" },
   { href: "#mixaj", label: "Regie & Mixaj" },
   { href: "#lumini", label: "Lumini" },
   { href: "#led", label: "Ecrane LED" },
@@ -62,10 +63,10 @@ const serviceBlocks: ServiceBlock[] = [
     whatWeDo: [
       "Alegem sistemul potrivit locației (inclusiv soluții premium: d&b audiotechnik) și dimensionăm corect.",
       "Montaj corect: acoperire uniformă, aliniere și optimizare FOH & monitor.",
-      "Calibrare acustică: Smaart RTA, room EQ, măsurători și reglaje pentru claritate + control pe feedback.",
+      "Măsurători acustice reale cu microfon de măsură (Isemcon / UMIK-1) + Smaart / REW / Open Sound Meter: aliniere, room EQ și control pe feedback.",
     ],
     keywordsLine:
-      "Căutări frecvente: sonorizare Iași, sistem PA, d&b audiotechnik, sunetist Iași.",
+      "Căutări frecvente: sonorizare Iași, sistem PA, d&b audiotechnik, sunetist Iași, măsurători acustice.",
     image: {
       src: "/servicii/pa-db.jpg",
       alt: "Proiectare sistem PA (d&b) – simulare / optimizare acoperire",
@@ -73,6 +74,34 @@ const serviceBlocks: ServiceBlock[] = [
       desc: "Simulare / planificare corectă înainte de montaj.",
     },
   },
+
+  {
+    id: "conferinte",
+    title: "Conferințe, corporate & evenimente business (panel / prezentări / Q&A)",
+    subtitle:
+      "Pentru conferințe contează claritatea și stabilitatea: speech inteligibil, microfonie zero, volum uniform și control pe momente.",
+    whatClientThinks:
+      "„Avem o conferință: câteva microfoane și un sistem… să se audă.”",
+    whatUsuallyHappens: [
+      "Voce neclară, volum inegal în sală, microfonii la întrebări.",
+      "Lipsă procedură: predare microfon, Q&A haotic, întârzieri.",
+      "Fără redundanță și fără operator dedicat pe speech.",
+    ],
+    whatWeDo: [
+      "Setup dedicat pentru speech: microfoane potrivite (handheld / lavalieră / headset), poziționare și gain-structure corecte.",
+      "Operator audio pentru conferință: control în timp real, Q&A, panel și tranziții între vorbitori.",
+      "Integrare cu LED / prezentări (HDMI), muzică intro/outro, înregistrare/livestream la cerere.",
+    ],
+    keywordsLine:
+      "Căutări frecvente: sonorizare conferință Iași, microfoane conferință, panel, evenimente corporate.",
+    image: {
+      src: "/servicii/conferinta-congres.jpg",
+      alt: "Conferință / congres: setup audio pentru speech și prezentări",
+      title: "Conferințe & corporate",
+      desc: "Speech clar, control pe Q&A și momente.",
+    },
+  },
+
   {
     id: "mixaj",
     title: "Regie & Mixaj: de ce unele evenimente sună „ca pe CD”",
@@ -98,6 +127,7 @@ const serviceBlocks: ServiceBlock[] = [
       desc: "Control în timp real pe vocale, muzică și trupă.",
     },
   },
+
   {
     id: "lumini",
     title: "Lumini scenice & ambientale (controlate, nu haos)",
@@ -123,6 +153,7 @@ const serviceBlocks: ServiceBlock[] = [
       desc: "Lumini programate pe momente, nu random.",
     },
   },
+
   {
     id: "led",
     title: "Ecrane LED & grafică vizuală (content live)",
@@ -168,8 +199,8 @@ export default function Page() {
             ANDYmedia oferă servicii profesionale pentru evenimente:{" "}
             <strong>sonorizare</strong>, <strong>lumini</strong>,{" "}
             <strong>ecrane LED</strong>, <strong>scenă</strong>, <strong>DJ</strong>,
-            operatori tehnici, transport, montaj, consultanță și{" "}
-            <strong>booking artistic</strong>.
+            <strong> conferințe</strong>, operatori tehnici, transport, montaj,
+            consultanță și <strong>booking artistic</strong>.
           </p>
 
           <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
@@ -439,6 +470,31 @@ export default function Page() {
               <li>Consultanță pentru alegerea soluției potrivite</li>
             </ul>
             <p className="mt-4 text-zinc-400 text-sm max-w-4xl">{citiesLine}</p>
+          </div>
+
+          {/* CTA final (conferinte) */}
+          <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-medium">
+              Ai o conferință / eveniment corporate?
+            </h2>
+            <p className="mt-4 text-zinc-300 max-w-3xl leading-relaxed">
+              Îți propunem un setup dedicat pentru speech (claritate, stabilitate, Q&A) și,
+              la nevoie, integrare cu LED / prezentări și operatori.
+            </p>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/cere-oferta"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-400 px-6 py-3 text-black font-medium hover:bg-amber-300 transition"
+              >
+                Cere ofertă conferință
+              </Link>
+              <Link
+                href="/echipamente"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+              >
+                Vezi echipamentele
+              </Link>
+            </div>
           </div>
         </section>
       </div>
