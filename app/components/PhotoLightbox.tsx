@@ -20,7 +20,7 @@ type Props = {
   youtubeTitle?: string;
 };
 
-// very small in-memory cache of URLs we've already successfully loaded
+// in-memory cache
 const LOADED = new Set<string>();
 
 function clamp(n: number, min: number, max: number) {
@@ -53,28 +53,6 @@ export default function PhotoLightbox({
 }: Props) {
   const isYouTube = !!youtubeId;
 
-  // lock scroll + ESC
-  useEffect(() => {
-    if (!open) return;
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (!isYouTube) {
-        if (e.key === "ArrowLeft") prevImageRef.current?.();
-        if (e.key === "ArrowRight") nextImageRef.current?.();
-      }
-    };
-
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open, onClose, isYouTube]);
-
   const gallery: LightboxImage[] = useMemo(() => {
     if (images && images.length) return images;
     if (src) return [{ src, alt }];
@@ -83,15 +61,14 @@ export default function PhotoLightbox({
 
   const canNav = gallery.length > 1;
 
-  // index & current url
   const [index, setIndex] = useState(() => clampIndex(startIndex, gallery.length));
 
-  // We keep a "shownSrc" so we don't flash blank while a new image is decoding.
+  // keep last visible while next decodes
   const [shownSrc, setShownSrc] = useState<string>(() => gallery[clampIndex(startIndex, gallery.length)]?.src ?? "");
   const [shownAlt, setShownAlt] = useState<string>(() => gallery[clampIndex(startIndex, gallery.length)]?.alt ?? "");
   const [pendingSrc, setPendingSrc] = useState<string>("");
 
-  // zoom/pan state
+  // zoom/pan
   const [scale, setScale] = useState(1);
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
@@ -100,12 +77,13 @@ export default function PhotoLightbox({
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
-  // swipe base (for nav + close)
+  // swipe close / nav (touch)
   const swipeBase = useRef<{ x: number; y: number; t: number; pointerType: string } | null>(null);
   const swipeLock = useRef<"none" | "h" | "v">("none");
 
-  // double-tap support
   const lastTap = useRef<number>(0);
+
+  const boxRef = useRef<HTMLDivElement | null>(null);
 
   const resetView = () => {
     setScale(1);
@@ -119,9 +97,6 @@ export default function PhotoLightbox({
     lastTap.current = 0;
   };
 
-  const prevImageRef = useRef<null | (() => void)>(null);
-  const nextImageRef = useRef<null | (() => void)>(null);
-
   const prevImage = () => {
     if (!canNav) return;
     setIndex((i) => (i - 1 + gallery.length) % gallery.length);
@@ -134,10 +109,30 @@ export default function PhotoLightbox({
     resetView();
   };
 
-  prevImageRef.current = prevImage;
-  nextImageRef.current = nextImage;
+  // lock scroll + keybinds
+  useEffect(() => {
+    if (!open) return;
 
-  // init/reset on open or when inputs change
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (!isYouTube) {
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "ArrowRight") nextImage();
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, onClose, isYouTube, canNav, gallery.length]);
+
+  // init on open (images mode)
   useEffect(() => {
     if (!open) return;
     if (isYouTube) return;
@@ -153,7 +148,6 @@ export default function PhotoLightbox({
 
     if (firstSrc) {
       preloadUrl(firstSrc);
-      // prefetch neighbors (big win for perceived speed + fewer "re-load" moments)
       const prev = gallery[(i - 1 + gallery.length) % gallery.length]?.src;
       const next = gallery[(i + 1) % gallery.length]?.src;
       if (prev) preloadUrl(prev);
@@ -164,7 +158,7 @@ export default function PhotoLightbox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, isYouTube, startIndex, gallery.length]);
 
-  // When index changes: prefetch and set pending src; swap only when decoded/loaded.
+  // when index changes: prefetch & swap smoothly
   useEffect(() => {
     if (!open) return;
     if (isYouTube) return;
@@ -173,17 +167,14 @@ export default function PhotoLightbox({
     const target = gallery[index];
     const targetSrc = target?.src ?? "";
     const targetAlt = target?.alt ?? "";
-
     if (!targetSrc) return;
 
-    // Prefetch target and neighbors immediately
     preloadUrl(targetSrc);
     const prev = gallery[(index - 1 + gallery.length) % gallery.length]?.src;
     const next = gallery[(index + 1) % gallery.length]?.src;
     if (prev) preloadUrl(prev);
     if (next) preloadUrl(next);
 
-    // if already loaded, swap instantly; else show pending loader but keep current visible
     if (LOADED.has(targetSrc)) {
       setShownSrc(targetSrc);
       setShownAlt(targetAlt);
@@ -193,7 +184,7 @@ export default function PhotoLightbox({
     }
   }, [open, isYouTube, index, gallery]);
 
-  // snap back near 1x
+  // snap to 1x when close
   useEffect(() => {
     if (!open) return;
     if (isYouTube) return;
@@ -213,13 +204,47 @@ export default function PhotoLightbox({
     setScale((s) => (s < 1.5 ? 2 : 1));
   };
 
+  // ✅ Ctrl + wheel zoom (desktop)
+  const onWheel = (e: React.WheelEvent) => {
+    if (isYouTube) return;
+
+    // only Ctrl+wheel (pro, doesn't break normal scrolling)
+    if (!e.ctrlKey) return;
+
+    e.preventDefault();
+
+    const rect = boxRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const cursorX = e.clientX - rect.left;
+    const cursorY = e.clientY - rect.top;
+
+    const dx = cursorX - rect.width / 2;
+    const dy = cursorY - rect.height / 2;
+
+    const direction = e.deltaY > 0 ? -1 : 1; // wheel up => zoom in
+    const factor = direction > 0 ? 1.12 : 1 / 1.12;
+
+    setScale((prevScale) => {
+      const nextScale = clamp(prevScale * factor, 1, 4);
+
+      // keep zoom around cursor: adjust translation proportionally
+      const ratio = nextScale / prevScale;
+
+      setTx((prevTx) => clamp(prevTx - dx * (ratio - 1), -2400, 2400));
+      setTy((prevTy) => clamp(prevTy - dy * (ratio - 1), -2400, 2400));
+
+      return nextScale;
+    });
+  };
+
   const onBoxPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
 
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-    // double-tap for touch/pen
+    // double-tap (touch/pen)
     if (e.pointerType !== "mouse") {
       const now = Date.now();
       if (now - lastTap.current < 280) {
@@ -294,7 +319,6 @@ export default function PhotoLightbox({
         setTy(0);
       }
 
-      // update baseline (smooth)
       p.dist = dist;
       p.scale = nextScale;
       p.midX = midX;
@@ -411,8 +435,6 @@ export default function PhotoLightbox({
   }
 
   // ===== Images mode =====
-  const showNav = canNav && gallery.length > 1;
-
   return (
     <div
       className="fixed inset-0 z-[200] bg-black/20"
@@ -433,7 +455,7 @@ export default function PhotoLightbox({
         Închide ✕
       </button>
 
-      {showNav && (
+      {canNav && (
         <>
           <button
             type="button"
@@ -463,7 +485,9 @@ export default function PhotoLightbox({
 
       <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
         <div
+          ref={boxRef}
           className="relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
+          onWheel={onWheel}
           onPointerDown={onBoxPointerDown}
           onPointerMove={onBoxPointerMove}
           onPointerUp={onBoxPointerUp}
@@ -474,7 +498,6 @@ export default function PhotoLightbox({
           }}
           style={{ touchAction: "none" }}
         >
-          {/* Keep current visible; if pending, we load it invisibly and swap onLoad */}
           <img
             src={shownSrc}
             alt={shownAlt}
@@ -491,29 +514,32 @@ export default function PhotoLightbox({
           />
 
           {pendingSrc ? (
-            <img
-              src={pendingSrc}
-              alt=""
-              draggable={false}
-              className="absolute inset-0 opacity-0 pointer-events-none"
-              onLoad={() => {
-                LOADED.add(pendingSrc);
-                const t = gallery[index];
-                setShownSrc(pendingSrc);
-                setShownAlt(t?.alt ?? "");
-                setPendingSrc("");
-              }}
-            />
+            <>
+              <img
+                src={pendingSrc}
+                alt=""
+                draggable={false}
+                className="absolute inset-0 opacity-0 pointer-events-none"
+                onLoad={() => {
+                  LOADED.add(pendingSrc);
+                  const t = gallery[index];
+                  setShownSrc(pendingSrc);
+                  setShownAlt(t?.alt ?? "");
+                  setPendingSrc("");
+                }}
+              />
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <div className="rounded-full border border-white/10 bg-black/40 px-3 py-2 text-xs text-white/80">
+                  Se încarcă…
+                </div>
+              </div>
+            </>
           ) : null}
 
-          {/* tiny loader only when truly pending */}
-          {pendingSrc ? (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="rounded-full border border-white/10 bg-black/40 px-3 py-2 text-xs text-white/80">
-                Se încarcă…
-              </div>
-            </div>
-          ) : null}
+          {/* hint: Ctrl+wheel */}
+          <div className="pointer-events-none absolute bottom-3 left-0 right-0 text-center text-[11px] text-white/60">
+            PC: Ctrl + rotiță = zoom • Dublu-click = 2× • Drag când e zoom
+          </div>
         </div>
       </div>
     </div>
