@@ -52,7 +52,7 @@ const PARTNERS: Partner[] = [
     exclusive: true,
     since: "2022",
     description:
-      "Trupă live pentru evenimente corporate și private. Show disciplinat, repertoriu adaptabil și energie de scenă. Lucrează cu noi pe setup tehnic calibrat (FOH/monitor).",
+      "Trupă live pentru evenimente corporate și private. Show disciplinat, repertoriu adaptabil și energie de scenă.",
     image: "/parteneri/soundcheck-band-iasi.jpg",
     tags: ["live", "corporate", "nuntă", "cover band"],
     links: {
@@ -71,7 +71,7 @@ const PARTNERS: Partner[] = [
     exclusive: true,
     since: "2021",
     description:
-      "Trupă de party cu setlist modern + evergreen, potrivită pentru public mixt. Stage-ready, soundcheck eficient, vibe de festival în sală.",
+      "Trupă de party cu setlist modern + evergreen, potrivită pentru public mixt. Stage-ready, soundcheck eficient.",
     image: "/parteneri/trupa-de-weekend-iasi.jpg",
     tags: ["party", "live", "evenimente", "cover"],
     links: {
@@ -89,7 +89,7 @@ const PARTNERS: Partner[] = [
     collaborated: true,
     since: "2019",
     description:
-      "Am colaborat la evenimente punctuale (show-uri, spectacole, apariții). Setup tehnic livrat de ANDYmedia + operator dedicat.",
+      "Am colaborat la evenimente punctuale (show-uri, spectacole, apariții). Setup tehnic livrat de ANDYmedia + operator.",
     image: "/parteneri/exemplu-trupa-colaborare-bacau.jpg",
     tags: ["colaborare", "spectacol", "live"],
     links: {
@@ -104,7 +104,7 @@ const PARTNERS: Partner[] = [
     city: "Iași",
     category: "DJ",
     description:
-      "DJ orientat pe public & moment: warm-up corect, peak-time controlat, microfon de eveniment, setlist adaptat (nu “un playlist la întâmplare”).",
+      "DJ orientat pe public & moment: warm-up corect, peak-time controlat, setlist adaptat (nu “random playlist”).",
     image: "/parteneri/dj-exemplu-iasi.jpg",
     tags: ["nuntă", "corporate", "club", "open format"],
     links: {
@@ -121,7 +121,7 @@ const PARTNERS: Partner[] = [
     city: "Iași",
     category: "Foto-Video",
     description:
-      "Echipă foto-video pentru evenimente: cadre curate, livrare rapidă, colaborare fluidă cu regie/LED pentru integrare live (HDMI/SDI).",
+      "Echipă foto-video pentru evenimente: cadre curate, livrare rapidă, colaborare fluidă cu regie/LED pentru integrare live.",
     image: "/parteneri/foto-video-exemplu-iasi.jpg",
     tags: ["foto", "video", "reels", "after-movie"],
     links: {
@@ -129,18 +129,6 @@ const PARTNERS: Partner[] = [
       instagram: "https://instagram.com/",
       facebook: "https://facebook.com/",
       youtube: "https://youtube.com/",
-    },
-  },
-  {
-    id: "booking-in-dezvoltare",
-    name: "Booking (în dezvoltare)",
-    category: "Booking",
-    description:
-      "Adăugăm constant artiști și formații imediat ce avem contactul lor. Dacă vrei recomandări rapide, trimite-ne detaliile.",
-    image: "/parteneri/booking-andymedia.jpg",
-    tags: ["booking", "artiști", "formații", "DJ"],
-    links: {
-      contact: "/cere-oferta",
     },
   },
 ];
@@ -261,85 +249,108 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* IMPORTANT: fără bg opac pe main -> se vede video background-ul global */}
       <main className="relative min-h-screen text-white">
-        {/* ca pe Home: nu intră sub header */}
         <div className="relative z-10 pt-20 md:pt-24">
-          {/* HERO */}
+          {/* HERO — tipografie ca Home */}
           <section className="relative overflow-hidden">
-            {/* overlay “soft” pentru lizibilitate, dar transparent ca să se vadă video */}
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-0 bg-black/25" />
               <div className="absolute -top-24 left-1/2 h-72 w-[900px] -translate-x-1/2 rounded-full bg-white/5 blur-3xl" />
               <div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
             </div>
 
-            <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-wrap items-center gap-3">
-                  <Badge>ANDYmedia • Parteneri</Badge>
-                  <Badge>Booking în dezvoltare</Badge>
-                  <Badge>Linkuri oficiale</Badge>
+            <div className="mx-auto max-w-6xl px-8 md:px-10 pt-6 pb-10 md:pt-7 md:pb-12">
+              <p className="text-[11px] uppercase tracking-[0.26em] text-zinc-200/70">
+                ANDYmedia • Parteneri & Booking
+              </p>
+
+              <h1 className="mt-2 text-xl md:text-2xl font-medium leading-tight text-white/95">
+                Trupe, DJ, Foto-Video și artiști verificați{" "}
+                <span className="text-amber-300">.</span>
+              </h1>
+
+              <p className="mt-2 text-sm md:text-base text-zinc-300/85 leading-snug max-w-3xl">
+                Aici găsești partenerii cu care lucrăm (exclusive + colaborări) și zona de booking în dezvoltare.
+                Fiecare profil are card premium cu poză, descriere și linkuri oficiale.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-4">
+                <Link
+                  href="/cere-oferta"
+                  className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-7 py-4 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
+                >
+                  Cere recomandare (client)
+                </Link>
+
+                <Link
+                  href="/booking"
+                  className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                >
+                  Aplică pentru Booking (artist)
+                </Link>
+
+                <Link
+                  href="/#top"
+                  className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                >
+                  Înapoi la Home
+                </Link>
+              </div>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-md">
+                  <div className="text-2xl font-bold">{stats.total}</div>
+                  <div className="text-sm text-white/75">profiluri în listă</div>
                 </div>
-
-                <h1 className="text-balance text-3xl font-extrabold tracking-tight sm:text-5xl">
-                  Trupe, DJ, Foto-Video & artiști — selectați pentru evenimente care
-                  trebuie să iasă perfect.
-                </h1>
-
-                <p className="max-w-3xl text-pretty text-base text-white/80 sm:text-lg">
-                  Aici găsești partenerii noștri: <strong className="text-white">trupe exclusive</strong>, colaborări,
-                  DJ, echipe foto-video și booking (în creștere). Fiecare profil are
-                  card dedicat cu poză, descriere și linkuri către canalele lor.
-                </p>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                    <div className="text-2xl font-bold">{stats.total}</div>
-                    <div className="text-sm text-white/75">profiluri în listă</div>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                    <div className="text-2xl font-bold">{stats.exclusiveCount}</div>
-                    <div className="text-sm text-white/75">trupe exclusive</div>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                    <div className="text-2xl font-bold">{stats.citiesCount}</div>
-                    <div className="text-sm text-white/75">orașe reprezentate</div>
-                  </div>
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-md">
+                  <div className="text-2xl font-bold">{stats.exclusiveCount}</div>
+                  <div className="text-sm text-white/75">trupe exclusive</div>
                 </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/cere-oferta"
-                    className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
-                  >
-                    Cere recomandare / disponibilitate
-                  </Link>
-
-                  {/* prindere / buton către Home (cum ai cerut) */}
-                  <Link
-                    href="/#top"
-                    className="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 backdrop-blur-sm"
-                  >
-                    Înapoi la Home
-                  </Link>
-
-                  <Link
-                    href="/servicii"
-                    className="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 backdrop-blur-sm"
-                  >
-                    Vezi serviciile ANDYmedia
-                  </Link>
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-md">
+                  <div className="text-2xl font-bold">{stats.citiesCount}</div>
+                  <div className="text-sm text-white/75">orașe reprezentate</div>
                 </div>
               </div>
             </div>
 
-            {/* gradient jos, ca pe home */}
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/65 to-transparent" />
           </section>
 
+          {/* “Atrage artiștii” — banner dedicat */}
+          <section className="mx-auto max-w-6xl px-8 md:px-10 pt-8">
+            <div className="rounded-2xl border border-white/10 bg-black/30 p-6 md:p-7 backdrop-blur-md">
+              <div className="grid gap-6 md:grid-cols-2 md:items-center">
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
+                    Ești trupă / DJ / artist / foto-video?
+                  </div>
+                  <h2 className="mt-2 text-xl md:text-2xl font-medium tracking-wide">
+                    Vrei să apari pe ANDYmedia <span className="text-amber-300">?</span>
+                  </h2>
+                  <p className="mt-2 text-sm md:text-base text-zinc-300/85 leading-snug">
+                    Ne dorim un roster curat, premium, cu profiluri care arată bine și trimit trafic către
+                    canalele oficiale (site/FB/IG/YouTube). Aplici o singură dată — revenim rapid cu pașii.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/booking"
+                    className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition text-center"
+                  >
+                    Aplică pentru listare (Booking)
+                  </Link>
+
+                  <div className="rounded-xl border border-white/10 bg-black/25 px-5 py-3 text-xs text-zinc-300/80">
+                    Poză: 1600–2400px (ideal ~2000px), JPG 70–85%, sub ~600KB • Linkuri oficiale • Descriere scurtă
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* FILTER BAR */}
-          <section className="mx-auto max-w-6xl px-4 pb-6">
+          <section className="mx-auto max-w-6xl px-8 md:px-10 pt-8 pb-6">
             <div className="rounded-3xl border border-white/10 bg-black/30 p-4 sm:p-5 backdrop-blur-md">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 flex-col gap-3">
@@ -393,13 +404,13 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                   Afișate: <span className="font-semibold text-white">{filtered.length}</span> /{" "}
                   {PARTNERS.length}
                 </div>
-                <div className="hidden sm:block">Carduri optimizate pentru linkuri oficiale + SEO</div>
+                <div className="hidden sm:block">Carduri premium cu linkuri oficiale</div>
               </div>
             </div>
           </section>
 
           {/* GRID */}
-          <section className="mx-auto max-w-6xl px-4 pb-14">
+          <section className="mx-auto max-w-6xl px-8 md:px-10 pb-14">
             {filtered.length === 0 ? (
               <div className="rounded-3xl border border-white/10 bg-black/30 p-10 text-center backdrop-blur-md">
                 <div className="text-xl font-bold">Niciun rezultat</div>
@@ -495,60 +506,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                 ))}
               </div>
             )}
-          </section>
-
-          {/* BOOKING SECTION */}
-          <section className="mx-auto max-w-6xl px-4 pb-16">
-            <div className="rounded-3xl border border-white/10 bg-black/30 p-6 sm:p-10 backdrop-blur-md">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="max-w-2xl">
-                  <h3 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-                    Booking (în dezvoltare) — adăugăm constant artiști
-                  </h3>
-                  <p className="mt-2 text-white/80">
-                    Dacă vrei recomandări rapide (trupă/DJ/foto-video) în funcție de public,
-                    locație și buget, trimite-ne detaliile. Îți răspundem cu opțiuni potrivite,
-                    nu “random”.
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    <Link
-                      href="/cere-oferta"
-                      className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
-                    >
-                      Cere recomandare
-                    </Link>
-
-                    <Link
-                      href="/#top"
-                      className="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                    >
-                      Înapoi la Home
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="grid w-full gap-3 sm:w-[360px]">
-                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                    <div className="text-sm font-semibold text-white/90">Ce ne trimiți</div>
-                    <ul className="mt-2 space-y-1 text-sm text-white/75">
-                      <li>• Data & orașul</li>
-                      <li>• Tipul evenimentului</li>
-                      <li>• Număr invitați / locație</li>
-                      <li>• Interval buget (opțional)</li>
-                    </ul>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                    <div className="text-sm font-semibold text-white/90">Ce primești</div>
-                    <ul className="mt-2 space-y-1 text-sm text-white/75">
-                      <li>• 2–5 opțiuni potrivite</li>
-                      <li>• Linkuri oficiale & demo</li>
-                      <li>• Recomandare tehnică ANDYmedia</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
           </section>
 
           {/* YOUTUBE MODAL */}

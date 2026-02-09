@@ -4,7 +4,11 @@ import SiteHeader from "@/app/components/SiteHeader";
 import VideoBackground from "@/app/components/VideoBackground";
 
 export const metadata: Metadata = {
-  title: "ANDYmedia",
+  metadataBase: new URL("https://andymedia-site.vercel.app"),
+  title: {
+    default: "ANDYmedia",
+    template: "%s | ANDYmedia",
+  },
   description:
     "ANDYmedia — evenimente corporate, trupe live, conferințe. Sunet profesional, execuție stabilă, fără stres.",
 };
