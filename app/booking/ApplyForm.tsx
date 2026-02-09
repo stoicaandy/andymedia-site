@@ -1,11 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
 
-type ApiResponse =
-  | { ok: true; message: string }
-  | { ok: false; message: string };
+type ApiResponse = { ok: true; message: string } | { ok: false; message: string };
 
 function cx(...c: Array<string | false | undefined>) {
   return c.filter(Boolean).join(" ");
@@ -17,20 +15,16 @@ const inputBase =
 
 export default function ApplyForm() {
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("Trupă");
+  const [category, setCategory] = useState("Trupă / DJ / Artist / Foto-Video");
   const [city, setCity] = useState("");
-  const [since, setSince] = useState("");
-  const [shortDesc, setShortDesc] = useState("");
-  const [tags, setTags] = useState("");
-  const [photoLink, setPhotoLink] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
-  const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
+  const [facebook, setFacebook] = useState("");
   const [youtube, setYoutube] = useState("");
-  const [youtubeEmbed, setYoutubeEmbed] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-
+  const [tiktok, setTiktok] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ApiResponse | null>(null);
 
@@ -39,12 +33,8 @@ export default function ApplyForm() {
     setResult(null);
 
     if (!name.trim()) return setResult({ ok: false, message: "Te rog completează numele." });
-    if (!contactEmail.trim() && !contactPhone.trim())
-      return setResult({ ok: false, message: "Te rog completează email sau telefon (ideal ambele)." });
-    if (!shortDesc.trim())
-      return setResult({ ok: false, message: "Te rog completează o descriere scurtă." });
-    if (!photoLink.trim())
-      return setResult({ ok: false, message: "Te rog adaugă un link către poză (Drive/WeTransfer etc.)." });
+    if (!phone.trim() && !email.trim())
+      return setResult({ ok: false, message: "Completează telefon sau email (ideal ambele)." });
 
     setLoading(true);
     try {
@@ -52,43 +42,40 @@ export default function ApplyForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name,
+          phone,
+          email,
+          location: city,
+          message: [
+            `Categorie: ${category}`,
+            website ? `Website: ${website}` : "",
+            instagram ? `Instagram: ${instagram}` : "",
+            facebook ? `Facebook: ${facebook}` : "",
+            youtube ? `YouTube: ${youtube}` : "",
+            tiktok ? `TikTok: ${tiktok}` : "",
+            message ? `Detalii: ${message}` : "",
+          ]
+            .filter(Boolean)
+            .join("\n"),
           page: "booking-apply",
-          partnerName: name,
-          category,
-          city,
-          since: since || undefined,
-          description: shortDesc,
-          tags,
-          photoLink,
-          website,
-          facebook,
-          instagram,
-          youtube,
-          youtubeEmbed,
-          contactEmail,
-          contactPhone,
         }),
       });
 
       const data = (await res.json()) as ApiResponse;
 
-      if (!res.ok) {
-        setResult({ ok: false, message: data?.message || "Eroare la trimitere. Încearcă din nou." });
-      } else {
-        setResult({ ok: true, message: data?.message || "Aplicarea a fost trimisă. Revenim rapid." });
+      if (!res.ok) setResult({ ok: false, message: data?.message || "Eroare la trimitere." });
+      else {
+        setResult({ ok: true, message: data?.message || "Cererea a fost trimisă." });
         setName("");
         setCity("");
-        setSince("");
-        setShortDesc("");
-        setTags("");
-        setPhotoLink("");
+        setPhone("");
+        setEmail("");
         setWebsite("");
-        setFacebook("");
         setInstagram("");
+        setFacebook("");
         setYoutube("");
-        setYoutubeEmbed("");
-        setContactEmail("");
-        setContactPhone("");
+        setTiktok("");
+        setMessage("");
       }
     } catch {
       setResult({ ok: false, message: "Eroare de rețea. Încearcă din nou." });
@@ -98,25 +85,26 @@ export default function ApplyForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:p-5">
+    <form onSubmit={onSubmit} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 md:p-4">
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block md:col-span-2">
-          <span className="text-xs text-zinc-300/70">Nume artist / trupă / firmă *</span>
+          <span className="sr-only">Nume</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="Ex: Soundcheck Band"
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Nume trupă / DJ / Artist / Studio *"
           />
         </label>
 
         <label className="block">
-          <span className="text-xs text-zinc-300/70">Categorie</span>
+          <span className="sr-only">Categorie</span>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
+            className={cx(inputBase, "h-9 px-4 text-sm")}
           >
+            <option>Trupă / DJ / Artist / Foto-Video</option>
             <option>Trupă</option>
             <option>DJ</option>
             <option>Artist</option>
@@ -126,133 +114,94 @@ export default function ApplyForm() {
         </label>
 
         <label className="block">
-          <span className="text-xs text-zinc-300/70">Oraș</span>
+          <span className="sr-only">Oraș</span>
           <input
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="Ex: Iași"
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Oraș (Iași / Bacău / ...)"
           />
         </label>
 
         <label className="block">
-          <span className="text-xs text-zinc-300/70">Colaborăm din (an)</span>
+          <span className="sr-only">Telefon</span>
           <input
-            value={since}
-            onChange={(e) => setSince(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="Ex: 2022"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Telefon (+40...)"
           />
         </label>
-
-        <label className="block md:col-span-2">
-          <span className="text-xs text-zinc-300/70">Descriere scurtă (max ~300 caractere) *</span>
-          <textarea
-            value={shortDesc}
-            onChange={(e) => setShortDesc(e.target.value)}
-            rows={3}
-            className={cx(inputBase, "mt-1 px-4 py-2 text-sm leading-snug")}
-            placeholder="Ex: Trupă live pentru corporate & evenimente private..."
-          />
-        </label>
-
-        <label className="block md:col-span-2">
-          <span className="text-xs text-zinc-300/70">Taguri (separate prin virgulă)</span>
-          <input
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="Ex: corporate, nuntă, party, live"
-          />
-        </label>
-
-        <label className="block md:col-span-2">
-          <span className="text-xs text-zinc-300/70">
-            Link poză principală * (Drive / WeTransfer / Dropbox)
-          </span>
-          <input
-            value={photoLink}
-            onChange={(e) => setPhotoLink(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="https://drive.google.com/..."
-          />
-          <p className="mt-1 text-[11px] text-zinc-400/70">
-            Recomandare: JPG 2000px lățime (min 1600px), 70–85% calitate, sub ~600KB.
-          </p>
-        </label>
-
-        <div className="md:col-span-2 border-t border-white/10 pt-3 mt-1" />
 
         <label className="block">
-          <span className="text-xs text-zinc-300/70">Website</span>
+          <span className="sr-only">Email</span>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Email"
+          />
+        </label>
+
+        <label className="block md:col-span-2">
+          <span className="sr-only">Website</span>
           <input
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="https://..."
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Website (opțional)"
           />
         </label>
 
         <label className="block">
-          <span className="text-xs text-zinc-300/70">Facebook</span>
-          <input
-            value={facebook}
-            onChange={(e) => setFacebook(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="https://facebook.com/..."
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-xs text-zinc-300/70">Instagram</span>
+          <span className="sr-only">Instagram</span>
           <input
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="https://instagram.com/..."
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Instagram (link)"
           />
         </label>
 
         <label className="block">
-          <span className="text-xs text-zinc-300/70">YouTube (canal/profil)</span>
+          <span className="sr-only">Facebook</span>
+          <input
+            value={facebook}
+            onChange={(e) => setFacebook(e.target.value)}
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="Facebook (link)"
+          />
+        </label>
+
+        <label className="block">
+          <span className="sr-only">YouTube</span>
           <input
             value={youtube}
             onChange={(e) => setYoutube(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="https://youtube.com/..."
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="YouTube (link)"
+          />
+        </label>
+
+        <label className="block">
+          <span className="sr-only">TikTok</span>
+          <input
+            value={tiktok}
+            onChange={(e) => setTiktok(e.target.value)}
+            className={cx(inputBase, "h-9 px-4 text-sm")}
+            placeholder="TikTok (link)"
           />
         </label>
 
         <label className="block md:col-span-2">
-          <span className="text-xs text-zinc-300/70">ID video YouTube pentru preview (opțional)</span>
-          <input
-            value={youtubeEmbed}
-            onChange={(e) => setYoutubeEmbed(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder='Ex: dQw4w9WgXcQ (doar ID, nu link complet)'
-          />
-        </label>
-
-        <div className="md:col-span-2 border-t border-white/10 pt-3 mt-1" />
-
-        <label className="block">
-          <span className="text-xs text-zinc-300/70">Email contact *</span>
-          <input
-            value={contactEmail}
-            onChange={(e) => setContactEmail(e.target.value)}
-            type="email"
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="contact@..."
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-xs text-zinc-300/70">Telefon contact *</span>
-          <input
-            value={contactPhone}
-            onChange={(e) => setContactPhone(e.target.value)}
-            className={cx(inputBase, "mt-1 h-9 px-4 text-sm")}
-            placeholder="+40..."
+          <span className="sr-only">Detalii</span>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={4}
+            className={cx(inputBase, "px-4 py-2 text-sm leading-snug")}
+            placeholder="Detalii (setup, stil, cerințe, rider, ce vrei să știm)..."
           />
         </label>
       </div>
@@ -270,7 +219,7 @@ export default function ApplyForm() {
         </div>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap items-center gap-3">
+      <div className="mt-3 flex flex-wrap items-center gap-3">
         <button
           disabled={loading}
           className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-5 py-2 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition disabled:opacity-60 disabled:cursor-not-allowed"
@@ -283,11 +232,11 @@ export default function ApplyForm() {
           href="/parteneri"
           className="rounded-xl border border-white/15 bg-white/5 px-5 py-2 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
         >
-          Înapoi la parteneri
+          Înapoi la Parteneri
         </Link>
 
         <p className="text-xs text-zinc-400/70">
-          Revenim cu confirmare + eventuale ajustări pentru listare.
+          Trimite linkuri oficiale + o poză 1600×1000 (ideal), JPG 70–85%, sub ~600KB.
         </p>
       </div>
     </form>

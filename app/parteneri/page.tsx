@@ -1,45 +1,47 @@
-import type { Metadata } from 'next';
-import PartnersClient from './PartnersClient';
-
-const SITE_NAME = 'ANDYmedia';
-const BASE_URL = 'https://andymedia-site.vercel.app';
-
-const PAGE_TITLE = 'Parteneri • Booking • Trupe • DJ • Foto-Video | ANDYmedia';
-const PAGE_DESC =
-  'Trupe exclusive, colaborări, DJ, foto-video și artiști cu care lucrăm. Booking în dezvoltare: adăugăm constant noi parteneri.';
-
-const OG_IMAGE = '/parteneri/og-parteneri.jpg'; // pune imaginea în public/parteneri/
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import PartnersClient from "./PartnersClient";
 
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
-  description: PAGE_DESC,
-  alternates: {
-    canonical: '/parteneri',
-  },
+  title: "Parteneri & Booking — ANDYmedia",
+  description:
+    "Parteneri ANDYmedia: trupe exclusive, DJ, foto-video și colaborări. Booking în dezvoltare — adăugăm constant noi artiști.",
+  alternates: { canonical: "/parteneri" },
   openGraph: {
-    title: PAGE_TITLE,
-    description: PAGE_DESC,
-    url: `${BASE_URL}/parteneri`,
-    siteName: SITE_NAME,
-    images: [
-      {
-        url: OG_IMAGE,
-        width: 1200,
-        height: 630,
-        alt: 'ANDYmedia Parteneri',
-      },
-    ],
-    locale: 'ro_RO',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: PAGE_TITLE,
-    description: PAGE_DESC,
-    images: [OG_IMAGE],
+    title: "Parteneri & Booking — ANDYmedia",
+    description:
+      "Trupe exclusive, DJ, foto-video și colaborări. Booking în dezvoltare — adăugăm constant noi artiști.",
+    url: "/parteneri",
+    siteName: "ANDYmedia",
+    type: "website",
   },
 };
 
-export default function ParteneriPage() {
-  return <PartnersClient baseUrl={BASE_URL} />;
+function normalizeBaseUrl(url: string) {
+  return url.replace(/\/$/, "");
+}
+
+async function getBaseUrl() {
+  // Preferă domeniul setat explicit
+  const env =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_VERCEL_URL ||
+    process.env.VERCEL_URL ||
+    "";
+
+  if (env) {
+    if (env.startsWith("http://") || env.startsWith("https://")) return normalizeBaseUrl(env);
+    return normalizeBaseUrl(`https://${env}`);
+  }
+
+  // Fallback: construiește din headers (Next 16: headers() este async)
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host") || "localhost:3000";
+  const proto = h.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
+  return normalizeBaseUrl(`${proto}://${host}`);
+}
+
+export default async function ParteneriPage() {
+  const baseUrl = await getBaseUrl();
+  return <PartnersClient baseUrl={baseUrl} />;
 }
