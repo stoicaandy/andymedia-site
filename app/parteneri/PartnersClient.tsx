@@ -37,7 +37,6 @@ type Partner = {
   tags?: string[];
   links?: PartnerLinks;
   youtubeEmbed?: string;
-
   /** 1..10 = sus (featured), 999 = jos */
   priority?: number;
 };
@@ -68,6 +67,7 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "rC35YDt2nDI",
   },
+
   {
     id: "soundcheck-band-iasi",
     name: "SoundCheck Band",
@@ -87,6 +87,7 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "4H0ZJeZGSJg",
   },
+
   {
     id: "dj-jonny-black-iasi",
     name: "DJ Jonny Black",
@@ -95,71 +96,37 @@ const PARTNERS: Partner[] = [
     priority: 3,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
-    image: "/parteneri/dj-jonny-black-iasi.jpeg",
+    // pune aici EXACT extensia din public/parteneri (jpg/jpeg)
+    image: "/parteneri/dj-jonny-black-iasi.jpg",
     tags: ["nuntă", "corporate", "party", "open format"],
     links: {
-      instagram: "https://instagram.com/",
-      facebook: "https://facebook.com/",
-      youtube: "https://youtube.com/",
-      contact: "https://wa.me/40700000000",
+      facebook: "https://facebook.com/eventiasi",
+      tiktok: "https://www.tiktok.com/@johnny.events?_r=1&_t=ZN-93mcjtQZu9W",
+      contact:
+        "https://wa.me/40757666811?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
     },
-    youtubeEmbed: "",
   },
+
   {
-  id: "smart-music-iasi",
-  name: "Smart Music",
-  city: "Iași",
-  category: "Trupe colaborări",
-  collaborated: true,
-  priority: 55,
-  description:
-    "Formație de evenimente (colaborare periodică). Repertoriu pentru petreceri / momente dedicate, livrat curat și adaptat publicului.",
-  image: "/parteneri/smart-music-iasi.jpg",
-  tags: ["formație", "evenimente", "colaborare", "Iași"],
-  links: {
-    instagram: "https://www.instagram.com/iasi.smartmusic/",
-    facebook: "https://www.facebook.com/iasi.smartmusic/",
-    youtube: "https://www.youtube.com/@smartmusiciasi",
-    tiktok: "https://www.tiktok.com/@smartmusic.iasi",
-    // WhatsApp: obligatoriu cu prefix țară și fără 0/space
-    contact: "https://wa.me/40742453047",
-  },
-  youtubeEmbed: "bRcEc5TpZ5c",
-},
-  {
-    id: "trupa-colaborare-exemplu",
-    name: "Exemplu Trupă Colaborare",
-    city: "Bacău",
+    id: "smart-music-iasi",
+    name: "Smart Music",
+    city: "Iași",
     category: "Trupe colaborări",
     collaborated: true,
-    since: "2019",
-    priority: 50,
+    priority: 55,
     description:
-      "Am colaborat la evenimente punctuale (show-uri, spectacole, apariții). Setup tehnic livrat de ANDYmedia + operator dedicat.",
-    image: "/parteneri/exemplu-trupa-colaborare-bacau.jpg",
-    tags: ["colaborare", "spectacol", "live"],
+      "Formație de evenimente (colaborare periodică). Repertoriu pentru petreceri / momente dedicate, livrat curat și adaptat publicului.",
+    image: "/parteneri/smart-music-iasi.jpg",
+    tags: ["formație", "evenimente", "colaborare", "Iași"],
     links: {
-      website: "https://example.com",
-      facebook: "https://facebook.com/",
-      instagram: "https://instagram.com/",
+      instagram: "https://www.instagram.com/iasi.smartmusic/",
+      facebook: "https://www.facebook.com/iasi.smartmusic/",
+      youtube: "https://www.youtube.com/@smartmusiciasi",
+      tiktok: "https://www.tiktok.com/@smartmusic.iasi",
+      contact:
+        "https://wa.me/40742453047?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
     },
-  },
-  {
-    id: "foto-video-exemplu-iasi",
-    name: "Studio Foto-Video Exemplu",
-    city: "Iași",
-    category: "Foto-Video",
-    priority: 60,
-    description:
-      "Echipă foto-video pentru evenimente: cadre curate, livrare rapidă, colaborare fluidă cu regie/LED pentru integrare live (HDMI/SDI).",
-    image: "/parteneri/foto-video-exemplu-iasi.jpg",
-    tags: ["foto", "video", "reels", "after-movie"],
-    links: {
-      website: "https://example.com",
-      instagram: "https://instagram.com/",
-      facebook: "https://facebook.com/",
-      youtube: "https://youtube.com/",
-    },
+    youtubeEmbed: "bRcEc5TpZ5c",
   },
 
   {
@@ -189,11 +156,7 @@ const CATEGORIES: Array<{ key: PartnerCategory | "Toate"; label: string }> = [
 ];
 
 function normalize(s: string) {
-  return s
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+  return s.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function IconLink({ href, label }: { href: string; label: string }) {
@@ -247,9 +210,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<PartnerCategory | "Toate">("Toate");
   const [onlyExclusive, setOnlyExclusive] = useState(false);
-  const [yt, setYt] = useState<{ open: boolean; title?: string; id?: string }>({
-    open: false,
-  });
+  const [yt, setYt] = useState<{ open: boolean; title?: string; id?: string }>({ open: false });
 
   const filtered = useMemo(() => {
     const nq = normalize(q);
@@ -257,11 +218,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
     const arr = PARTNERS.filter((p) => {
       const inCat = cat === "Toate" ? true : p.category === cat;
       const exOk = onlyExclusive ? !!p.exclusive : true;
-
-      const hay = [p.name, p.city ?? "", p.category, p.description, ...(p.tags ?? [])]
-        .join(" ")
-        .toLowerCase();
-
+      const hay = [p.name, p.city ?? "", p.category, p.description, ...(p.tags ?? [])].join(" ");
       const inQuery = nq.length === 0 ? true : normalize(hay).includes(nq);
       return inCat && exOk && inQuery;
     });
@@ -332,7 +289,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
 
       <main className="relative min-h-screen text-white">
         <div className="relative z-10 pt-20 md:pt-24">
-          {/* HERO */}
           <section className="relative overflow-hidden">
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-0 bg-black/25" />
@@ -378,28 +334,22 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                 </Link>
               </div>
 
-              {/* ✅ STATS COMPACT (în loc de 3 casete mari) */}
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <StatPill v={stats.total} k="profiluri" />
                 <StatPill v={stats.exclusiveCount} k="exclusive" />
                 <StatPill v={stats.citiesCount} k="orașe" />
-                <span className="ml-1 text-xs text-white/40 hidden sm:inline">
-                  • actualizăm constant lista
-                </span>
+                <span className="ml-1 text-xs text-white/40 hidden sm:inline">• actualizăm constant lista</span>
               </div>
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/65 to-transparent" />
           </section>
 
-          {/* FILTER BAR */}
           <section className="mx-auto max-w-6xl px-8 md:px-10 pt-6 pb-6">
             <div className="rounded-3xl border border-white/10 bg-black/30 p-4 sm:p-5 backdrop-blur-md">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 flex-col gap-3">
-                  <label className="text-sm font-semibold text-white/85">
-                    Caută partener (nume, oraș, tag)
-                  </label>
+                  <label className="text-sm font-semibold text-white/85">Caută partener (nume, oraș, tag)</label>
                   <input
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
@@ -423,6 +373,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                               ? "bg-white text-neutral-950"
                               : "border border-white/10 bg-white/5 text-white/90 hover:bg-white/10",
                           ].join(" ")}
+                          type="button"
                         >
                           {c.label}
                         </button>
@@ -444,15 +395,13 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
 
               <div className="mt-4 flex items-center justify-between text-sm text-white/70">
                 <div>
-                  Afișate: <span className="font-semibold text-white">{filtered.length}</span> /{" "}
-                  {PARTNERS.length}
+                  Afișate: <span className="font-semibold text-white">{filtered.length}</span> / {PARTNERS.length}
                 </div>
                 <div className="hidden sm:block">Ordine: featured → categorie → nume</div>
               </div>
             </div>
           </section>
 
-          {/* GRID */}
           <section className="mx-auto max-w-6xl px-8 md:px-10 pb-14">
             {filtered.length === 0 ? (
               <div className="rounded-3xl border border-white/10 bg-black/30 p-10 text-center backdrop-blur-md">
@@ -534,6 +483,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                           <button
                             onClick={() => setYt({ open: true, title: p.name, id: p.youtubeEmbed })}
                             className="inline-flex items-center justify-center rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
+                            type="button"
                           >
                             Vezi video
                           </button>
@@ -548,59 +498,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
             )}
           </section>
 
-          {/* Booking CTA (clienți) */}
-          <section className="mx-auto max-w-6xl px-8 md:px-10 pb-10">
-            <div className="rounded-3xl border border-white/10 bg-black/30 p-6 sm:p-10 backdrop-blur-md">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="max-w-2xl">
-                  <h3 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-                    Booking — recomandări rapide pentru eveniment
-                  </h3>
-                  <p className="mt-2 text-white/80">
-                    Spune-ne data, orașul, tipul evenimentului și publicul țintă — revenim cu opțiuni potrivite
-                    (trupă/DJ/foto-video), nu “random”.
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    <Link
-                      href="/cere-oferta"
-                      className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
-                    >
-                      Cere recomandare
-                    </Link>
-                    <Link
-                      href="/servicii"
-                      className="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                    >
-                      Vezi serviciile ANDYmedia
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="grid w-full gap-3 sm:w-[360px]">
-                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                    <div className="text-sm font-semibold text-white/90">Ce ne trimiți</div>
-                    <ul className="mt-2 space-y-1 text-sm text-white/75">
-                      <li>• Data & orașul</li>
-                      <li>• Tipul evenimentului</li>
-                      <li>• Număr invitați / locație</li>
-                      <li>• Interval buget (opțional)</li>
-                    </ul>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                    <div className="text-sm font-semibold text-white/90">Ce primești</div>
-                    <ul className="mt-2 space-y-1 text-sm text-white/75">
-                      <li>• 2–5 opțiuni potrivite</li>
-                      <li>• Linkuri oficiale & demo</li>
-                      <li>• Recomandare tehnică ANDYmedia</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ✅ ULTIMA secțiune: “Vrei să apari?” (artist) */}
           <section className="mx-auto max-w-6xl px-8 md:px-10 pb-16">
             <div className="rounded-2xl border border-white/10 bg-black/30 p-6 md:p-7 backdrop-blur-md">
               <div className="grid gap-6 md:grid-cols-2 md:items-center">
@@ -633,7 +530,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
             </div>
           </section>
 
-          {/* YOUTUBE MODAL */}
           {yt.open && yt.id ? (
             <div
               className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
@@ -653,6 +549,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                   <button
                     className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90 hover:bg-white/10"
                     onClick={() => setYt({ open: false })}
+                    type="button"
                   >
                     Închide
                   </button>
