@@ -59,7 +59,7 @@ function ZoomCard(props: {
 }
 
 export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[] }) {
-  // Lightbox SINGLE image (fără next/prev)
+  // SINGLE image lightbox (fără next/prev)
   const [open, setOpen] = useState(false);
   const [activeSrc, setActiveSrc] = useState<string>("");
   const [activeAlt, setActiveAlt] = useState<string>("");
@@ -70,38 +70,38 @@ export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[
     setOpen(true);
   };
 
-  // Galerie: acum o facem "full" cu pozele pe care le ai în public/servicii
+  // Galerie “full” (din fișierele pe care le ai acum)
   const galleryItems = useMemo(
     () => [
       {
         src: "/servicii/smaart-rta.jpg",
         alt: "Smaart RTA – calibrare acustică (RTA/TF) pentru evenimente",
         title: "Calibrare (Smaart RTA)",
-        desc: "Măsurători + room EQ ca să obții claritate și control pe feedback.",
+        desc: "Măsurători + room EQ pentru claritate și control pe feedback.",
       },
       {
         src: "/servicii/vst-server.jpg",
         alt: "Procesare audio avansată (server/rack) pentru live",
         title: "Procesare audio (live)",
-        desc: "Procesare în timp real pentru un sunet “curat” și consistent.",
+        desc: "Procesare în timp real pentru un sunet consistent.",
       },
       {
         src: "/servicii/digital-console.jpg",
         alt: "Mixer digital / consolă de mixaj pentru evenimente",
         title: "Mixer digital (control în timp real)",
-        desc: "Ajustăm vocea, muzica și trupa în timp real, pe moment.",
+        desc: "Ajustări pe moment: voce, trupă, muzică, dinamici.",
       },
       {
         src: "/servicii/rig-lights.jpg",
         alt: "Schelă lumini / rig cu moving heads pentru evenimente",
         title: "Rig / schelă lumini (real)",
-        desc: "Setup coerent + focus pe scenă, nu lumini “care fac ce vor”.",
+        desc: "Setup coerent, cablare curată, focus pe show.",
       },
       {
         src: "/servicii/console-lights.jpg",
         alt: "Consolă lumini (DMX) pentru control profesionist",
         title: "Control lumini (DMX)",
-        desc: "Lumini programate pe momente, cu operator dedicat.",
+        desc: "Momente și tranziții gândite, nu haos.",
       },
       {
         src: "/servicii/capture-3d.jpg",
@@ -119,7 +119,7 @@ export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[
         src: "/servicii/led-resolume.jpg",
         alt: "Ecran LED + content live pentru evenimente",
         title: "LED + content live",
-        desc: "Nu poză în loop: content adaptat momentului.",
+        desc: "Content adaptat momentului, nu loop static.",
       },
     ],
     []
@@ -134,7 +134,7 @@ export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[
         alt={activeAlt}
       />
 
-      {/* MAIN SERVICE BLOCKS */}
+      {/* BLOCURI PRINCIPALE */}
       <section className="mx-auto max-w-6xl px-8 md:px-10 pb-14 space-y-10">
         {props.serviceBlocks.map((s) => (
           <div
@@ -199,11 +199,12 @@ export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[
                 </div>
               </div>
 
+              {/* IMAGINE + ZOOM */}
               <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-white/10 bg-black/30 p-6 md:p-8">
                 <ZoomCard
                   src={s.image.src}
                   alt={s.image.alt}
-                  title={s.image.title ?? "Click pentru zoom"}
+                  title={s.image.title ?? "Detaliu tehnic"}
                   desc={s.image.desc}
                   onClick={() => openSingle(s.image.src, s.image.alt)}
                 />
@@ -213,7 +214,7 @@ export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[
         ))}
       </section>
 
-      {/* GALLERY */}
+      {/* GALERIE */}
       <section id="vizual" className="mx-auto max-w-6xl px-8 md:px-10 pb-16">
         <div className="flex items-end justify-between gap-6 flex-wrap">
           <div>
@@ -221,8 +222,23 @@ export default function ServicesZoomClient(props: { serviceBlocks: ServiceBlock[
               Exemple vizuale (click pentru zoom)
             </h2>
             <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
-              Ca să înțeleagă oricine diferența: proiectare, calibrare, control DMX și content live.
+              Ca să înțeleagă oricine diferența: proiectare, calibrare, control DMX și
+              content live.
             </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link
+                href="/echipamente"
+                className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10 transition"
+              >
+                Vezi echipamentele
+              </Link>
+              <Link
+                href="/portofoliu"
+                className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10 transition"
+              >
+                Vezi portofoliu
+              </Link>
+            </div>
           </div>
 
           <Link

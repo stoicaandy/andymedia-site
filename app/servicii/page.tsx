@@ -1,13 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ServicesZoomClient from "../components/ServicesZoomClient";
+import ZoomSingleCard from "../components/ZoomSingleCard";
 
 export const metadata: Metadata = {
   title:
     "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
   description:
-    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), lumini control DMX, ecrane LED cu conținut live (Resolume), DJ, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
+    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
   alternates: { canonical: "/servicii" },
+  openGraph: {
+    title:
+      "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
+    description:
+      "Sunet calibrat (Smaart), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). DJ adaptat publicului + scenă dimensionată corect.",
+    url: "/servicii",
+    type: "website",
+  },
 };
 
 type ServiceBlock = {
@@ -34,6 +43,7 @@ const quickNav = [
   { href: "#dj", label: "DJ" },
   { href: "#scena", label: "Scenă" },
   { href: "#booking", label: "Booking artiști" },
+  { href: "#logistica", label: "Logistică" },
 ];
 
 const serviceBlocks: ServiceBlock[] = [
@@ -60,7 +70,7 @@ const serviceBlocks: ServiceBlock[] = [
       src: "/servicii/pa-db.jpg",
       alt: "Proiectare sistem PA (d&b) – simulare / optimizare acoperire",
       title: "Proiectare & dimensionare PA",
-      desc: "Click pentru zoom.",
+      desc: "Simulare / planificare corectă înainte de montaj.",
     },
   },
   {
@@ -85,7 +95,7 @@ const serviceBlocks: ServiceBlock[] = [
       src: "/servicii/mixer-digital.jpg",
       alt: "Mixer digital pentru mixaj live la evenimente",
       title: "Mixer digital (mixaj live)",
-      desc: "Click pentru zoom.",
+      desc: "Control în timp real pe vocale, muzică și trupă.",
     },
   },
   {
@@ -110,7 +120,7 @@ const serviceBlocks: ServiceBlock[] = [
       src: "/servicii/console-lights.jpg",
       alt: "Consolă lumini pentru control DMX la evenimente",
       title: "Control lumini (DMX)",
-      desc: "Click pentru zoom.",
+      desc: "Lumini programate pe momente, nu random.",
     },
   },
   {
@@ -135,7 +145,7 @@ const serviceBlocks: ServiceBlock[] = [
       src: "/servicii/led-resolume.jpg",
       alt: "Ecran LED cu control de conținut în timp real",
       title: "LED + content live",
-      desc: "Click pentru zoom.",
+      desc: "Content adaptat momentului, nu loop static.",
     },
   },
 ];
@@ -147,6 +157,7 @@ export default function Page() {
   return (
     <main className="relative min-h-screen text-white">
       <div className="relative z-10 pt-20 md:pt-24">
+        {/* INTRO */}
         <section className="mx-auto max-w-6xl px-8 md:px-10 py-14 md:py-16">
           <h1 className="text-3xl md:text-5xl font-medium leading-tight">
             Servicii tehnice complete pentru evenimente în Iași și Moldova
@@ -161,6 +172,14 @@ export default function Page() {
             <strong>booking artistic</strong>.
           </p>
 
+          <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
+            Proiect coordonat de <strong>Andy Stoica (Andi Stoica)</strong>, cunoscut și
+            ca <strong>ANDYmusic</strong>. Diferența e simplă: la noi nu „închiriezi
+            niște aparate”. Primești un rezultat controlat: <strong>sunet calibrat</strong>,
+            <strong> lumini programate</strong> și <strong>vizualuri sincronizate</strong>.
+          </p>
+
+          {/* QUICK NAV */}
           <div className="mt-10 flex flex-wrap gap-2">
             {quickNav.map((item) => (
               <a
@@ -173,6 +192,7 @@ export default function Page() {
             ))}
           </div>
 
+          {/* CTA */}
           <div className="mt-10 flex flex-col sm:flex-row gap-3">
             <Link
               href="/cere-oferta"
@@ -180,16 +200,238 @@ export default function Page() {
             >
               Cere ofertă
             </Link>
+
+            <Link
+              href="/echipamente"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+            >
+              Vezi echipamentele
+            </Link>
+
+            <Link
+              href="/parteneri"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+            >
+              Parteneri (DJ & artiști)
+            </Link>
+
+            <Link
+              href="/portofoliu"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+            >
+              Vezi portofoliu
+            </Link>
           </div>
         </section>
 
+        {/* BLOCURI (cu imagini + zoom) */}
         <ServicesZoomClient serviceBlocks={serviceBlocks} />
 
-        <section className="mx-auto max-w-6xl px-8 md:px-10 pb-16">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10">
-            <h3 className="text-xl md:text-2xl font-medium">
-              Logistică & echipă tehnică
-            </h3>
+        {/* DJ / SCENA / BOOKING */}
+        <section className="mx-auto max-w-6xl px-8 md:px-10 pb-16 space-y-10">
+          {/* DJ */}
+          <div id="dj" className="rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-7">
+                <h2 className="text-2xl md:text-3xl font-medium">
+                  DJ evenimente – adaptat cerințelor reale și publicului țintă
+                </h2>
+
+                <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
+                  Un DJ bun nu înseamnă “muzică tare” sau “playlist la întâmplare”.
+                  Înseamnă <strong>muzică adaptată publicului majoritar</strong> de la
+                  eveniment și momentelor reale (intrare, dinner, party, after).
+                </p>
+
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-sm text-zinc-400">De ce e important:</p>
+                    <ul className="mt-3 space-y-2 text-zinc-200 list-disc list-inside">
+                      <li>Public diferit = atmosferă diferită (vârstă, stil, energie)</li>
+                      <li>Flow pe momente (nu “piese bune”, ci piese potrivite)</li>
+                      <li>Intervenție în timp real: citirea sălii și ajustare</li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-xl border border-amber-300/30 bg-amber-300/10 p-5">
+                    <p className="text-sm text-amber-200">Ce facem noi:</p>
+                    <ul className="mt-3 space-y-2 text-zinc-100 list-disc list-inside">
+                      <li>Recomandăm DJ-ul potrivit, în funcție de publicul real</li>
+                      <li>Aliniem cerințele muzicale cu atmosfera dorită</li>
+                      <li>Integrare tehnică completă: sunet, lumini și LED</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-7 flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href="/parteneri"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-400 px-6 py-3 text-black font-medium hover:bg-amber-300 transition"
+                  >
+                    Vezi parteneri DJ
+                  </Link>
+
+                  <Link
+                    href="/cere-oferta"
+                    className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+                  >
+                    Cere recomandare DJ
+                  </Link>
+
+                  <Link
+                    href="/echipamente"
+                    className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+                  >
+                    Vezi echipamentele
+                  </Link>
+                </div>
+
+                <p className="mt-4 text-sm text-zinc-400">
+                  Căutări frecvente: DJ nuntă Iași, DJ evenimente corporate, DJ petrecere Iași.
+                </p>
+              </div>
+
+              <div className="lg:col-span-5">
+                <ZoomSingleCard
+                  src="/servicii/dj-pioneer.jpg"
+                  alt="Pupitru DJ Pioneer – setup DJ pentru evenimente"
+                  label="Setup DJ (Pioneer)"
+                  hint="Detalii setup + control pe tranziții și energie."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* SCENA */}
+          <div id="scena" className="rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-7">
+                <h2 className="text-2xl md:text-3xl font-medium">
+                  Scenă, podium, rigging & schelă lumini – dimensionate corect
+                </h2>
+
+                <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
+                  Scena nu e “o bucată de podium”. E o decizie tehnică: trebuie să fie
+                  <strong> adaptată locației</strong>, <strong>numărului de persoane</strong>,
+                  tipului de eveniment și cerințelor artistice (trupă, DJ, conferință).
+                </p>
+
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-sm text-zinc-400">De ce contează:</p>
+                    <ul className="mt-3 space-y-2 text-zinc-200 list-disc list-inside">
+                      <li>Vizibilitate pentru public (sală / outdoor)</li>
+                      <li>Siguranță (structură, încărcare, cablare, acces)</li>
+                      <li>Dimensiune corectă pentru artiști & echipamente</li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-xl border border-amber-300/30 bg-amber-300/10 p-5">
+                    <p className="text-sm text-amber-200">Ce facem noi:</p>
+                    <ul className="mt-3 space-y-2 text-zinc-100 list-disc list-inside">
+                      <li>Recomandăm dimensiunea scenei în funcție de locație și setup</li>
+                      <li>Montaj/demontaj + plan de cablare și organizare backstage</li>
+                      <li>Integrare cu lumini/LED/sunet pentru un aspect “pro”</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-7 flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href="/echipamente"
+                    className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+                  >
+                    Vezi echipamentele
+                  </Link>
+
+                  <Link
+                    href="/cere-oferta"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-400 px-6 py-3 text-black font-medium hover:bg-amber-300 transition"
+                  >
+                    Cere ofertă scenă
+                  </Link>
+                </div>
+
+                <p className="mt-4 text-sm text-zinc-400">
+                  Căutări frecvente: scenă Iași, podium scenă, schelă lumini.
+                </p>
+              </div>
+
+              <div className="lg:col-span-5">
+                <ZoomSingleCard
+                  src="/servicii/scena-1.jpg"
+                  alt="Scenă / podium scenă pentru evenimente"
+                  label="Scenă modulară (exemplu real)"
+                  hint="Dimensiune și poziționare adaptate locației și publicului."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* BOOKING */}
+          <div id="booking" className="rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-medium">
+              Booking artiști & impresariat – recomandări prin parteneri
+            </h2>
+
+            <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
+              La booking contează două lucruri: <strong>artistul potrivit</strong> și
+              <strong> coordonarea tehnică</strong> (input list, backline, soundcheck, logistică).
+              Aici lucrăm în zona de <strong>parteneri</strong>, iar pagina va fi extinsă
+              pe măsură ce publicăm lineup-uri și colaborări.
+            </p>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="rounded-xl border border-white/10 bg-black/20 p-5">
+                <p className="text-sm text-zinc-400">Ce primești:</p>
+                <ul className="mt-3 space-y-2 text-zinc-200 list-disc list-inside">
+                  <li>Recomandare artist / trupă potrivită evenimentului și bugetului</li>
+                  <li>Coordonare tehnică pentru un show fără improvizații</li>
+                  <li>Planificare: timpi, soundcheck, necesar tehnic</li>
+                </ul>
+              </div>
+
+              <div className="rounded-xl border border-amber-300/30 bg-amber-300/10 p-5">
+                <p className="text-sm text-amber-200">Dezvoltare în “Parteneri”:</p>
+                <ul className="mt-3 space-y-2 text-zinc-100 list-disc list-inside">
+                  <li>DJ recomandați (pe stiluri / tip eveniment)</li>
+                  <li>Artiști & trupe live (nunți / corporate / show-uri)</li>
+                  <li>Recomandări + exemple reale (cu portofoliu)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-7 flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/parteneri"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-400 px-6 py-3 text-black font-medium hover:bg-amber-300 transition"
+              >
+                Vezi parteneri (DJ & artiști)
+              </Link>
+
+              <Link
+                href="/cere-oferta"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+              >
+                Cere recomandare booking
+              </Link>
+
+              <Link
+                href="/echipamente"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-zinc-200 hover:bg-white/10 transition"
+              >
+                Vezi echipamentele
+              </Link>
+            </div>
+
+            <p className="mt-4 text-sm text-zinc-400">
+              Căutări frecvente: formații nuntă Iași, trupe live nuntă, booking artiști.
+            </p>
+          </div>
+
+          {/* LOGISTICA */}
+          <div id="logistica" className="rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-medium">Logistică & echipă tehnică</h2>
             <ul className="mt-6 space-y-2 text-zinc-300 list-disc list-inside">
               <li>Transport echipamente (auto 3.5T), montaj și demontaj</li>
               <li>Personal tehnic specializat (audio, lumini, LED, scenă)</li>
