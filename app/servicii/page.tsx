@@ -5,15 +5,15 @@ import ZoomSingleCard from "../components/ZoomSingleCard";
 
 export const metadata: Metadata = {
   title:
-    "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
+    "Servicii evenimente Iași | Sonorizare d&b, concerte, lumini, LED, DJ, scenă – ANDYmedia",
   description:
-    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), conferințe corporate, lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
+    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), conferințe corporate, concerte și spectacole, lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
   alternates: { canonical: "/servicii" },
   openGraph: {
     title:
-      "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
+      "Servicii evenimente Iași | Sonorizare d&b, concerte, lumini, LED, DJ, scenă – ANDYmedia",
     description:
-      "Sunet calibrat (Smaart/REW), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). Conferințe corporate + DJ adaptat publicului + scenă dimensionată corect.",
+      "Sunet calibrat (Smaart/REW), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). Conferințe corporate + concerte/spectacole + DJ adaptat publicului + scenă dimensionată corect.",
     url: "/servicii",
     type: "website",
   },
@@ -38,6 +38,7 @@ type ServiceBlock = {
 const quickNav = [
   { href: "#sonorizare", label: "Sonorizare" },
   { href: "#conferinte", label: "Conferințe" },
+  { href: "#concerte", label: "Concerte / Spectacole" },
   { href: "#mixaj", label: "Regie & Mixaj" },
   { href: "#lumini", label: "Lumini" },
   { href: "#led", label: "Ecrane LED" },
@@ -99,6 +100,33 @@ const serviceBlocks: ServiceBlock[] = [
       alt: "Conferință / congres: setup audio pentru speech și prezentări",
       title: "Corporate & conferințe",
       desc: "Speech clar, control pe Q&A și momente.",
+    },
+  },
+
+  {
+    id: "concerte",
+    title: "Concerte / spectacole / trupe live – producție tehnică completă",
+    subtitle:
+      "La show-uri nu e despre „tare”. E despre impact și control: PA dimensionat corect, mixaj coerent, monitoare ok și un setup care ține tot evenimentul.",
+    whatClientThinks:
+      "„Avem o trupă / un spectacol… puneți voi un sistem și merge.”",
+    whatUsuallyHappens: [
+      "PA subdimensionat sau montat greșit: goluri în sală, bubuială în față.",
+      "Soundcheck scurt / improvizat, monitoare slabe, feedback și stres pe scenă.",
+      "Fără plan tehnic: intrări, patch, routing, comunicare scenă–FOH.",
+    ],
+    whatWeDo: [
+      "Planificare tehnică: input list / stage plot, patching, timpi de soundcheck, FOH & monitor.",
+      "Sistem PA dimensionat și aliniat pentru public + scenă (uniform, clar, headroom).",
+      "Operatori dedicați + disciplină de show: control pe momente, schimbări, guest-uri, prezentatori.",
+    ],
+    keywordsLine:
+      "Căutări frecvente: sonorizare concert Iași, spectacole Iași, trupă live, festival, sistem PA d&b.",
+    image: {
+      src: "/servicii/concert2.jpg",
+      alt: "Concert / spectacol: producție tehnică completă (sunet, scenă, lumini)",
+      title: "Concerte & spectacole",
+      desc: "Show controlat: sunet, scenă și momente.",
     },
   },
 
@@ -197,10 +225,11 @@ export default function Page() {
 
           <p className="mt-6 text-zinc-300 max-w-4xl leading-relaxed">
             ANDYmedia oferă servicii profesionale pentru evenimente:{" "}
-            <strong>sonorizare</strong>, <strong>lumini</strong>,{" "}
+            <strong>sonorizare</strong>, <strong>conferințe</strong>,{" "}
+            <strong>concerte / spectacole</strong>, <strong>lumini</strong>,{" "}
             <strong>ecrane LED</strong>, <strong>scenă</strong>, <strong>DJ</strong>,
-            <strong> conferințe</strong>, operatori tehnici, transport, montaj,
-            consultanță și <strong>booking artistic</strong>.
+            operatori tehnici, transport, montaj, consultanță și{" "}
+            <strong>booking artistic</strong>.
           </p>
 
           <p className="mt-4 text-zinc-300 max-w-4xl leading-relaxed">
@@ -472,21 +501,21 @@ export default function Page() {
             <p className="mt-4 text-zinc-400 text-sm max-w-4xl">{citiesLine}</p>
           </div>
 
-          {/* CTA conferinte */}
+          {/* CTA final */}
           <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 p-8 md:p-10">
             <h2 className="text-2xl md:text-3xl font-medium">
-              Ai o conferință / eveniment corporate?
+              Ai o conferință / eveniment corporate sau un spectacol?
             </h2>
             <p className="mt-4 text-zinc-300 max-w-3xl leading-relaxed">
-              Îți propunem un setup dedicat pentru speech (claritate, stabilitate, Q&A) și,
-              la nevoie, integrare cu LED / prezentări și operatori.
+              Îți propunem un setup dedicat (speech / show) cu operatori și integrare completă:
+              sunet, lumini, LED și scenă — dimensionate corect.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/cere-oferta"
                 className="inline-flex items-center justify-center gap-2 rounded-md bg-amber-400 px-6 py-3 text-black font-medium hover:bg-amber-300 transition"
               >
-                Cere ofertă conferință
+                Cere ofertă
               </Link>
               <Link
                 href="/echipamente"
