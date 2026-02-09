@@ -37,6 +37,9 @@ type Partner = {
   tags?: string[];
   links?: PartnerLinks;
   youtubeEmbed?: string;
+
+  /** 1..10 = sus (featured), 999 = jos */
+  priority?: number;
 };
 
 const PAGE_TITLE = "Parteneri • Booking • Trupe • DJ • Foto-Video | ANDYmedia";
@@ -44,25 +47,7 @@ const PAGE_DESC =
   "Trupe exclusive, colaborări, DJ, foto-video și artiști cu care lucrăm. Booking în dezvoltare: adăugăm constant noi parteneri.";
 
 const PARTNERS: Partner[] = [
-  {
-    id: "soundcheck-band-iasi",
-    name: "Soundcheck Band",
-    city: "Iași",
-    category: "Trupe exclusive",
-    exclusive: true,
-    since: "2022",
-    description:
-      "Trupă live pentru evenimente corporate și private. Show disciplinat, repertoriu adaptabil și energie de scenă.",
-    image: "/parteneri/soundcheck-band-iasi.jpg",
-    tags: ["live", "corporate", "nuntă", "cover band"],
-    links: {
-      instagram: "https://instagram.com/",
-      facebook: "https://facebook.com/",
-      youtube: "https://youtube.com/",
-      website: "https://example.com",
-    },
-    youtubeEmbed: "",
-  },
+  // ✅ FEATURED / PRIORITATE (în ordinea cerută)
   {
     id: "trupa-de-weekend-iasi",
     name: "Trupa de Weekend",
@@ -70,43 +55,48 @@ const PARTNERS: Partner[] = [
     category: "Trupe exclusive",
     exclusive: true,
     since: "2021",
+    priority: 1,
     description:
-      "Trupă de party cu setlist modern + evergreen, potrivită pentru public mixt. Stage-ready, soundcheck eficient.",
+      "Trupă de party cu setlist modern + evergreen, potrivită pentru public mixt. Stage-ready, soundcheck eficient, vibe de festival în sală.",
     image: "/parteneri/trupa-de-weekend-iasi.jpg",
     tags: ["party", "live", "evenimente", "cover"],
     links: {
-      instagram: "https://instagram.com/",
       facebook: "https://facebook.com/",
+      instagram: "https://instagram.com/",
       youtube: "https://youtube.com/",
     },
     youtubeEmbed: "",
   },
   {
-    id: "trupa-colaborare-exemplu",
-    name: "Exemplu Trupă Colaborare",
-    city: "Bacău",
-    category: "Trupe colaborări",
-    collaborated: true,
-    since: "2019",
+    id: "soundcheck-band-iasi",
+    name: "Soundcheck Band",
+    city: "Iași",
+    category: "Trupe exclusive",
+    exclusive: true,
+    since: "2022",
+    priority: 2,
     description:
-      "Am colaborat la evenimente punctuale (show-uri, spectacole, apariții). Setup tehnic livrat de ANDYmedia + operator.",
-    image: "/parteneri/exemplu-trupa-colaborare-bacau.jpg",
-    tags: ["colaborare", "spectacol", "live"],
+      "Trupă live pentru evenimente corporate și private. Show disciplinat, repertoriu adaptabil și energie de scenă. Lucrează cu noi pe setup tehnic calibrat (FOH/monitor).",
+    image: "/parteneri/soundcheck-band-iasi.jpg",
+    tags: ["live", "corporate", "nuntă", "cover band"],
     links: {
+      website: "https://example.com",
       facebook: "https://facebook.com/",
       instagram: "https://instagram.com/",
-      website: "https://example.com",
+      youtube: "https://youtube.com/",
     },
+    youtubeEmbed: "",
   },
   {
-    id: "dj-exemplu-iasi",
-    name: "DJ Exemplu",
+    id: "dj-jonny-black-iasi",
+    name: "DJ Jonny Black",
     city: "Iași",
     category: "DJ",
+    priority: 3,
     description:
-      "DJ orientat pe public & moment: warm-up corect, peak-time controlat, setlist adaptat (nu “random playlist”).",
-    image: "/parteneri/dj-exemplu-iasi.jpg",
-    tags: ["nuntă", "corporate", "club", "open format"],
+      "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
+    image: "/parteneri/dj-jonny-black-iasi.jpg", // pune poza în public/parteneri
+    tags: ["nuntă", "corporate", "party", "open format"],
     links: {
       instagram: "https://instagram.com/",
       facebook: "https://facebook.com/",
@@ -115,13 +105,34 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "",
   },
+
+  // ✅ RESTUL (colaborări / foto-video etc.)
+  {
+    id: "trupa-colaborare-exemplu",
+    name: "Exemplu Trupă Colaborare",
+    city: "Bacău",
+    category: "Trupe colaborări",
+    collaborated: true,
+    since: "2019",
+    priority: 50,
+    description:
+      "Am colaborat la evenimente punctuale (show-uri, spectacole, apariții). Setup tehnic livrat de ANDYmedia + operator dedicat.",
+    image: "/parteneri/exemplu-trupa-colaborare-bacau.jpg",
+    tags: ["colaborare", "spectacol", "live"],
+    links: {
+      website: "https://example.com",
+      facebook: "https://facebook.com/",
+      instagram: "https://instagram.com/",
+    },
+  },
   {
     id: "foto-video-exemplu-iasi",
     name: "Studio Foto-Video Exemplu",
     city: "Iași",
     category: "Foto-Video",
+    priority: 60,
     description:
-      "Echipă foto-video pentru evenimente: cadre curate, livrare rapidă, colaborare fluidă cu regie/LED pentru integrare live.",
+      "Echipă foto-video pentru evenimente: cadre curate, livrare rapidă, colaborare fluidă cu regie/LED pentru integrare live (HDMI/SDI).",
     image: "/parteneri/foto-video-exemplu-iasi.jpg",
     tags: ["foto", "video", "reels", "after-movie"],
     links: {
@@ -129,6 +140,21 @@ const PARTNERS: Partner[] = [
       instagram: "https://instagram.com/",
       facebook: "https://facebook.com/",
       youtube: "https://youtube.com/",
+    },
+  },
+
+  // (opțional) dacă vrei să păstrezi card “Booking (în dezvoltare)” în grilă, îl ținem ultimul:
+  {
+    id: "booking-in-dezvoltare",
+    name: "Booking (în dezvoltare)",
+    category: "Booking",
+    priority: 999,
+    description:
+      "Adăugăm constant artiști și formații imediat ce avem contactul lor. Dacă vrei recomandări rapide, trimite-ne detaliile evenimentului.",
+    image: "/parteneri/booking-andymedia.jpg",
+    tags: ["booking", "artiști", "formații", "DJ"],
+    links: {
+      contact: "/cere-oferta",
     },
   },
 ];
@@ -177,6 +203,20 @@ function Badge({ children }: { children: React.ReactNode }) {
   );
 }
 
+function categoryRank(c: PartnerCategory) {
+  // dacă nu există priority, asta decide ordinea generală
+  const order: Record<PartnerCategory, number> = {
+    "Trupe exclusive": 10,
+    DJ: 20,
+    "Trupe colaborări": 30,
+    "Artiști": 40,
+    "Foto-Video": 50,
+    "Servicii": 60,
+    Booking: 99,
+  };
+  return order[c] ?? 999;
+}
+
 export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<PartnerCategory | "Toate">("Toate");
@@ -187,7 +227,8 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
 
   const filtered = useMemo(() => {
     const nq = normalize(q);
-    return PARTNERS.filter((p) => {
+
+    const arr = PARTNERS.filter((p) => {
       const inCat = cat === "Toate" ? true : p.category === cat;
       const exOk = onlyExclusive ? !!p.exclusive : true;
 
@@ -198,6 +239,21 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
       const inQuery = nq.length === 0 ? true : normalize(hay).includes(nq);
       return inCat && exOk && inQuery;
     });
+
+    // ✅ sortare: priority -> category -> name
+    arr.sort((a, b) => {
+      const pa = a.priority ?? 100;
+      const pb = b.priority ?? 100;
+      if (pa !== pb) return pa - pb;
+
+      const ca = categoryRank(a.category);
+      const cb = categoryRank(b.category);
+      if (ca !== cb) return ca - cb;
+
+      return a.name.localeCompare(b.name, "ro");
+    });
+
+    return arr;
   }, [q, cat, onlyExclusive]);
 
   const stats = useMemo(() => {
@@ -251,7 +307,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
 
       <main className="relative min-h-screen text-white">
         <div className="relative z-10 pt-20 md:pt-24">
-          {/* HERO — tipografie ca Home */}
+          {/* HERO */}
           <section className="relative overflow-hidden">
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-0 bg-black/25" />
@@ -265,13 +321,13 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
               </p>
 
               <h1 className="mt-2 text-xl md:text-2xl font-medium leading-tight text-white/95">
-                Trupe, DJ, Foto-Video și artiști verificați{" "}
+                Parteneri selectați pentru evenimente care trebuie să iasă perfect{" "}
                 <span className="text-amber-300">.</span>
               </h1>
 
               <p className="mt-2 text-sm md:text-base text-zinc-300/85 leading-snug max-w-3xl">
-                Aici găsești partenerii cu care lucrăm (exclusive + colaborări) și zona de booking în dezvoltare.
-                Fiecare profil are card premium cu poză, descriere și linkuri oficiale.
+                Partenerii noștri (exclusive + colaborări), DJ, foto-video și artiști. Carduri premium cu poză,
+                descriere și linkuri oficiale — exact ce trebuie pentru decizie rapidă.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-4">
@@ -314,39 +370,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/65 to-transparent" />
-          </section>
-
-          {/* “Atrage artiștii” — banner dedicat */}
-          <section className="mx-auto max-w-6xl px-8 md:px-10 pt-8">
-            <div className="rounded-2xl border border-white/10 bg-black/30 p-6 md:p-7 backdrop-blur-md">
-              <div className="grid gap-6 md:grid-cols-2 md:items-center">
-                <div>
-                  <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
-                    Ești trupă / DJ / artist / foto-video?
-                  </div>
-                  <h2 className="mt-2 text-xl md:text-2xl font-medium tracking-wide">
-                    Vrei să apari pe ANDYmedia <span className="text-amber-300">?</span>
-                  </h2>
-                  <p className="mt-2 text-sm md:text-base text-zinc-300/85 leading-snug">
-                    Ne dorim un roster curat, premium, cu profiluri care arată bine și trimit trafic către
-                    canalele oficiale (site/FB/IG/YouTube). Aplici o singură dată — revenim rapid cu pașii.
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-3">
-                  <Link
-                    href="/booking"
-                    className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition text-center"
-                  >
-                    Aplică pentru listare (Booking)
-                  </Link>
-
-                  <div className="rounded-xl border border-white/10 bg-black/25 px-5 py-3 text-xs text-zinc-300/80">
-                    Poză: 1600–2400px (ideal ~2000px), JPG 70–85%, sub ~600KB • Linkuri oficiale • Descriere scurtă
-                  </div>
-                </div>
-              </div>
-            </div>
           </section>
 
           {/* FILTER BAR */}
@@ -404,7 +427,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                   Afișate: <span className="font-semibold text-white">{filtered.length}</span> /{" "}
                   {PARTNERS.length}
                 </div>
-                <div className="hidden sm:block">Carduri premium cu linkuri oficiale</div>
+                <div className="hidden sm:block">Ordine: featured → categorie → nume</div>
               </div>
             </div>
           </section>
@@ -438,6 +461,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                         {!p.exclusive && p.collaborated ? <Badge>Colaborat</Badge> : null}
                         <Badge>{p.category}</Badge>
                         {p.since ? <Badge>din {p.since}</Badge> : null}
+                        {p.priority && p.priority <= 10 ? <Badge>Featured</Badge> : null}
                       </div>
                     </div>
 
@@ -498,14 +522,95 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                         )}
                       </div>
                     </div>
-
-                    <div className="pointer-events-none absolute -inset-24 opacity-0 blur-3xl transition duration-500 group-hover:opacity-100">
-                      <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/10" />
-                    </div>
                   </article>
                 ))}
               </div>
             )}
+          </section>
+
+          {/* Booking CTA (clienți) */}
+          <section className="mx-auto max-w-6xl px-8 md:px-10 pb-10">
+            <div className="rounded-3xl border border-white/10 bg-black/30 p-6 sm:p-10 backdrop-blur-md">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="max-w-2xl">
+                  <h3 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+                    Booking — recomandări rapide pentru eveniment
+                  </h3>
+                  <p className="mt-2 text-white/80">
+                    Spune-ne data, orașul, tipul evenimentului și publicul țintă — revenim cu opțiuni potrivite
+                    (trupă/DJ/foto-video), nu “random”.
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Link
+                      href="/cere-oferta"
+                      className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
+                    >
+                      Cere recomandare
+                    </Link>
+                    <Link
+                      href="/servicii"
+                      className="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                    >
+                      Vezi serviciile ANDYmedia
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="grid w-full gap-3 sm:w-[360px]">
+                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                    <div className="text-sm font-semibold text-white/90">Ce ne trimiți</div>
+                    <ul className="mt-2 space-y-1 text-sm text-white/75">
+                      <li>• Data & orașul</li>
+                      <li>• Tipul evenimentului</li>
+                      <li>• Număr invitați / locație</li>
+                      <li>• Interval buget (opțional)</li>
+                    </ul>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                    <div className="text-sm font-semibold text-white/90">Ce primești</div>
+                    <ul className="mt-2 space-y-1 text-sm text-white/75">
+                      <li>• 2–5 opțiuni potrivite</li>
+                      <li>• Linkuri oficiale & demo</li>
+                      <li>• Recomandare tehnică ANDYmedia</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ✅ ULTIMA secțiune: “Vrei să apari?” (artist) */}
+          <section className="mx-auto max-w-6xl px-8 md:px-10 pb-16">
+            <div className="rounded-2xl border border-white/10 bg-black/30 p-6 md:p-7 backdrop-blur-md">
+              <div className="grid gap-6 md:grid-cols-2 md:items-center">
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
+                    Ești trupă / DJ / artist / foto-video?
+                  </div>
+                  <h2 className="mt-2 text-xl md:text-2xl font-medium tracking-wide">
+                    Vrei să apari pe ANDYmedia <span className="text-amber-300">?</span>
+                  </h2>
+                  <p className="mt-2 text-sm md:text-base text-zinc-300/85 leading-snug">
+                    Profil premium cu poză + descriere + linkuri oficiale. Aplici o singură dată — revenim rapid cu pașii
+                    pentru listare.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/booking"
+                    className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition text-center"
+                  >
+                    Aplică pentru listare (Booking)
+                  </Link>
+
+                  <div className="rounded-xl border border-white/10 bg-black/25 px-5 py-3 text-xs text-zinc-300/80">
+                    Poză: 1600–2400px (ideal ~2000px), JPG 70–85%, sub ~600KB • Linkuri oficiale • Descriere scurtă
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
 
           {/* YOUTUBE MODAL */}
