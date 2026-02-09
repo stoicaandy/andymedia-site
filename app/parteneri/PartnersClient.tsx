@@ -57,15 +57,18 @@ const PARTNERS: Partner[] = [
     since: "2021",
     priority: 1,
     description:
-      "Trupă de party cu setlist modern + evergreen, potrivită pentru public mixt. Stage-ready, soundcheck eficient, vibe de festival în sală.",
+      "Trupă live cu repertoriu versatil (folclor → pop/evergreen). Show disciplinat, energie de scenă și flow bun pentru public mixt. Contact: +40 743 341 797 / trupadeweekend@gmail.com.",
     image: "/parteneri/trupa-de-weekend-iasi.jpg",
-    tags: ["party", "live", "evenimente", "cover"],
+    tags: ["party", "live", "evenimente", "cover", "corporate", "nuntă"],
     links: {
-      facebook: "https://facebook.com/",
-      instagram: "https://instagram.com/",
-      youtube: "https://youtube.com/",
+      website: "https://trupadeweekend.ro/",
+      facebook: "https://www.facebook.com/trupaweekend",
+      instagram: "https://www.instagram.com/trupadeweekend/",
+      youtube: "https://www.youtube.com/channel/UC-rVV4JUokF9Sstoha35BkA",
+      contact: "https://trupadeweekend.ro/contact/",
     },
-    youtubeEmbed: "",
+    // un clip “general” (wedding recap) – îl poți schimba oricând cu alt ID
+    youtubeEmbed: "rC35YDt2nDI",
   },
   {
     id: "soundcheck-band-iasi",
@@ -95,7 +98,8 @@ const PARTNERS: Partner[] = [
     priority: 3,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
-    image: "/parteneri/dj-jonny-black-iasi.jpg", // pune poza în public/parteneri
+    // ✅ la tine poza este .jpeg (conform folderului public/parteneri)
+    image: "/parteneri/dj-jonny-black-iasi.jpeg",
     tags: ["nuntă", "corporate", "party", "open format"],
     links: {
       instagram: "https://instagram.com/",
@@ -204,7 +208,6 @@ function Badge({ children }: { children: React.ReactNode }) {
 }
 
 function categoryRank(c: PartnerCategory) {
-  // dacă nu există priority, asta decide ordinea generală
   const order: Record<PartnerCategory, number> = {
     "Trupe exclusive": 10,
     DJ: 20,
@@ -240,7 +243,6 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
       return inCat && exOk && inQuery;
     });
 
-    // ✅ sortare: priority -> category -> name
     arr.sort((a, b) => {
       const pa = a.priority ?? 100;
       const pb = b.priority ?? 100;
