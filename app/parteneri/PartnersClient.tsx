@@ -47,7 +47,6 @@ const PAGE_DESC =
   "Trupe exclusive, colaborări, DJ, foto-video și artiști cu care lucrăm. Booking în dezvoltare: adăugăm constant noi parteneri.";
 
 const PARTNERS: Partner[] = [
-  // ✅ FEATURED / PRIORITATE (în ordinea cerută)
   {
     id: "trupa-de-weekend-iasi",
     name: "Trupa de Weekend",
@@ -67,7 +66,6 @@ const PARTNERS: Partner[] = [
       youtube: "https://www.youtube.com/channel/UC-rVV4JUokF9Sstoha35BkA",
       contact: "https://trupadeweekend.ro/contact/",
     },
-    // un clip “general” (wedding recap) – îl poți schimba oricând cu alt ID
     youtubeEmbed: "rC35YDt2nDI",
   },
   {
@@ -98,7 +96,7 @@ const PARTNERS: Partner[] = [
     priority: 3,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
-    // ✅ la tine poza este .jpeg (conform folderului public/parteneri)
+    // IMPORTANT: la tine fișierul este .jpeg
     image: "/parteneri/dj-jonny-black-iasi.jpeg",
     tags: ["nuntă", "corporate", "party", "open format"],
     links: {
@@ -110,7 +108,6 @@ const PARTNERS: Partner[] = [
     youtubeEmbed: "",
   },
 
-  // ✅ RESTUL (colaborări / foto-video etc.)
   {
     id: "trupa-colaborare-exemplu",
     name: "Exemplu Trupă Colaborare",
@@ -147,7 +144,6 @@ const PARTNERS: Partner[] = [
     },
   },
 
-  // (opțional) dacă vrei să păstrezi card “Booking (în dezvoltare)” în grilă, îl ținem ultimul:
   {
     id: "booking-in-dezvoltare",
     name: "Booking (în dezvoltare)",
@@ -199,7 +195,7 @@ function IconLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-function Badge({ children }: { children: React.ReactNode }) {
+function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm">
       {children}
@@ -448,6 +444,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                     key={p.id}
                     className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30 transition hover:border-white/20 hover:bg-black/35 backdrop-blur-md"
                   >
+                    {/* Imagine: fără overlay cu badges (nu mai acoperim logo-uri/fețe) */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden">
                       <Image
                         src={p.image}
@@ -456,18 +453,19 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover transition duration-500 group-hover:scale-[1.03]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-
-                      <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-                        {p.exclusive ? <Badge>Exclusiv</Badge> : null}
-                        {!p.exclusive && p.collaborated ? <Badge>Colaborat</Badge> : null}
-                        <Badge>{p.category}</Badge>
-                        {p.since ? <Badge>din {p.since}</Badge> : null}
-                        {p.priority && p.priority <= 10 ? <Badge>Featured</Badge> : null}
-                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     </div>
 
                     <div className="p-5">
+                      {/* Chips sub poză */}
+                      <div className="mb-3 flex flex-wrap gap-2">
+                        {p.priority && p.priority <= 10 ? <Chip>ANDYmedia Preferred</Chip> : null}
+                        {p.exclusive ? <Chip>Exclusiv</Chip> : null}
+                        {!p.exclusive && p.collaborated ? <Chip>Colaborat</Chip> : null}
+                        <Chip>{p.category}</Chip>
+                        {p.since ? <Chip>din {p.since}</Chip> : null}
+                      </div>
+
                       <h2 className="text-xl font-extrabold tracking-tight">{p.name}</h2>
 
                       <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-white/70">
@@ -608,7 +606,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
                   </Link>
 
                   <div className="rounded-xl border border-white/10 bg-black/25 px-5 py-3 text-xs text-zinc-300/80">
-                    Poză: 1600–2400px (ideal ~2000px), JPG 70–85%, sub ~600KB • Linkuri oficiale • Descriere scurtă
+                    Poză: 1600×1000 (ideal), JPG 70–85%, sub ~600KB • Linkuri oficiale • Descriere scurtă
                   </div>
                 </div>
               </div>
