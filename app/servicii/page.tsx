@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   title:
     "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
   description:
-    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, conferințe, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
+    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), conferințe corporate, lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
   alternates: { canonical: "/servicii" },
   openGraph: {
     title:
       "Servicii evenimente Iași | Sonorizare d&b, lumini, LED, DJ, scenă – ANDYmedia",
     description:
-      "Sunet calibrat (Smaart/REW), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). DJ adaptat publicului + scenă dimensionată corect.",
+      "Sunet calibrat (Smaart/REW), mixaj controlat, lumini programate (DMX) și ecrane LED cu content live (Resolume). Conferințe corporate + DJ adaptat publicului + scenă dimensionată corect.",
     url: "/servicii",
     type: "website",
   },
@@ -79,25 +79,25 @@ const serviceBlocks: ServiceBlock[] = [
     id: "conferinte",
     title: "Conferințe, corporate & evenimente business (panel / prezentări / Q&A)",
     subtitle:
-      "Pentru conferințe contează claritatea și stabilitatea: speech inteligibil, microfonie zero, volum uniform și control pe momente.",
+      "La corporate nu ai voie să „ghicești”: speech clar, volum uniform, microfonie zero și control pe momente (intro, panel, Q&A).",
     whatClientThinks:
       "„Avem o conferință: câteva microfoane și un sistem… să se audă.”",
     whatUsuallyHappens: [
       "Voce neclară, volum inegal în sală, microfonii la întrebări.",
-      "Lipsă procedură: predare microfon, Q&A haotic, întârzieri.",
-      "Fără redundanță și fără operator dedicat pe speech.",
+      "Predare microfon haotic, Q&A fără control, întârzieri și stres.",
+      "Fără operator dedicat pe speech și fără proceduri pe panel.",
     ],
     whatWeDo: [
-      "Setup dedicat pentru speech: microfoane potrivite (handheld / lavalieră / headset), poziționare și gain-structure corecte.",
-      "Operator audio pentru conferință: control în timp real, Q&A, panel și tranziții între vorbitori.",
-      "Integrare cu LED / prezentări (HDMI), muzică intro/outro, înregistrare/livestream la cerere.",
+      "Setup dedicat pentru speech: tipul de microfon potrivit (handheld / lavalieră / headset), poziționare și gain-structure corecte.",
+      "Operator audio pentru conferință: control în timp real pe vorbitori, panel și Q&A.",
+      "Integrare cu prezentări (HDMI), LED / proiecție, muzică intro/outro și înregistrare/livestream la cerere.",
     ],
     keywordsLine:
       "Căutări frecvente: sonorizare conferință Iași, microfoane conferință, panel, evenimente corporate.",
     image: {
       src: "/servicii/conferinta-congres.jpg",
       alt: "Conferință / congres: setup audio pentru speech și prezentări",
-      title: "Conferințe & corporate",
+      title: "Corporate & conferințe",
       desc: "Speech clar, control pe Q&A și momente.",
     },
   },
@@ -472,7 +472,7 @@ export default function Page() {
             <p className="mt-4 text-zinc-400 text-sm max-w-4xl">{citiesLine}</p>
           </div>
 
-          {/* CTA final (conferinte) */}
+          {/* CTA conferinte */}
           <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 p-8 md:p-10">
             <h2 className="text-2xl md:text-3xl font-medium">
               Ai o conferință / eveniment corporate?
