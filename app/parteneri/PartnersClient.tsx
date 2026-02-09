@@ -68,26 +68,24 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "rC35YDt2nDI",
   },
-  {
-    id: "soundcheck-band-iasi",
-    name: "Soundcheck Band",
-    city: "Iași",
-    category: "Trupe exclusive",
-    exclusive: true,
-    since: "2022",
-    priority: 2,
-    description:
-      "Trupă live pentru evenimente corporate și private. Show disciplinat, repertoriu adaptabil și energie de scenă. Lucrează cu noi pe setup tehnic calibrat (FOH/monitor).",
-    image: "/parteneri/soundcheck-band-iasi.jpg",
-    tags: ["live", "corporate", "nuntă", "cover band"],
-    links: {
-      website: "https://example.com",
-      facebook: "https://facebook.com/",
-      instagram: "https://instagram.com/",
-      youtube: "https://youtube.com/",
-    },
-    youtubeEmbed: "",
+{
+  id: "soundcheck-band-iasi",
+  name: "SoundCheck Band",
+  city: "Iași",
+  category: "Trupe exclusive",
+  exclusive: true,
+  since: "2022",
+  priority: 2,
+  description:
+    "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. Booking: 0742 137 647 • trupasoundcheck@gmail.com.",
+  image: "/parteneri/soundcheck-band-iasi.jpg",
+  tags: ["live", "corporate", "nuntă", "cover band", "jazz", "rock", "disco", "reggae"],
+  links: {
+    website: "https://www.soundcheckband.ro/",
+    youtube: "https://www.youtube.com/c/soundcheckiasi/videos",
   },
+  youtubeEmbed: "4H0ZJeZGSJg",
+},
   {
     id: "dj-jonny-black-iasi",
     name: "DJ Jonny Black",
@@ -97,11 +95,11 @@ const PARTNERS: Partner[] = [
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
     // IMPORTANT: la tine fișierul este .jpeg
-    image: "/parteneri/dj-jonny-black-iasi.jpeg",
+    image: "/parteneri/dj-jonny-black-iasi.jpg",
     tags: ["nuntă", "corporate", "party", "open format"],
     links: {
       instagram: "https://instagram.com/",
-      facebook: "https://facebook.com/",
+      facebook: "https://facebook.com/eventiasi",
       youtube: "https://youtube.com/",
       contact: "https://wa.me/",
     },
