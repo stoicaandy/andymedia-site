@@ -8,18 +8,20 @@ type Props = {
   open: boolean;
   onClose: () => void;
 
-  // images mode
   images?: LightboxImage[];
   startIndex?: number;
 
-  // legacy single image (optional)
+  // optional legacy single image
   src?: string;
   alt?: string;
 
-  // YouTube mode (ONLY in lightbox)
-  youtubeId?: string; // only ID
+  // optional YouTube mode
+  youtubeId?: string;
   youtubeTitle?: string;
 };
+
+// very small in-memory cache of URLs we've already successfully loaded
+const LOADED = new Set<string>();
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
@@ -27,6 +29,16 @@ function clamp(n: number, min: number, max: number) {
 function clampIndex(i: number, len: number) {
   if (len <= 0) return 0;
   return Math.max(0, Math.min(len - 1, i));
+}
+
+function preloadUrl(url: string) {
+  if (!url || LOADED.has(url)) return;
+  const img = new Image();
+  img.decoding = "async";
+  img.src = url;
+  img.onload = () => {
+    LOADED.add(url);
+  };
 }
 
 export default function PhotoLightbox({
@@ -39,10 +51,9 @@ export default function PhotoLightbox({
   youtubeId,
   youtubeTitle,
 }: Props) {
-  // ✅ IMPORTANT: hooks must be called unconditionally (no early returns before hooks)
   const isYouTube = !!youtubeId;
 
-  // body lock + ESC
+  // lock scroll + ESC
   useEffect(() => {
     if (!open) return;
 
@@ -52,20 +63,18 @@ export default function PhotoLightbox({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (!isYouTube) {
-        if (e.key === "ArrowLeft") prevImage();
-        if (e.key === "ArrowRight") nextImage();
+        if (e.key === "ArrowLeft") prevImageRef.current?.();
+        if (e.key === "ArrowRight") nextImageRef.current?.();
       }
     };
-    window.addEventListener("keydown", onKey);
 
+    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onClose, isYouTube]);
 
-  // ===== IMAGES MODE state (declared ALWAYS, even if YouTube mode) =====
   const gallery: LightboxImage[] = useMemo(() => {
     if (images && images.length) return images;
     if (src) return [{ src, alt }];
@@ -74,7 +83,15 @@ export default function PhotoLightbox({
 
   const canNav = gallery.length > 1;
 
+  // index & current url
   const [index, setIndex] = useState(() => clampIndex(startIndex, gallery.length));
+
+  // We keep a "shownSrc" so we don't flash blank while a new image is decoding.
+  const [shownSrc, setShownSrc] = useState<string>(() => gallery[clampIndex(startIndex, gallery.length)]?.src ?? "");
+  const [shownAlt, setShownAlt] = useState<string>(() => gallery[clampIndex(startIndex, gallery.length)]?.alt ?? "");
+  const [pendingSrc, setPendingSrc] = useState<string>("");
+
+  // zoom/pan state
   const [scale, setScale] = useState(1);
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
@@ -83,12 +100,12 @@ export default function PhotoLightbox({
   const pinch = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
   const panBase = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
 
+  // swipe base (for nav + close)
   const swipeBase = useRef<{ x: number; y: number; t: number; pointerType: string } | null>(null);
   const swipeLock = useRef<"none" | "h" | "v">("none");
 
+  // double-tap support
   const lastTap = useRef<number>(0);
-
-  const current = gallery[index];
 
   const resetView = () => {
     setScale(1);
@@ -102,6 +119,9 @@ export default function PhotoLightbox({
     lastTap.current = 0;
   };
 
+  const prevImageRef = useRef<null | (() => void)>(null);
+  const nextImageRef = useRef<null | (() => void)>(null);
+
   const prevImage = () => {
     if (!canNav) return;
     setIndex((i) => (i - 1 + gallery.length) % gallery.length);
@@ -114,21 +134,69 @@ export default function PhotoLightbox({
     resetView();
   };
 
-  // reset on open / startIndex changes (images mode)
+  prevImageRef.current = prevImage;
+  nextImageRef.current = nextImage;
+
+  // init/reset on open or when inputs change
   useEffect(() => {
     if (!open) return;
     if (isYouTube) return;
 
-    setIndex(clampIndex(startIndex, gallery.length));
+    const i = clampIndex(startIndex, gallery.length);
+    setIndex(i);
+
+    const first = gallery[i];
+    const firstSrc = first?.src ?? "";
+    setShownSrc(firstSrc);
+    setShownAlt(first?.alt ?? "");
+    setPendingSrc("");
+
+    if (firstSrc) {
+      preloadUrl(firstSrc);
+      // prefetch neighbors (big win for perceived speed + fewer "re-load" moments)
+      const prev = gallery[(i - 1 + gallery.length) % gallery.length]?.src;
+      const next = gallery[(i + 1) % gallery.length]?.src;
+      if (prev) preloadUrl(prev);
+      if (next) preloadUrl(next);
+    }
+
     resetView();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, isYouTube, startIndex, gallery.length]);
+
+  // When index changes: prefetch and set pending src; swap only when decoded/loaded.
+  useEffect(() => {
+    if (!open) return;
+    if (isYouTube) return;
+    if (!gallery.length) return;
+
+    const target = gallery[index];
+    const targetSrc = target?.src ?? "";
+    const targetAlt = target?.alt ?? "";
+
+    if (!targetSrc) return;
+
+    // Prefetch target and neighbors immediately
+    preloadUrl(targetSrc);
+    const prev = gallery[(index - 1 + gallery.length) % gallery.length]?.src;
+    const next = gallery[(index + 1) % gallery.length]?.src;
+    if (prev) preloadUrl(prev);
+    if (next) preloadUrl(next);
+
+    // if already loaded, swap instantly; else show pending loader but keep current visible
+    if (LOADED.has(targetSrc)) {
+      setShownSrc(targetSrc);
+      setShownAlt(targetAlt);
+      setPendingSrc("");
+    } else {
+      setPendingSrc(targetSrc);
+    }
+  }, [open, isYouTube, index, gallery]);
 
   // snap back near 1x
   useEffect(() => {
     if (!open) return;
     if (isYouTube) return;
-
     if (scale < 1.06) {
       setScale(1);
       setTx(0);
@@ -142,14 +210,12 @@ export default function PhotoLightbox({
   );
 
   const toggleZoom = () => {
-    if (scale < 1.5) setScale(2);
-    else setScale(1);
+    setScale((s) => (s < 1.5 ? 2 : 1));
   };
-
-  const stop = (e: any) => e.stopPropagation();
 
   const onBoxPointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
 
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -197,7 +263,6 @@ export default function PhotoLightbox({
 
   const onBoxPointerMove = (e: React.PointerEvent) => {
     e.stopPropagation();
-
     if (!pointers.current.has(e.pointerId)) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -277,9 +342,12 @@ export default function PhotoLightbox({
       const farH = absDx > 80;
       const farV = absDy > 90;
 
+      // vertical close (touch/pen only)
       if (isTouchLike && swipeLock.current === "v" && (farV || (fast && absDy > 60))) {
         onClose();
-      } else if (canNav && swipeLock.current === "h" && (farH || (fast && absDx > 50))) {
+      }
+      // horizontal nav
+      else if (canNav && swipeLock.current === "h" && (farH || (fast && absDx > 50))) {
         if (dx < 0) nextImage();
         else prevImage();
       }
@@ -296,10 +364,9 @@ export default function PhotoLightbox({
     }
   };
 
-  // ✅ Only now we can early-return safely (after hooks)
   if (!open) return null;
 
-  // ====== YOUTUBE RENDER ======
+  // ===== YouTube mode =====
   if (isYouTube) {
     const embedSrc =
       `https://www.youtube-nocookie.com/embed/${youtubeId}` +
@@ -339,16 +406,12 @@ export default function PhotoLightbox({
             </div>
           </div>
         </div>
-
-        <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
-          YouTube rulează doar în lightbox • Tap pe fundal sau ESC pentru închidere
-        </div>
       </div>
     );
   }
 
-  // ====== IMAGES RENDER ======
-  if (!current) return null;
+  // ===== Images mode =====
+  const showNav = canNav && gallery.length > 1;
 
   return (
     <div
@@ -361,28 +424,24 @@ export default function PhotoLightbox({
     >
       <button
         type="button"
-        onMouseDown={stop}
-        onPointerDown={stop}
         onClick={(e) => {
           e.stopPropagation();
           onClose();
         }}
-        className="pointer-events-auto z-20 absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
+        className="absolute right-4 top-4 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white/90 hover:bg-white/20 transition"
       >
         Închide ✕
       </button>
 
-      {canNav && (
+      {showNav && (
         <>
           <button
             type="button"
-            onMouseDown={stop}
-            onPointerDown={stop}
             onClick={(e) => {
               e.stopPropagation();
               prevImage();
             }}
-            className="pointer-events-auto z-20 hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
+            className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
             aria-label="Imaginea anterioară"
           >
             ←
@@ -390,42 +449,35 @@ export default function PhotoLightbox({
 
           <button
             type="button"
-            onMouseDown={stop}
-            onPointerDown={stop}
             onClick={(e) => {
               e.stopPropagation();
               nextImage();
             }}
-            className="pointer-events-auto z-20 hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
+            className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 hover:bg-white/20 transition"
             aria-label="Imaginea următoare"
           >
             →
           </button>
-
-          <div className="pointer-events-none z-20 absolute left-4 top-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white/85">
-            {index + 1} / {gallery.length}
-          </div>
         </>
       )}
 
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-6">
+      <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6">
         <div
-          className="pointer-events-auto relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
-          onMouseDown={stop}
-          onClick={stop}
+          className="relative max-h-[92vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-black/10"
           onPointerDown={onBoxPointerDown}
           onPointerMove={onBoxPointerMove}
           onPointerUp={onBoxPointerUp}
           onPointerCancel={onBoxPointerUp}
-          style={{ touchAction: "none" }}
           onDoubleClick={(e) => {
             e.stopPropagation();
             toggleZoom();
           }}
+          style={{ touchAction: "none" }}
         >
+          {/* Keep current visible; if pending, we load it invisibly and swap onLoad */}
           <img
-            src={current.src}
-            alt={current.alt ?? ""}
+            src={shownSrc}
+            alt={shownAlt}
             draggable={false}
             className="select-none"
             style={{
@@ -437,19 +489,32 @@ export default function PhotoLightbox({
               willChange: "transform",
             }}
           />
-        </div>
-      </div>
 
-      <div className="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-white/70">
-        {canNav ? (
-          <>
-            Swipe stânga/dreapta = next/prev • Swipe sus/jos = închide • Pinch zoom • Dublu-tap pentru 2× • Tap pe fundal pentru închidere
-          </>
-        ) : (
-          <>
-            Swipe sus/jos = închide • Pinch zoom • Dublu-tap pentru 2× • Tap pe fundal pentru închidere
-          </>
-        )}
+          {pendingSrc ? (
+            <img
+              src={pendingSrc}
+              alt=""
+              draggable={false}
+              className="absolute inset-0 opacity-0 pointer-events-none"
+              onLoad={() => {
+                LOADED.add(pendingSrc);
+                const t = gallery[index];
+                setShownSrc(pendingSrc);
+                setShownAlt(t?.alt ?? "");
+                setPendingSrc("");
+              }}
+            />
+          ) : null}
+
+          {/* tiny loader only when truly pending */}
+          {pendingSrc ? (
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="rounded-full border border-white/10 bg-black/40 px-3 py-2 text-xs text-white/80">
+                Se încarcă…
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
