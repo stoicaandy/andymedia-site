@@ -38,9 +38,15 @@ export default function RequestForm() {
     e.preventDefault();
     setResult(null);
 
-    if (!name.trim()) return setResult({ ok: false, message: "Te rog completează numele." });
-    if (!phone.trim() && !email.trim())
-      return setResult({ ok: false, message: "Te rog completează telefon sau email (ideal ambele)." });
+    if (!name.trim()) {
+      return setResult({ ok: false, message: "Te rog completează numele." });
+    }
+    if (!phone.trim() && !email.trim()) {
+      return setResult({
+        ok: false,
+        message: "Te rog completează telefon sau email (ideal ambele).",
+      });
+    }
 
     setLoading(true);
     try {
@@ -61,8 +67,12 @@ export default function RequestForm() {
       });
 
       const data = (await res.json()) as ApiResponse;
+
       if (!res.ok) {
-        setResult({ ok: false, message: data?.message || "Eroare la trimitere. Încearcă din nou." });
+        setResult({
+          ok: false,
+          message: data?.message || "Eroare la trimitere. Încearcă din nou.",
+        });
       } else {
         setResult({ ok: true, message: data?.message || "Cererea a fost trimisă." });
         setName("");
@@ -84,9 +94,11 @@ export default function RequestForm() {
       onSubmit={onSubmit}
       className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 md:p-4"
     >
-      {/* Oferta selectată — linie mică (nu bloc mare) */}
+      {/* Oferta selectată — linie mică */}
       <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-zinc-300/80">
-        <span className="uppercase tracking-[0.22em] text-zinc-300/60">Selectat:</span>
+        <span className="uppercase tracking-[0.22em] text-zinc-300/60">
+          Selectat:
+        </span>
         <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">
           {selectedOffer
             ? selectedOffer.title
@@ -96,7 +108,6 @@ export default function RequestForm() {
         </span>
       </div>
 
-      {/* Grid compact */}
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block">
           <span className="sr-only">Nume</span>
@@ -145,7 +156,7 @@ export default function RequestForm() {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className={cx(inputBase, "h-9 px-4 text-sm")}
-            placeholder="Locație / oraș (București / Cluj / ...)"
+            placeholder="Locație / oraș (Iași / București / ...)"
           />
         </label>
 
@@ -174,7 +185,6 @@ export default function RequestForm() {
         </div>
       ) : null}
 
-      {/* CTA compact */}
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <button
           disabled={loading}

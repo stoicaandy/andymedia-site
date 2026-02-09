@@ -1,23 +1,45 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
+import PartnersClient from './PartnersClient';
+
+const SITE_NAME = 'ANDYmedia';
+const BASE_URL = 'https://andymedia-site.vercel.app';
+
+const PAGE_TITLE = 'Parteneri • Booking • Trupe • DJ • Foto-Video | ANDYmedia';
+const PAGE_DESC =
+  'Trupe exclusive, colaborări, DJ, foto-video și artiști cu care lucrăm. Booking în dezvoltare: adăugăm constant noi parteneri.';
+
+const OG_IMAGE = '/parteneri/og-parteneri.jpg'; // pune imaginea în public/parteneri/
 
 export const metadata: Metadata = {
-  title: "Parteneri",
-  description: "Trupe și parteneri ANDYmedia.",
+  title: PAGE_TITLE,
+  description: PAGE_DESC,
+  alternates: {
+    canonical: '/parteneri',
+  },
+  openGraph: {
+    title: PAGE_TITLE,
+    description: PAGE_DESC,
+    url: `${BASE_URL}/parteneri`,
+    siteName: SITE_NAME,
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: 'ANDYmedia Parteneri',
+      },
+    ],
+    locale: 'ro_RO',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: PAGE_TITLE,
+    description: PAGE_DESC,
+    images: [OG_IMAGE],
+  },
 };
 
-export default function Page() {
-  return (
-    <main className="relative min-h-screen text-white">
-      <div className="relative z-10 pt-20 md:pt-24">
-        <section className="mx-auto max-w-6xl px-8 md:px-10 py-16">
-          <h1 className="text-3xl md:text-4xl font-medium">
-            Parteneri <span className="text-amber-300">.</span>
-          </h1>
-          <p className="mt-4 text-zinc-300 max-w-3xl">
-            Aici punem logo-uri + nume, colaborări și ce facem împreună.
-          </p>
-        </section>
-      </div>
-    </main>
-  );
+export default function ParteneriPage() {
+  return <PartnersClient baseUrl={BASE_URL} />;
 }

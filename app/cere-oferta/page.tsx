@@ -1,9 +1,20 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import RequestForm from "./RequestForm";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Cere ofertă — ANDYmedia",
-  description: "Trimite o cerere de ofertă. Oferta selectată se precompletează automat.",
+  description:
+    "Trimite o cerere de ofertă. Oferta selectată se precompletează automat.",
+  alternates: { canonical: "/cere-oferta" },
+  openGraph: {
+    title: "Cere ofertă — ANDYmedia",
+    description:
+      "Trimite o cerere de ofertă. Oferta selectată se precompletează automat.",
+    url: "/cere-oferta",
+    type: "website",
+    locale: "ro_RO",
+  },
 };
 
 export default function CereOfertaPage() {
@@ -22,11 +33,12 @@ export default function CereOfertaPage() {
                   Cere ofertă <span className="text-amber-300">.</span>
                 </h1>
                 <p className="mt-1 text-sm text-zinc-300/85 leading-snug max-w-2xl">
-                  Detalii esențiale → revenim rapid cu disponibilitate și soluție adaptată.
+                  Detalii esențiale → revenim rapid cu disponibilitate și soluție
+                  adaptată.
                 </p>
               </div>
 
-              {/* buton back (desktop) */}
+              {/* back (desktop) */}
               <a
                 href="/#oferte"
                 className="hidden md:inline-flex rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
@@ -36,14 +48,18 @@ export default function CereOfertaPage() {
             </div>
 
             <div className="mt-4">
-              <Suspense fallback={<div className="text-sm text-zinc-300/85">Se încarcă...</div>}>
+              <Suspense
+                fallback={
+                  <div className="text-sm text-zinc-300/85">Se încarcă...</div>
+                }
+              >
                 <RequestForm />
               </Suspense>
             </div>
           </div>
         </section>
 
-        {/* Dacă vrei neapărat footer, îl afișăm doar pe ecrane înalte */}
+        {/* footer doar pe ecrane înalte */}
         <footer className="border-t border-white/5 [@media(max-height:820px)]:hidden">
           <div className="mx-auto max-w-6xl px-6 md:px-10 py-5">
             <div className="text-xs text-gray-400">
