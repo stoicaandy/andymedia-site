@@ -126,7 +126,7 @@ const PARTNERS: Partner[] = [
       contact:
         "https://wa.me/40742453047?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
     },
-    youtubeEmbed: "bRcEc5TpZ5c",
+    youtubeEmbed: "https://www.youtube.com/shorts/USqoBAt16WU?feature=share",
   },
 
   {
