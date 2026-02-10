@@ -94,6 +94,25 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/QFbfbizJZOU",
 },
 {
+  id: "alex-maxim-vocea-romaniei",
+  name: "Alex Maxim (Alexandru Ionuț Maxim)",
+  city: "Iași",
+  category: "Artiști",
+  priority: 4,
+  description:
+    "Artist & performer, cunoscut publicului larg din Vocea României (finalist). Voce puternică, interpretare cu impact și prezență scenică. Potrivit pentru evenimente private, corporate și apariții live, cu repertoriu adaptat publicului și momentului.",
+  image: "/parteneri/alex-maxim.jpg",
+  tags: ["artist", "live", "Vocea României", "show", "evenimente", "corporate", "nuntă", "Iași"],
+  links: {
+    instagram: "https://www.instagram.com/alexmaxim.ro/?hl=ro",
+    facebook: "https://www.facebook.com/alexmaxim.ro/",
+    youtube: "https://www.youtube.com/@ImAlexMaxim",
+    tiktok: "https://www.tiktok.com/@alexmaxim.ro",
+    contact: "https://www.instagram.com/alexmaxim.ro/?hl=ro",
+  },
+  youtubeEmbed: "https://youtu.be/Err1svvzAYA",
+},
+{
   id: "dj-ralmm-iasi",
   name: "DJ RALMM",
   city: "Iași",
