@@ -135,6 +135,25 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/NisW5bQqfsI",
 },
 {
+  id: "ioana-ignat",
+  name: "Ioana Ignat",
+  city: "București",
+  category: "Artiști",
+  priority: 9,
+  description:
+    "Ioana Ignat — artistă pop cu hituri cunoscute și prezență scenică puternică. Show live potrivit pentru evenimente private, corporate și concerte, cu repertoriu adaptat publicului și momentului.",
+  image: "/parteneri/ioana-ignat.jpg",
+  tags: ["artist", "pop", "live", "evenimente", "corporate", "concert", "București"],
+  links: {
+    instagram: "https://www.instagram.com/ioanaignatofficial/",
+    facebook: "https://www.facebook.com/Ioanaignatofficial/",
+    youtube: "https://www.youtube.com/channel/UC2114LUrKwLVB96aPsaabVQ",
+    tiktok: "https://www.tiktok.com/@ioanaignatoficial",
+    contact: "https://www.instagram.com/ioanaignatofficial/",
+  },
+  youtubeEmbed: "https://youtu.be/sRJUTKKmwpI",
+},
+{
   id: "proconsul",
   name: "Proconsul",
   city: "România",
