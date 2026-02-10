@@ -7,12 +7,14 @@ type Item = { text: string; tone?: "gold" | "silver" };
 export default function RotatingHeadline() {
   const items: Item[] = useMemo(
     () => [
-      { text: "EVENIMENTE CORPORATE", tone: "gold" },
+      { text: "CORPORATE EVENTS", tone: "gold" },
       { text: "SPECTACOLE", tone: "silver" },
       { text: "CONFERINȚE", tone: "gold" },
       { text: "CONGRESE", tone: "silver" },
       { text: "NUNȚI", tone: "gold" },
       { text: "PETRECERI", tone: "silver" },
+      { text: "CONFERINTE", tone: "gold" },
+      { text: "BOOKING", tone: "silver" },
     ],
     []
   );
