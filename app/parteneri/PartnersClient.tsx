@@ -94,6 +94,26 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/QFbfbizJZOU",
 },
 {
+  id: "dj-ralmm-iasi",
+  name: "DJ RALMM",
+  city: "Iași",
+  category: "DJ",
+  priority: 6,
+  description:
+    "DJ & producer cu experiență solidă, seturi versatile (club / house / afro / latino) și control bun al energiei pe ring. Potrivit pentru nunți, corporate și party-uri, cu selecție adaptată publicului și momentului. Contact: 0743 566 030.",
+  image: "/parteneri/dj-ralm-iasi.jpg",
+  tags: ["dj", "producer", "Iași", "club", "house", "afro", "latin", "party", "evenimente"],
+  links: {
+    facebook: "https://www.facebook.com/RALMM.RO/",
+    instagram: "https://www.instagram.com/ralmm.ro/",
+    tiktok: "https://www.tiktok.com/@ralmm.ro",
+    youtube: "https://www.youtube.com/@ralmmro",
+    contact:
+      "https://wa.me/40743566030?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/JS0PsJkmP8E",
+},
+{
     id: "soundcheck-band-iasi",
     name: "SoundCheck Band",
     city: "Iași",
