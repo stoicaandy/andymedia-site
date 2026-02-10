@@ -4,14 +4,13 @@ import { NEWS, type NewsItem } from "@/app/data/news";
 
 function badgeLabel(item: NewsItem) {
   if (item.type === "image") return "IMAGE";
-  if (item.type === "video") return "VIDEO";
+  if (item.type === "video") return item.format === "portrait" ? "VIDEO (VERTICAL)" : "VIDEO";
   if (item.type === "embed" && item.provider === "youtube") return "YOUTUBE";
   if (item.type === "embed" && item.provider === "tiktok") return "TIKTOK";
   return "MEDIA";
 }
 
 export default function NewsSection() {
-  // AICI alegi 4 sau 6
   const COUNT = 4;
 
   const items = [...NEWS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, COUNT);
@@ -26,7 +25,7 @@ export default function NewsSection() {
                 Noutăți <span className="text-amber-300">.</span>
               </h2>
               <p className="mt-2 text-gray-300 max-w-2xl">
-                Fiecare noutate are pagină proprie (URL), optimizată pentru share pe Facebook.
+                4 casete → fiecare are pagină proprie cu OpenGraph pentru Facebook.
               </p>
             </div>
 
@@ -38,7 +37,7 @@ export default function NewsSection() {
             </Link>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             {items.map((item) => (
               <article
                 key={item.id}
@@ -50,6 +49,7 @@ export default function NewsSection() {
                   </div>
 
                   <Link href={`/noutati/${item.slug}`} className="block">
+                    {/* Previzualizare: doar imagine dacă există; altfel placeholder */}
                     {item.type === "image" && item.src ? (
                       <div className="relative aspect-[16/9]">
                         <Image
@@ -57,7 +57,7 @@ export default function NewsSection() {
                           alt={item.alt || item.title}
                           fill
                           className="object-cover"
-                          sizes="(max-width: 1024px) 100vw, 33vw"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                       </div>
                     ) : (

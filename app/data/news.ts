@@ -1,6 +1,6 @@
 export type NewsProvider = "youtube" | "tiktok";
-
 export type NewsType = "image" | "video" | "embed";
+export type MediaFormat = "landscape" | "portrait";
 
 export type NewsAction = {
   label: string;
@@ -9,30 +9,38 @@ export type NewsAction = {
 };
 
 export type NewsItemBase = {
-  // CE AI TU DE COMPLETAT (simplu)
   id: string;
+  title: string;
+  description: string;
+  date: string; // YYYY-MM-DD
+
   type: NewsType;
   provider?: NewsProvider;
 
-  src?: string; // pt image/video local (ex: "/noutati/retro.jpg" sau "/video/clip.mp4")
-  href?: string; // pt embed (YouTube/TikTok link)
+  // media
+  src?: string;  // local image/video
+  href?: string; // youtube/tiktok link
   alt?: string;
 
-  title: string;
-  description: string;
-  date: string; // "YYYY-MM-DD"
+  // control layout
+  format?: MediaFormat; // portrait/landscape (default landscape)
 
-  // OPTIONAL (dacă nu pui, se generează automat)
-  slug?: string; // URL: /noutati/<slug> (dacă lipsește => din id)
-  ogImage?: string; // imagine pt Facebook share (dacă lipsește => "/og/news/<id>.jpg")
-  actions?: NewsAction[]; // butoane în pagină (dacă lipsește => default)
+  // share
+  slug?: string;
+  ogImage?: string; // 1200x630 recomandat
+
+  // buttons in page
+  actions?: NewsAction[];
 };
 
 export type NewsItem = {
-  // CE FOLOSEȘTE SITE-UL (auto)
   id: string;
   slug: string;
   ogImage: string;
+
+  title: string;
+  description: string;
+  date: string;
 
   type: NewsType;
   provider?: NewsProvider;
@@ -41,40 +49,83 @@ export type NewsItem = {
   href?: string;
   alt?: string;
 
-  title: string;
-  description: string;
-  date: string;
-
+  format: MediaFormat;
   actions: NewsAction[];
 };
 
-// 1) AICI pui noutățile (exact ca înainte)
-// IMPORTANT: în exemplu am păstrat primul item din ce ai trimis.
-// Completezi restul item-urilor tale aici.
+// =========================
+// AICI editezi tu noutățile
+// =========================
 export const NEWS_BASE: NewsItemBase[] = [
+  // 1) IMAGINE LANDSCAPE (ex: 16:9)
   {
-    id: "retro-lights",
-    type: "image",
-    src: "/noutati/retro.jpg",
-    alt: "Lumini retro pentru impact vizual",
-    title: "Upgrade flota lumini",
+    id: "site-launch",
+    title: "Ne-am dezvoltat site-ul ca să fim mai aproape de parteneri și clienți",
     description:
-      "Ne îmbunătățim în mod constant flota de echipament pentru a obține impact vizual maxim și un sunet cât mai pur. În curând mai multe lumini retro în stock.",
-    date: "2026-02-06",
-    // OPTIONAL:
-    // slug: "upgrade-flota-lumini",
-    // ogImage: "/og/news/retro-lights.jpg",
-    // actions: [...]
+      "Am construit andymedia.ro ca un hub clar: servicii, portofoliu, oferte și contact. Ne ajută să lucrăm mai rapid și mai organizat.",
+    date: "2026-02-10",
+    type: "image",
+    format: "landscape",
+    src: "/noutati/site-launch.jpg",
+    alt: "Preview andymedia.ro",
+    ogImage: "/og/news/site-launch.jpg",
+    actions: [
+      { label: "Vezi servicii", href: "/servicii", variant: "secondary" },
+      { label: "Vezi portofoliu", href: "/portofoliu", variant: "secondary" },
+      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
+    ],
   },
 
+  // 2) VIDEO LOCAL LANDSCAPE (site tour)
   {
-    id: "miclauseni",
-    type: "image",
-    src: "/noutati/miclauseni.jpg",
-    alt: "Eveniment Miclăușeni",
-    title: "Proiect Miclăușeni",
-    description: "Descrierea ta aici (cum era înainte).",
-    date: "2026-02-02",
+    id: "site-tour-video",
+    title: "Tur rapid: Hero → Servicii → Parteneri (video)",
+    description:
+      "Un clip scurt care arată structura site-ului: ce facem, cu cine lucrăm și cum ceri ofertă.",
+    date: "2026-02-10",
+    type: "video",
+    format: "landscape",
+    src: "/video/site-tour.mp4",
+    ogImage: "/og/news/site-tour-video.jpg",
+    actions: [
+      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
+      { label: "Oferte", href: "/oferte", variant: "secondary" },
+    ],
+  },
+
+  // 3) VIDEO LOCAL PORTRAIT (ex: 9:16)
+  {
+    id: "moment-vertical",
+    title: "Moment din eveniment (vertical)",
+    description:
+      "Clip vertical (9:16) — lumini, energie, detalii. Ideal pentru mobil.",
+    date: "2026-02-06",
+    type: "video",
+    format: "portrait",
+    src: "/video/moment-vertical.mp4",
+    ogImage: "/og/news/moment-vertical.jpg",
+    actions: [
+      { label: "Servicii", href: "/servicii", variant: "secondary" },
+      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
+    ],
+  },
+
+  // 4) YOUTUBE EXTERN (embed în pagină)
+  {
+    id: "showreel-youtube",
+    title: "Showreel (YouTube)",
+    description:
+      "Material scurt cu secvențe din proiecte — pentru o privire rapidă asupra stilului nostru.",
+    date: "2026-02-01",
+    type: "embed",
+    provider: "youtube",
+    format: "landscape",
+    href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    ogImage: "/og/news/showreel-youtube.jpg",
+    actions: [
+      { label: "Portofoliu", href: "/portofoliu", variant: "secondary" },
+      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
+    ],
   },
 ];
 
@@ -86,10 +137,8 @@ function toSlug(s: string) {
     .replace(/ă/g, "a")
     .replace(/â/g, "a")
     .replace(/î/g, "i")
-    .replace(/ș/g, "s")
-    .replace(/ş/g, "s")
-    .replace(/ț/g, "t")
-    .replace(/ţ/g, "t")
+    .replace(/ș|ş/g, "s")
+    .replace(/ț|ţ/g, "t")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
@@ -109,14 +158,15 @@ export const NEWS: NewsItem[] = NEWS_BASE.map((x) => {
     id: x.id,
     slug,
     ogImage,
+    title: x.title,
+    description: x.description,
+    date: x.date,
     type: x.type,
     provider: x.provider,
     src: x.src,
     href: x.href,
     alt: x.alt,
-    title: x.title,
-    description: x.description,
-    date: x.date,
+    format: x.format ?? "landscape",
     actions,
   };
 });
