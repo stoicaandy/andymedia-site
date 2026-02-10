@@ -29,7 +29,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm md:text-base text-zinc-300/85 tracking-wide">
-              Sunet • Lumini • LED • Scenă • Broadcast • Live / Studio
+              Sunet • Lumini • LED • Scenă • Broadcast • Live / Studio Records • Booking
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
@@ -128,16 +128,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* FOOTER */}
-        <footer className="border-t border-white/5">
-          <div className="mx-auto max-w-6xl px-8 md:px-10 py-10">
-            <div className="text-sm text-gray-400">
-              <div className="text-white font-medium">ANDYmedia</div>
-              <div className="mt-1">Event production • Technical rentals</div>
-            </div>
-          </div>
-        </footer>
       </div>
     </main>
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { SITE, whatsappUrl } from "@/app/data/site";
 
 const NAV = [
   { href: "/servicii", label: "SERVICII" },
@@ -55,6 +56,11 @@ export default function SiteHeader() {
         : "text-white/85 hover:text-white"
     );
 
+  const iconBtnCls =
+    "px-3 py-2 text-xs uppercase tracking-[0.22em] rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-amber-300/50 transition text-white/85 hover:text-white";
+
+  const wa = whatsappUrl(SITE.phoneE164);
+
   return (
     <header className={headerCls}>
       <div className="h-20 lg:h-24 px-4 md:px-6 lg:px-8 flex items-center gap-3">
@@ -74,17 +80,41 @@ export default function SiteHeader() {
           </Link>
         </div>
 
-        {/* DESKTOP NAV — doar pe lg+ */}
+        {/* DESKTOP NAV */}
         <nav className="ml-auto hidden lg:flex items-center gap-3">
           {NAV.map((x) => (
             <Link key={x.label} href={x.href} className={linkCls(!!x.primary)}>
               {x.label}
             </Link>
           ))}
+
+          {/* Contact quick-actions */}
+          <a className={iconBtnCls} href={`tel:${SITE.phoneE164}`}>
+            SUNĂ
+          </a>
+          <a className={iconBtnCls} href={wa} target="_blank" rel="noopener noreferrer">
+            WHATSAPP
+          </a>
         </nav>
 
         {/* MOBILE / TABLET */}
         <div className="ml-auto flex lg:hidden items-center gap-2">
+          <a
+            href={`tel:${SITE.phoneE164}`}
+            className="px-3 py-2 text-xs uppercase tracking-[0.22em] rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition"
+          >
+            Sună
+          </a>
+
+          <a
+            href={wa}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-2 text-xs uppercase tracking-[0.22em] rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition"
+          >
+            WA
+          </a>
+
           <Link
             href="/cere-oferta"
             className="px-4 py-2 text-xs uppercase tracking-[0.22em] rounded-xl border border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 transition"
@@ -116,6 +146,20 @@ export default function SiteHeader() {
                 {x.label}
               </Link>
             ))}
+
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <a className={cx(iconBtnCls, "text-center")} href={`tel:${SITE.phoneE164}`}>
+                Sună
+              </a>
+              <a
+                className={cx(iconBtnCls, "text-center")}
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       )}
