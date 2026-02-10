@@ -198,7 +198,7 @@ const PARTNERS: Partner[] = [
     city: "Iași",
     category: "Trupe exclusive",
     exclusive: true,
-    since: "2022",
+    since: "2018",
     priority: 2,
     description:
       "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. Booking: 0742 137 647 • trupasoundcheck@gmail.com.",
@@ -236,7 +236,7 @@ const PARTNERS: Partner[] = [
     name: "DJ Jonny Black",
     city: "Iași",
     category: "DJ",
-    priority: 3,
+    priority: 15,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
     image: "/parteneri/dj-jonny-black-iasi.jpg",
