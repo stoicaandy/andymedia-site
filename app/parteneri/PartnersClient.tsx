@@ -154,6 +154,26 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/sRJUTKKmwpI",
 },
 {
+  id: "alina-eremia",
+  name: "Alina Eremia",
+  city: "București",
+  category: "Artiști",
+  priority: 8,
+  description:
+    "Alina Eremia — artistă pop de top din România, cu hituri cunoscute și show live modern, potrivit pentru evenimente private, corporate și festivaluri. Booking: 0751 144 109 (Bogdan Niță).",
+  image: "/parteneri/alina-eremia-iasi.jpg",
+  tags: ["artist", "pop", "live", "evenimente", "corporate", "festival", "București"],
+  links: {
+    website: "https://alinaeremia.ro/",
+    instagram: "https://www.instagram.com/alinaeremia/",
+    facebook: "https://www.facebook.com/OfficialAlinaEremia/",
+    youtube: "https://www.youtube.com/channel/UCfuFmKmtny4iQmDK6wREP4w",
+    contact:
+      "https://wa.me/40751144109?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/scl2UJnbk9Q",
+},
+{
   id: "proconsul",
   name: "Proconsul",
   city: "România",
