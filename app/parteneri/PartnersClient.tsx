@@ -153,6 +153,26 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/AbSgSofD3Us",
 },
 {
+  id: "pepe",
+  name: "Pepe",
+  city: "București",
+  category: "Artiști",
+  priority: 7,
+  description:
+    "Pepe — artist cu hituri cunoscute și show live energic, potrivit pentru evenimente private, corporate și festivaluri. Repertoriu pop/latin, interacțiune bună cu publicul și program adaptabil (format eveniment). Booking: 0722 825 860.",
+  image: "/parteneri/pepe.jpg",
+  tags: ["artist", "live", "pop", "latin", "corporate", "festival", "evenimente", "București"],
+  links: {
+    website: "https://pepe.ro/",
+    facebook: "https://www.facebook.com/PepeOnline/",
+    instagram: "https://www.instagram.com/official_pepe/",
+    youtube: "https://www.youtube.com/channel/UCeEHd3DVXGm4NNxaDDZngKQ",
+    contact:
+      "https://wa.me/40722825860?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/3RcKxlbcXmY",
+},
+{
   id: "dj-ralmm-iasi",
   name: "DJ RALMM",
   city: "Iași",
