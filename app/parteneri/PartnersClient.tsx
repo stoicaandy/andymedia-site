@@ -97,7 +97,7 @@ const PARTNERS: Partner[] = [
     name: "DJ Jonny Black",
     city: "Iași",
     category: "DJ",
-    priority: 10,
+    priority: 3,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
     image: "/parteneri/dj-jonny-black-iasi.jpg",
@@ -116,7 +116,7 @@ const PARTNERS: Partner[] = [
     city: "Iași",
     category: "Trupe colaborări",
     collaborated: true,
-    priority: 9,
+    priority: 55,
     description:
       "Formație de evenimente (colaborare periodică). Repertoriu pentru petreceri / momente dedicate, livrat curat și adaptat publicului.",
     image: "/parteneri/smart-music-iasi.jpg",
@@ -129,7 +129,6 @@ const PARTNERS: Partner[] = [
       contact:
         "https://wa.me/40742453047?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
     },
-    // ✅ poți lăsa URL-ul, extragem automat ID-ul:
     youtubeEmbed: "https://www.youtube.com/shorts/USqoBAt16WU?feature=share",
   },
 
@@ -141,7 +140,7 @@ const PARTNERS: Partner[] = [
     description:
       "Adăugăm constant artiști și formații imediat ce avem contactul lor. Dacă vrei recomandări rapide, trimite-ne detaliile evenimentului.",
     image: "/parteneri/booking-andymedia.jpg",
-    tags: ["booking", "artiști", "formații", "trupe live" ,"DJ"],
+    tags: ["booking", "artiști", "formații", "DJ"],
     links: {
       contact: "/cere-oferta",
     },
@@ -169,42 +168,34 @@ function getYouTubeId(input?: string): string | undefined {
 
   const raw = input.trim();
 
-  // deja e ID (11 char), acceptăm direct
   if (/^[a-zA-Z0-9_-]{11}$/.test(raw)) return raw;
 
-  // încearcă să parseze ca URL
   try {
     const url = new URL(raw);
 
-    // watch?v=
     const v = url.searchParams.get("v");
     if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
 
-    // youtu.be/<id>
     if (url.hostname.includes("youtu.be")) {
       const id = url.pathname.split("/").filter(Boolean)[0];
       if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
     }
 
-    // youtube.com/shorts/<id>
     const parts = url.pathname.split("/").filter(Boolean);
+
     const shortsIdx = parts.indexOf("shorts");
     if (shortsIdx >= 0) {
       const id = parts[shortsIdx + 1];
       if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
     }
 
-    // youtube.com/embed/<id>
     const embedIdx = parts.indexOf("embed");
     if (embedIdx >= 0) {
       const id = parts[embedIdx + 1];
       if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
     }
-  } catch {
-    // nu e URL valid → ignorăm
-  }
+  } catch {}
 
-  // fallback: regex (în caz de input ciudat)
   const m =
     raw.match(/v=([a-zA-Z0-9_-]{11})/) ||
     raw.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/) ||
@@ -342,148 +333,241 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="relative min-h-screen text-white">
-        <div className="relative z-10 pt-20 md:pt-24">
-          {/* ... restul codului tău rămâne identic până la carduri ... */}
+      {/* HERO + FILTERS */}
+      <section className="mx-auto max-w-6xl px-8 md:px-10 pt-8 md:pt-10 pb-8">
+        <h1 className="text-2xl md:text-3xl font-medium tracking-wide">
+          Parteneri <span className="text-amber-300">.</span>
+        </h1>
 
-          <section className="mx-auto max-w-6xl px-8 md:px-10 pb-14">
-            {filtered.length === 0 ? (
-              <div className="rounded-3xl border border-white/10 bg-black/30 p-10 text-center backdrop-blur-md">
-                <div className="text-xl font-bold">Niciun rezultat</div>
-                <p className="mt-2 text-white/75">Încearcă alt cuvânt-cheie sau schimbă filtrul.</p>
-              </div>
-            ) : (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {filtered.map((p) => {
-                  const ytId = getYouTubeId(p.youtubeEmbed);
+        <p className="mt-2 text-zinc-300/85 max-w-3xl">
+          Caută rapid în listă sau filtrează pe categorie (DJ, trupe exclusive, colaborări etc.).
+        </p>
 
-                  return (
-                    <article
-                      key={p.id}
-                      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30 transition hover:border-white/20 hover:bg-black/35 backdrop-blur-md"
-                    >
-                      <div className="relative aspect-[16/10] w-full overflow-hidden">
-                        <Image
-                          src={p.image}
-                          alt={`${p.name}${p.city ? ` - ${p.city}` : ""} - ANDYmedia partener`}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                      </div>
-
-                      <div className="p-5">
-                        <div className="mb-3 flex flex-wrap gap-2">
-                          {p.priority && p.priority <= 10 ? <Chip>ANDYmedia Preferred</Chip> : null}
-                          {p.exclusive ? <Chip>Exclusiv</Chip> : null}
-                          {!p.exclusive && p.collaborated ? <Chip>Colaborat</Chip> : null}
-                          <Chip>{p.category}</Chip>
-                          {p.since ? <Chip>din {p.since}</Chip> : null}
-                        </div>
-
-                        <h2 className="text-xl font-extrabold tracking-tight">{p.name}</h2>
-
-                        <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-white/70">
-                          {p.city ? <span>{p.city}</span> : null}
-                          {p.tags?.length ? (
-                            <>
-                              <span className="text-white/30">•</span>
-                              <span className="line-clamp-1">{p.tags.join(" · ")}</span>
-                            </>
-                          ) : null}
-                        </div>
-
-                        <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-white/80">{p.description}</p>
-
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {p.links?.website ? <IconLink href={p.links.website} label="Website" /> : null}
-                          {p.links?.facebook ? <IconLink href={p.links.facebook} label="Facebook" /> : null}
-                          {p.links?.instagram ? <IconLink href={p.links.instagram} label="Instagram" /> : null}
-                          {p.links?.youtube ? <IconLink href={p.links.youtube} label="YouTube" /> : null}
-                          {p.links?.tiktok ? <IconLink href={p.links.tiktok} label="TikTok" /> : null}
-                          {p.links?.spotify ? <IconLink href={p.links.spotify} label="Spotify" /> : null}
-
-                          {p.links?.contact ? (
-                            /^\/|^#/.test(p.links.contact) ? (
-                              <Link
-                                href={p.links.contact}
-                                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/90 transition hover:bg-white/10 hover:text-white"
-                                aria-label="Contact"
-                                title="Contact"
-                              >
-                                <span className="h-2 w-2 rounded-full bg-white/50" />
-                                Contact
-                              </Link>
-                            ) : (
-                              <IconLink href={p.links.contact} label="Contact" />
-                            )
-                          ) : null}
-                        </div>
-
-                        <div className="mt-5 flex items-center justify-between">
-                          <div className="text-xs text-white/55">Linkuri oficiale & demo</div>
-
-                          {ytId ? (
-                            <button
-                              onClick={() => setYt({ open: true, title: p.name, id: ytId })}
-                              className="inline-flex items-center justify-center rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
-                              type="button"
-                            >
-                              Vezi video
-                            </button>
-                          ) : (
-                            <span className="text-xs text-white/40">—</span>
-                          )}
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
-          </section>
-
-          {/* ... restul paginii rămâne la fel ... */}
-
-          {yt.open && yt.id ? (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
-              role="dialog"
-              aria-modal="true"
-              aria-label="YouTube preview"
-              onClick={() => setYt({ open: false })}
-            >
-              <div
-                className="w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-                  <div className="text-sm font-semibold text-white/90">
-                    {yt.title ? `Preview: ${yt.title}` : "Preview"}
-                  </div>
-                  <button
-                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90 hover:bg-white/10"
-                    onClick={() => setYt({ open: false })}
-                    type="button"
-                  >
-                    Închide
-                  </button>
-                </div>
-                <div className="relative aspect-video w-full">
-                  <iframe
-                    className="absolute inset-0 h-full w-full"
-                    src={`https://www.youtube-nocookie.com/embed/${yt.id}?autoplay=0&rel=0`}
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              </div>
-            </div>
-          ) : null}
+        <div className="mt-5 flex flex-wrap gap-2">
+          <StatPill k="Parteneri" v={stats.total} />
+          <StatPill k="Exclusivi" v={stats.exclusiveCount} />
+          <StatPill k="Orașe" v={stats.citiesCount} />
         </div>
-      </main>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-[1.2fr_auto] lg:items-start">
+          {/* Search */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:p-5">
+            <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
+              Căutare rapidă
+            </div>
+
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Caută: nume, oraș, tag, descriere…"
+              className="mt-3 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white/90 placeholder:text-white/40 outline-none focus:border-amber-300/40"
+            />
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {CATEGORIES.map((c) => {
+                const active = cat === c.key;
+                return (
+                  <button
+                    key={c.key}
+                    type="button"
+                    onClick={() => setCat(c.key)}
+                    className={[
+                      "rounded-full border px-4 py-2 text-xs transition",
+                      active
+                        ? "border-amber-300/40 bg-amber-300/10 text-amber-100"
+                        : "border-white/10 bg-white/[0.03] text-white/80 hover:bg-white/[0.06] hover:border-amber-300/30",
+                    ].join(" ")}
+                  >
+                    {c.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <label className="inline-flex items-center gap-2 text-sm text-white/80">
+                <input
+                  type="checkbox"
+                  checked={onlyExclusive}
+                  onChange={(e) => setOnlyExclusive(e.target.checked)}
+                  className="h-4 w-4 accent-amber-300"
+                />
+                Doar exclusivi
+              </label>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setQ("");
+                  setCat("Toate");
+                  setOnlyExclusive(false);
+                }}
+                className="text-sm text-zinc-300/80 hover:text-white transition"
+              >
+                Reset filtre →
+              </button>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:p-5">
+            <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
+              Booking / recomandări
+            </div>
+            <p className="mt-2 text-sm text-zinc-300/85 leading-snug">
+              Spune-ne data, orașul și tipul evenimentului — îți trimitem recomandări rapide.
+            </p>
+
+            <div className="mt-4">
+              <Link
+                href="/cere-oferta"
+                className="inline-flex rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
+              >
+                Cere ofertă
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* GRID */}
+      <section className="mx-auto max-w-6xl px-8 md:px-10 pb-14">
+        {filtered.length === 0 ? (
+          <div className="rounded-3xl border border-white/10 bg-black/30 p-10 text-center backdrop-blur-md">
+            <div className="text-xl font-bold">Niciun rezultat</div>
+            <p className="mt-2 text-white/75">Încearcă alt cuvânt-cheie sau schimbă filtrul.</p>
+          </div>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((p) => {
+              const ytId = getYouTubeId(p.youtubeEmbed);
+
+              return (
+                <article
+                  key={p.id}
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30 transition hover:border-white/20 hover:bg-black/35 backdrop-blur-md"
+                >
+                  <div className="relative aspect-[16/10] w-full overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={`${p.name}${p.city ? ` - ${p.city}` : ""} - ANDYmedia partener`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  </div>
+
+                  <div className="p-5">
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      {p.priority && p.priority <= 10 ? <Chip>ANDYmedia Preferred</Chip> : null}
+                      {p.exclusive ? <Chip>Exclusiv</Chip> : null}
+                      {!p.exclusive && p.collaborated ? <Chip>Colaborat</Chip> : null}
+                      <Chip>{p.category}</Chip>
+                      {p.since ? <Chip>din {p.since}</Chip> : null}
+                    </div>
+
+                    <h2 className="text-xl font-extrabold tracking-tight">{p.name}</h2>
+
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-white/70">
+                      {p.city ? <span>{p.city}</span> : null}
+                      {p.tags?.length ? (
+                        <>
+                          <span className="text-white/30">•</span>
+                          <span className="line-clamp-1">{p.tags.join(" · ")}</span>
+                        </>
+                      ) : null}
+                    </div>
+
+                    <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-white/80">
+                      {p.description}
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {p.links?.website ? <IconLink href={p.links.website} label="Website" /> : null}
+                      {p.links?.facebook ? <IconLink href={p.links.facebook} label="Facebook" /> : null}
+                      {p.links?.instagram ? <IconLink href={p.links.instagram} label="Instagram" /> : null}
+                      {p.links?.youtube ? <IconLink href={p.links.youtube} label="YouTube" /> : null}
+                      {p.links?.tiktok ? <IconLink href={p.links.tiktok} label="TikTok" /> : null}
+                      {p.links?.spotify ? <IconLink href={p.links.spotify} label="Spotify" /> : null}
+
+                      {p.links?.contact ? (
+                        /^\/|^#/.test(p.links.contact) ? (
+                          <Link
+                            href={p.links.contact}
+                            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/90 transition hover:bg-white/10 hover:text-white"
+                            aria-label="Contact"
+                            title="Contact"
+                          >
+                            <span className="h-2 w-2 rounded-full bg-white/50" />
+                            Contact
+                          </Link>
+                        ) : (
+                          <IconLink href={p.links.contact} label="Contact" />
+                        )
+                      ) : null}
+                    </div>
+
+                    <div className="mt-5 flex items-center justify-between">
+                      <div className="text-xs text-white/55">Linkuri oficiale & demo</div>
+
+                      {ytId ? (
+                        <button
+                          onClick={() => setYt({ open: true, title: p.name, id: ytId })}
+                          className="inline-flex items-center justify-center rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-white/90"
+                          type="button"
+                        >
+                          Vezi video
+                        </button>
+                      ) : (
+                        <span className="text-xs text-white/40">—</span>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* YT MODAL */}
+      {yt.open && yt.id ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="YouTube preview"
+          onClick={() => setYt({ open: false })}
+        >
+          <div
+            className="w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+              <div className="text-sm font-semibold text-white/90">
+                {yt.title ? `Preview: ${yt.title}` : "Preview"}
+              </div>
+              <button
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90 hover:bg-white/10"
+                onClick={() => setYt({ open: false })}
+                type="button"
+              >
+                Închide
+              </button>
+            </div>
+            <div className="relative aspect-video w-full">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={`https://www.youtube-nocookie.com/embed/${yt.id}?autoplay=0&rel=0`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
