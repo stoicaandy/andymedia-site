@@ -113,6 +113,26 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/Err1svvzAYA",
 },
 {
+  id: "proconsul",
+  name: "Proconsul",
+  city: "România",
+  category: "Trupe colaborări",
+  priority: 7,
+  description:
+    "Proconsul — una dintre cele mai iubite trupe pop-rock din România, cu un repertoriu cunoscut și un show live potrivit pentru evenimente mari (private, corporate, festival). Booking / management: 0744 831 410.",
+  image: "/parteneri/proconsul-iasi.jpg",
+  tags: ["trupă", "pop-rock", "live", "corporate", "festival", "evenimente", "România"],
+  links: {
+    website: "https://www.proconsul.com.ro/",
+    facebook: "https://www.facebook.com/ProconsulOfficial/?locale=ro_RO",
+    instagram: "https://www.instagram.com/proconsul_music/",
+    youtube: "https://www.youtube.com/channel/UCCJAzWoNFWPhIFXo-j17EPw",
+    contact:
+      "https://wa.me/40744831410?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/9mTUM9RzPkI",
+},
+{
   id: "dj-ralmm-iasi",
   name: "DJ RALMM",
   city: "Iași",
