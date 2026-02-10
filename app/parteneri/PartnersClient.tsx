@@ -91,16 +91,16 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "4H0ZJeZGSJg",
   },
-  {
+ {
   id: "ion-paladi",
   name: "Ion Paladi",
-  city: "Iași",
+  city: "Chișinău",
   category: "Artiști",
   priority: 4,
   description:
-    "Artist. Pentru booking / contact RO: +40755588995. Video: primul clip de pe canalul YouTube.",
+    "Ion Paladi este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului. Booking / contact RO: +40755588995.",
   image: "/parteneri/ion-paladi.jpg",
-  tags: ["artist", "muzică populară", "live", "evenimente", "show"],
+  tags: ["artist", "muzică populară", "live", "nuntă", "corporate", "festival", "show"],
   links: {
     website: "https://ionpaladi.md/",
     facebook: "https://www.facebook.com/ionpaladi.ro/",
@@ -109,7 +109,6 @@ const PARTNERS: Partner[] = [
     contact:
       "https://wa.me/40755588995?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
   },
-  // acceptă URL youtu.be și funcția ta extrage automat ID-ul
   youtubeEmbed: "https://youtu.be/xNW-Hfz4lo8",
 },
   {
