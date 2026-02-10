@@ -71,8 +71,29 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "rC35YDt2nDI",
   },
-
-  {
+{
+  id: "dj-marius-voicescu-iasi",
+  name: "DJ Marius Voicescu",
+  city: "Iași",
+  category: "DJ",
+  priority: 5,
+  description:
+    "DJ & MC pentru evenimente în Iași și în țară — seturi personalizate, flow coerent și energie constantă pe ring. Potrivit pentru nunți, botezuri, corporate și petreceri tematice (retro / video party). Contact: 0741 054 444.",
+  image: "/parteneri/marius-voicescu-iasi.jpg",
+  tags: ["dj", "mc", "nuntă", "botez", "corporate", "party", "retro", "Iași"],
+  links: {
+    facebook: "https://www.facebook.com/p/Dj-Marius-Voicescu-Nunti-Iasi-100057072895652/",
+    instagram: "https://www.instagram.com/djmariusvoicescu/",
+    youtube: "https://www.youtube.com/@djmariusvoicescu3455",
+    spotify: undefined,
+    tiktok: undefined,
+    website: undefined,
+    contact:
+      "https://wa.me/40741054444?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/QFbfbizJZOU",
+},
+{
     id: "soundcheck-band-iasi",
     name: "SoundCheck Band",
     city: "Iași",
