@@ -22,7 +22,6 @@ function normalizeBaseUrl(url: string) {
 }
 
 async function getBaseUrl() {
-  // Preferă domeniul setat explicit
   const env =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_VERCEL_URL ||
@@ -34,7 +33,6 @@ async function getBaseUrl() {
     return normalizeBaseUrl(`https://${env}`);
   }
 
-  // Fallback: construiește din headers (Next 16: headers() este async)
   const h = await headers();
   const host = h.get("x-forwarded-host") || h.get("host") || "localhost:3000";
   const proto = h.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
@@ -43,5 +41,12 @@ async function getBaseUrl() {
 
 export default async function ParteneriPage() {
   const baseUrl = await getBaseUrl();
-  return <PartnersClient baseUrl={baseUrl} />;
+
+  return (
+    <main className="relative min-h-screen text-white">
+      <div className="relative z-10 pt-24 md:pt-28">
+        <PartnersClient baseUrl={baseUrl} />
+      </div>
+    </main>
+  );
 }
