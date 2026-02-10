@@ -91,7 +91,27 @@ const PARTNERS: Partner[] = [
     },
     youtubeEmbed: "4H0ZJeZGSJg",
   },
-
+  {
+  id: "ion-paladi",
+  name: "Ion Paladi",
+  city: "Iași",
+  category: "Artiști",
+  priority: 4,
+  description:
+    "Artist. Pentru booking / contact RO: +40755588995. Video: primul clip de pe canalul YouTube.",
+  image: "/parteneri/ion-paladi.jpg",
+  tags: ["artist", "muzică populară", "live", "evenimente", "show"],
+  links: {
+    website: "https://ionpaladi.md/",
+    facebook: "https://www.facebook.com/ionpaladi.ro/",
+    instagram: "https://www.instagram.com/ionpaladiofficial/",
+    youtube: "https://www.youtube.com/@ionpaladiofficial",
+    contact:
+      "https://wa.me/40755588995?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  // acceptă URL youtu.be și funcția ta extrage automat ID-ul
+  youtubeEmbed: "https://youtu.be/xNW-Hfz4lo8",
+},
   {
     id: "dj-jonny-black-iasi",
     name: "DJ Jonny Black",
