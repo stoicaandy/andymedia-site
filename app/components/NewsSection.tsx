@@ -14,9 +14,7 @@ export default function NewsSection() {
   // AICI alegi 4 sau 6
   const COUNT = 4;
 
-  const items = [...NEWS]
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, COUNT);
+  const items = [...NEWS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, COUNT);
 
   return (
     <section id="noutati" className="scroll-mt-28 border-t border-white/5">
@@ -28,7 +26,7 @@ export default function NewsSection() {
                 Noutăți <span className="text-amber-300">.</span>
               </h2>
               <p className="mt-2 text-gray-300 max-w-2xl">
-                Casete optimizate pentru share: fiecare are pagină proprie + OG pentru Facebook.
+                Fiecare noutate are pagină proprie (URL), optimizată pentru share pe Facebook.
               </p>
             </div>
 
@@ -52,7 +50,6 @@ export default function NewsSection() {
                   </div>
 
                   <Link href={`/noutati/${item.slug}`} className="block">
-                    {/* Previzualizare media (fără embed direct în listă pentru performanță) */}
                     {item.type === "image" && item.src ? (
                       <div className="relative aspect-[16/9]">
                         <Image
@@ -79,7 +76,7 @@ export default function NewsSection() {
                   </div>
 
                   <h3 className="mt-2 text-base md:text-lg font-medium text-white/95 leading-snug">
-                    <Link href={`/noutati/${item.slug}`} className="hover:text-white">
+                    <Link href={`/noutati/${item.slug}`} className="hover:text-white transition">
                       {item.title}
                     </Link>
                   </h3>

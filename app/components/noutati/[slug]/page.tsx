@@ -1,16 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { NEWS, type NewsItem } from "@/app/data/news";
+import { getNewsBySlug } from "@/app/data/news";
 import { SITE } from "@/app/data/site";
 
 function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
 
-    if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) {
-      return href;
-    }
+    if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
 
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
@@ -20,13 +18,10 @@ function normalizeYoutubeSrc(href: string) {
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
-
   return href;
 }
 
 function normalizeTikTokSrc(href: string) {
-  // Acceptă link normal: https://www.tiktok.com/@user/video/<id>
-  // Returnează embed v2: https://www.tiktok.com/embed/v2/<id>
   try {
     const u = new URL(href);
     const parts = u.pathname.split("/").filter(Boolean);
@@ -39,12 +34,8 @@ function normalizeTikTokSrc(href: string) {
   return href;
 }
 
-function getItem(slug: string) {
-  return NEWS.find((x) => x.slug === slug);
-}
-
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const item = getItem(params.slug);
+  const item = getNewsBySlug(params.slug);
   if (!item) return {};
 
   const url = `${SITE.url}/noutati/${item.slug}`;
@@ -61,12 +52,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: item.description,
       locale: "ro_RO",
       images: [
-        {
-          url: item.ogImage, // trebuie să existe în /public
-          width: 1200,
-          height: 630,
-          alt: item.title,
-        },
+        { url: item.ogImage, width: 1200, height: 630, alt: item.title },
       ],
     },
   };
@@ -85,7 +71,6 @@ function Button({ href, label, primary }: { href: string; label: string; primary
       </a>
     );
   }
-
   return (
     <Link href={href} className={cls}>
       {label}
@@ -94,7 +79,7 @@ function Button({ href, label, primary }: { href: string; label: string; primary
 }
 
 export default function NoutatePage({ params }: { params: { slug: string } }) {
-  const item = getItem(params.slug);
+  const item = getNewsBySlug(params.slug);
   if (!item) notFound();
 
   return (
@@ -114,7 +99,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
           </p>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            {/* IMAGE */}
             {item.type === "image" && item.src ? (
               <div className="relative aspect-[16/9]">
                 <Image
@@ -128,7 +112,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
-            {/* LOCAL VIDEO */}
             {item.type === "video" && item.src ? (
               <div className="relative aspect-[16/9] bg-black/30">
                 <video className="absolute inset-0 h-full w-full object-cover" controls playsInline>
@@ -137,7 +120,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
-            {/* YOUTUBE */}
             {item.type === "embed" && item.provider === "youtube" && item.href ? (
               <div className="relative aspect-[16/9] w-full bg-black/30">
                 <iframe
@@ -151,7 +133,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
-            {/* TIKTOK */}
             {item.type === "embed" && item.provider === "tiktok" && item.href ? (
               <div className="relative aspect-[9/16] w-full bg-black/30">
                 <iframe

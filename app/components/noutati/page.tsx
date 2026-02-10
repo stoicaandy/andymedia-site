@@ -3,8 +3,7 @@ import { NEWS } from "@/app/data/news";
 
 export const metadata = {
   title: "Noutăți",
-  description:
-    "Noutăți ANDYmedia: proiecte, echipamente noi, materiale video și actualizări.",
+  description: "Noutăți ANDYmedia: proiecte, echipamente noi, materiale media și update-uri.",
 };
 
 export default function NoutatiPage() {
@@ -18,7 +17,7 @@ export default function NoutatiPage() {
             Noutăți <span className="text-amber-300">.</span>
           </h1>
           <p className="mt-2 text-zinc-300/85 max-w-2xl">
-            Fiecare noutate are pagină proprie, optimizată pentru share (Facebook / WhatsApp).
+            Fiecare noutate are pagină proprie cu OG pentru Facebook.
           </p>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
