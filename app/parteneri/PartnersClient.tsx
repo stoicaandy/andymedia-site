@@ -168,34 +168,42 @@ function getYouTubeId(input?: string): string | undefined {
 
   const raw = input.trim();
 
+  // deja e ID (11 char), acceptăm direct
   if (/^[a-zA-Z0-9_-]{11}$/.test(raw)) return raw;
 
+  // încearcă să parseze ca URL
   try {
     const url = new URL(raw);
 
+    // watch?v=
     const v = url.searchParams.get("v");
     if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
 
+    // youtu.be/<id>
     if (url.hostname.includes("youtu.be")) {
       const id = url.pathname.split("/").filter(Boolean)[0];
       if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
     }
 
+    // youtube.com/shorts/<id>
     const parts = url.pathname.split("/").filter(Boolean);
-
     const shortsIdx = parts.indexOf("shorts");
     if (shortsIdx >= 0) {
       const id = parts[shortsIdx + 1];
       if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
     }
 
+    // youtube.com/embed/<id>
     const embedIdx = parts.indexOf("embed");
     if (embedIdx >= 0) {
       const id = parts[embedIdx + 1];
       if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
     }
-  } catch {}
+  } catch {
+    // nu e URL valid → ignorăm
+  }
 
+  // fallback: regex (în caz de input ciudat)
   const m =
     raw.match(/v=([a-zA-Z0-9_-]{11})/) ||
     raw.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/) ||
@@ -255,7 +263,6 @@ function categoryRank(c: PartnerCategory) {
 export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<PartnerCategory | "Toate">("Toate");
-  const [onlyExclusive, setOnlyExclusive] = useState(false);
   const [yt, setYt] = useState<{ open: boolean; title?: string; id?: string }>({ open: false });
 
   const filtered = useMemo(() => {
@@ -263,10 +270,9 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
 
     const arr = PARTNERS.filter((p) => {
       const inCat = cat === "Toate" ? true : p.category === cat;
-      const exOk = onlyExclusive ? !!p.exclusive : true;
       const hay = [p.name, p.city ?? "", p.category, p.description, ...(p.tags ?? [])].join(" ");
       const inQuery = nq.length === 0 ? true : normalize(hay).includes(nq);
-      return inCat && exOk && inQuery;
+      return inCat && inQuery;
     });
 
     arr.sort((a, b) => {
@@ -282,7 +288,7 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
     });
 
     return arr;
-  }, [q, cat, onlyExclusive]);
+  }, [q, cat]);
 
   const stats = useMemo(() => {
     const exclusiveCount = PARTNERS.filter((p) => p.exclusive).length;
@@ -385,22 +391,11 @@ export default function PartnersClient({ baseUrl }: { baseUrl: string }) {
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <label className="inline-flex items-center gap-2 text-sm text-white/80">
-                <input
-                  type="checkbox"
-                  checked={onlyExclusive}
-                  onChange={(e) => setOnlyExclusive(e.target.checked)}
-                  className="h-4 w-4 accent-amber-300"
-                />
-                Doar exclusivi
-              </label>
-
               <button
                 type="button"
                 onClick={() => {
                   setQ("");
                   setCat("Toate");
-                  setOnlyExclusive(false);
                 }}
                 className="text-sm text-zinc-300/80 hover:text-white transition"
               >
