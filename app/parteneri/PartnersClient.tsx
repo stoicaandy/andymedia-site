@@ -280,13 +280,13 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 3,
   description:
-    "Andra Botez — artistă & performer, finalistă Vocea României (2022). Voce puternică, interpretare cu impact și moment live potrivit pentru evenimente private, corporate și concerte.",
+    "Andra Botez — voce de jazz/soul și una dintre cele mai respectate prezențe din zona vocală: CVT (Complete Vocal Technique) Certified Practitioner / vocal coach și fondatoare „Atelierul de Voce by Andra Botez”. Cu peste 20 de ani de experiență în proiecte live (pop/rock/fusion → jazz & soul), livrează performance elegant, control vocal impecabil și repertoriu premium pentru evenimente. Finalistă Vocea României 2022.",
   image: "/parteneri/andra-botez.jpg",
   tags: ["artist", "jazz" , "live", "Vocea României", "show", "evenimente", "corporate", "București"],
   links: {
     instagram: "https://www.instagram.com/andrabotezvoice/",
     facebook: "https://www.facebook.com/AndraBotezOfficial/",
-    youtube: "https://www.youtube.com/watch?v=aHqb_NBnWXA",
+    youtube: "https://www.youtube.com/@andrabotez3909",
     spotify: "https://open.spotify.com/artist/6D13IqlSUTSNtDqs15v0vb",
     website: undefined,
     tiktok: undefined,
