@@ -55,6 +55,10 @@ export default function SiteHeader() {
         : "text-white/85 hover:text-white"
     );
 
+  // butoanele din header pe mobil (hamburger + oferta) – aceleași dimensiuni
+  const mobileBtnBase =
+    "h-10 px-3 rounded-xl border transition inline-flex items-center justify-center text-xs uppercase tracking-[0.22em] shrink-0";
+
   return (
     <header className={headerCls}>
       <div className="h-20 lg:h-24 px-4 md:px-6 lg:px-8 flex items-center gap-3">
@@ -84,23 +88,32 @@ export default function SiteHeader() {
         </nav>
 
         {/* MOBILE / TABLET */}
-        <div className="ml-auto flex lg:hidden items-center gap-2">
-          <Link
-            href="/cere-oferta"
-            className="px-4 py-2 text-xs uppercase tracking-[0.22em] rounded-xl border border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 transition"
-          >
-            Ofertă
-          </Link>
-
+        <div className="ml-auto flex lg:hidden items-center gap-2 min-w-0">
+          {/* 1) MENIU primul */}
           <button
             type="button"
             aria-label="Deschide meniul"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-white"
+            className={cx(
+              mobileBtnBase,
+              "w-10 px-0",
+              "border-white/10 bg-white/5 hover:bg-white/10 text-white"
+            )}
           >
             <span className="text-xl leading-none">{open ? "×" : "≡"}</span>
           </button>
+
+          {/* 2) OFERTA al doilea, dar same height/weight */}
+          <Link
+            href="/cere-oferta"
+            className={cx(
+              mobileBtnBase,
+              "border-amber-300/50 bg-amber-300/10 hover:bg-amber-300/20 text-amber-100"
+            )}
+          >
+            Ofertă
+          </Link>
         </div>
       </div>
 
