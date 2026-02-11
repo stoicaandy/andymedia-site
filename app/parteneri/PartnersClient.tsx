@@ -77,7 +77,7 @@ const PARTNERS: Partner[] = [
   name: "DJ Marius Voicescu",
   city: "Iași",
   category: "DJ",
-  priority: 54,
+  priority: 80,
   description:
     "DJ & MC pentru evenimente în Iași și în țară — seturi personalizate, flow coerent și energie constantă pe ring. Potrivit pentru nunți, botezuri, corporate și petreceri tematice (retro / video party). Contact: 0741 054 444.",
   image: "/parteneri/marius-voicescu-iasi.jpg",
@@ -181,7 +181,7 @@ const PARTNERS: Partner[] = [
   category: "Trupe colaborări",
   priority: 4,
   description:
-    "Carla’s Dreams — proiect muzical de top (MD/RO), cu show live puternic și repertoriu cunoscut. Potrivit pentru evenimente mari (corporate, festival, private premium). Booking România: +40 746 666 313 (booking@forward.ro).",
+    "Carla’s Dreams — proiect muzical de top (MD/RO), cu show live puternic și repertoriu cunoscut. Potrivit pentru evenimente mari (corporate, festival, private premium).",
   image: "/parteneri/carlas-dreams-iasi.jpg",
   tags: ["trupă", "live", "corporate", "festival", "evenimente", "MD", "RO", "show"],
   links: {
@@ -202,7 +202,7 @@ const PARTNERS: Partner[] = [
   category: "Trupe colaborări",
   priority: 5,
   description:
-    "Proconsul — una dintre cele mai iubite trupe pop-rock din România, cu un repertoriu cunoscut și un show live potrivit pentru evenimente mari (private, corporate, festival). Booking / management: 0744 831 410.",
+    "Proconsul — una dintre cele mai iubite trupe pop-rock din România, cu un repertoriu cunoscut și un show live potrivit pentru evenimente mari (private, corporate, festival).",
   image: "/parteneri/proconsul-iasi.jpg",
   tags: ["trupă", "pop-rock", "live", "corporate", "festival", "evenimente", "România"],
   links: {
@@ -262,7 +262,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 6,
   description:
-    "Bogdan Alin Ota — pianist și compozitor de anvergură internațională (crossover / cinematic / new age), recunoscut pentru concerte sold-out și emoția pe care o transmite live. Repertoriu original (albume precum Chronos, Bliss, Revelations) și show premium pentru evenimente corporate, gale și apariții speciale. Booking/Contact: 0741 550 875.",
+    "Bogdan Alin Ota — pianist și compozitor de anvergură internațională (crossover / cinematic / new age), recunoscut pentru concerte sold-out și emoția pe care o transmite live. ",
   image: "/parteneri/bogdan-ota.jpg",
   tags: ["pianist", "compozitor", "crossover", "cinematic", "new age", "live", "corporate", "show premium"],
   links: {
@@ -305,7 +305,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 3,
   description:
-    "Andra Botez — voce de jazz/soul și una dintre cele mai respectate prezențe din zona vocală: CVT (Complete Vocal Technique) Certified Practitioner / vocal coach și fondatoare „Atelierul de Voce by Andra Botez”. Cu peste 20 de ani de experiență în proiecte live (pop/rock/fusion → jazz & soul), livrează performance elegant, control vocal impecabil și repertoriu premium pentru evenimente. Finalistă Vocea României 2022.",
+    "Andra Botez — voce de jazz/soul și una dintre cele mai respectate prezențe din zona vocală: CVT Certified Practitioner / vocal coach . Finalista Vocea Romaniei 2022 ",
   image: "/parteneri/andra-botez.jpg",
   tags: ["artist", "jazz" , "live", "Vocea României", "show", "evenimente", "corporate", "București"],
   links: {
@@ -344,7 +344,7 @@ const PARTNERS: Partner[] = [
   name: "DJ RALMM",
   city: "Iași",
   category: "DJ",
-  priority: 53,
+  priority: 80,
   description:
     "DJ & producer cu experiență solidă, seturi versatile (club / house / afro / latino) și control bun al energiei pe ring. Potrivit pentru nunți, corporate și party-uri, cu selecție adaptată publicului și momentului. Contact: 0743 566 030.",
   image: "/parteneri/dj-ralm-iasi.jpg",
@@ -405,7 +405,7 @@ const PARTNERS: Partner[] = [
     name: "DJ Jonny Black",
     city: "Iași",
     category: "DJ",
-    priority: 56,
+    priority: 90,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
     image: "/parteneri/dj-jonny-black-iasi.jpg",
