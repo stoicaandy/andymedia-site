@@ -55,9 +55,9 @@ export default function SiteHeader() {
         : "text-white/85 hover:text-white"
     );
 
-  // butoanele din header pe mobil (hamburger + oferta) – aceleași dimensiuni
+  // Butoane mobile egale (meniul + oferta)
   const mobileBtnBase =
-    "h-10 px-3 rounded-xl border transition inline-flex items-center justify-center text-xs uppercase tracking-[0.22em] shrink-0";
+    "h-10 px-4 rounded-xl border transition inline-flex items-center justify-center text-xs uppercase tracking-[0.22em] shrink-0";
 
   return (
     <header className={headerCls}>
@@ -88,8 +88,8 @@ export default function SiteHeader() {
         </nav>
 
         {/* MOBILE / TABLET */}
-        <div className="ml-auto flex lg:hidden items-center gap-2 min-w-0">
-          {/* 1) MENIU primul */}
+        <div className="ml-auto flex lg:hidden items-center gap-2">
+          {/* MENIU - acum e la dimensiunea butonului "Ofertă" */}
           <button
             type="button"
             aria-label="Deschide meniul"
@@ -97,14 +97,13 @@ export default function SiteHeader() {
             onClick={() => setOpen((v) => !v)}
             className={cx(
               mobileBtnBase,
-              "w-10 px-0",
               "border-white/10 bg-white/5 hover:bg-white/10 text-white"
             )}
           >
-            <span className="text-xl leading-none">{open ? "×" : "≡"}</span>
+            {open ? "ÎNCHIDE" : "MENIU"}
           </button>
 
-          {/* 2) OFERTA al doilea, dar same height/weight */}
+          {/* OFERTĂ */}
           <Link
             href="/cere-oferta"
             className={cx(
@@ -118,7 +117,7 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div className="lg:hidden border-t border-white/10 bg-black/80 backdrop-blur-xl">
+        <div className="lg:hidden border-t border-white/10 bg-black/80 backdrop-blur-xlxl">
           <div className="px-4 py-3 flex flex-col gap-2">
             {NAV.map((x) => (
               <Link
