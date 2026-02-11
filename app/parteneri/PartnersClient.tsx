@@ -67,7 +67,8 @@ const PARTNERS: Partner[] = [
       facebook: "https://www.facebook.com/trupaweekend",
       instagram: "https://www.instagram.com/trupadeweekend/",
       youtube: "https://www.youtube.com/channel/UC-rVV4JUokF9Sstoha35BkA",
-      contact: "https://trupadeweekend.ro/contact/",
+      contact:
+      "https://wa.me/4043341797?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
     },
     youtubeEmbed: "rC35YDt2nDI",
   },
@@ -350,6 +351,8 @@ const PARTNERS: Partner[] = [
       website: "https://www.soundcheckband.ro/",
       youtube: "https://www.youtube.com/c/soundcheckiasi/videos",
       tiktok: "https://www.tiktok.com/@soundcheckband.ro",
+      contact:
+      "https://wa.me/40742137647?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
     },
     youtubeEmbed: "4H0ZJeZGSJg",
   },
