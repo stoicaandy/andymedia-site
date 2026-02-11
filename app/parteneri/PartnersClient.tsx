@@ -274,6 +274,28 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/cSpRXk2AifY",
 },
 {
+  id: "andra-botez",
+  name: "Andra Botez",
+  city: "București",
+  category: "Artiști",
+  priority: 3,
+  description:
+    "Andra Botez — artistă & performer, finalistă Vocea României (2022). Voce puternică, interpretare cu impact și moment live potrivit pentru evenimente private, corporate și concerte.",
+  image: "/parteneri/andra-botez.jpg",
+  tags: ["artist", "jazz" , "live", "Vocea României", "show", "evenimente", "corporate", "București"],
+  links: {
+    instagram: "https://www.instagram.com/andrabotezvoice/",
+    facebook: "https://www.facebook.com/AndraBotezOfficial/",
+    youtube: "https://www.youtube.com/watch?v=aHqb_NBnWXA",
+    spotify: "https://open.spotify.com/artist/6D13IqlSUTSNtDqs15v0vb",
+    website: undefined,
+    tiktok: undefined,
+    contact:
+      "https://wa.me/40747131907?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/aHqb_NBnWXA",
+},
+{
   id: "fetele-din-botosani",
   name: "Fetele din Botoșani",
   city: "Botoșani",
