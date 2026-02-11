@@ -255,6 +255,25 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/3RcKxlbcXmY",
 },
 {
+  id: "elena-ionescu",
+  name: "Elena Ionescu",
+  city: "București",
+  category: "Artiști",
+  priority: 10,
+  description:
+    "Elena Ionescu — artistă pop (ex-Mandinga) cu show live energic și repertoriu potrivit pentru evenimente private, corporate și festivaluri. Booking / management: +40 720 990 989 • elenaionescu88@yahoo.com.",
+  image: "/parteneri/elena-ionescu.jpg",
+  tags: ["artist", "pop", "live", "evenimente", "corporate", "festival", "București"],
+  links: {
+    instagram: "https://www.instagram.com/elenaionescumusic/",
+    facebook: "https://www.facebook.com/Elena.Ionescu.oficial/",
+    youtube: "https://www.youtube.com/@elenaionescuofficial43",
+    contact:
+      "https://wa.me/40720990989?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/cSpRXk2AifY",
+},
+{
   id: "dj-ralmm-iasi",
   name: "DJ RALMM",
   city: "Iași",
