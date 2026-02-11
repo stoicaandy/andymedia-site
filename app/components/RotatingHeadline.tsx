@@ -24,7 +24,7 @@ export default function RotatingHeadline() {
 
   useEffect(() => {
     const showMs = 3200; // mai rar
-    const fadeMs = 520;  // mai smooth
+    const fadeMs = 520; // mai smooth
 
     const t1 = setTimeout(() => setVisible(false), showMs);
     const t2 = setTimeout(() => {
@@ -44,7 +44,7 @@ export default function RotatingHeadline() {
   return (
     <div className="relative w-full">
       {/* container fix (dar corect dimensionat) */}
-      <div className="h-[64px] md:h-[76px] lg:h-[88px] overflow-hidden">
+      <div className="h-[52px] md:h-[60px] lg:h-[68px] overflow-hidden">
         <span
           className={[
             "block uppercase leading-none",
@@ -59,8 +59,8 @@ export default function RotatingHeadline() {
           ].join(" ")}
           style={{
             fontFamily: "var(--font-bebas), system-ui",
-            // impact, dar nu “cât ecranul”
-            fontSize: "clamp(1.9rem, 4.8vw, 3.6rem)",
+            // mai mic decat inainte
+            fontSize: "clamp(1.5rem, 3.8vw, 2.8rem)",
           }}
         >
           {item.text}
