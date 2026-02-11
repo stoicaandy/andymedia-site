@@ -59,7 +59,7 @@ const PARTNERS: Partner[] = [
     since: "2021",
     priority: 1,
     description:
-      "Trupă live cu repertoriu versatil (folclor → pop/evergreen). Show disciplinat, energie de scenă și flow bun pentru public mixt. Contact: +40 743 341 797 / trupadeweekend@gmail.com.",
+      "Trupă live cu repertoriu versatil (folclor → pop/evergreen). Show disciplinat, energie de scenă și flow bun pentru public mixt. ",
     image: "/parteneri/trupa-de-weekend-iasi.jpg",
     tags: ["party", "live", "evenimente", "cover", "corporate", "nuntă"],
     links: {
@@ -79,7 +79,7 @@ const PARTNERS: Partner[] = [
   category: "DJ",
   priority: 80,
   description:
-    "DJ & MC pentru evenimente în Iași și în țară — seturi personalizate, flow coerent și energie constantă pe ring. Potrivit pentru nunți, botezuri, corporate și petreceri tematice (retro / video party). Contact: 0741 054 444.",
+    "DJ & MC pentru evenimente în Iași și în țară — seturi personalizate, flow coerent și energie constantă pe ring. Potrivit pentru nunți, botezuri, corporate și petreceri tematice (retro / video party). ",
   image: "/parteneri/marius-voicescu-iasi.jpg",
   tags: ["dj", "mc", "nuntă", "botez", "corporate", "party", "retro", "Iași"],
   links: {
@@ -120,7 +120,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 11,
   description:
-    "Ionuț Galani — artist recunoscut pentru show-ul live de muzică grecească, energie ridicată și momente de ring care „prind” imediat. Format potrivit pentru nunți, evenimente private, corporate și seri tematice (Greek night), cu program adaptat publicului. Booking: 0724 966 666.",
+    "Ionuț Galani — artist recunoscut pentru show-ul live de muzică grecească, energie ridicată și momente de ring care „prind” imediat. Format potrivit pentru nunți, evenimente private, corporate și seri tematice (Greek night), cu program adaptat publicului.",
   image: "/parteneri/ionut-galani.jpg",
   tags: ["artist", "muzică grecească", "live", "nuntă", "corporate", "evenimente", "Greek night"],
   links: {
@@ -286,7 +286,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 10,
   description:
-    "Elena Ionescu — artistă pop (ex-Mandinga) cu show live energic și repertoriu potrivit pentru evenimente private, corporate și festivaluri. Booking / management: +40 720 990 989 • elenaionescu88@yahoo.com.",
+    "Elena Ionescu — artistă pop (ex-Mandinga) cu show live energic și repertoriu potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/elena-ionescu.jpg",
   tags: ["artist", "pop", "live", "evenimente", "corporate", "festival", "București"],
   links: {
@@ -327,7 +327,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 12,
   description:
-    "Fetele din Botoșani — proiect folcloric cunoscut, cu repertoriu autentic moldovenesc și momente live pline de energie. Potrivite pentru nunți, evenimente private, spectacole și festivaluri. Booking: +40 748 710 887.",
+    "Fetele din Botoșani — proiect folcloric cunoscut, cu repertoriu autentic moldovenesc și momente live pline de energie. Potrivite pentru nunți, evenimente private, spectacole și festivaluri.",
   image: "/parteneri/fetele-din-botosani.jpg",
   tags: ["folclor", "moldovenesc", "live", "nuntă", "evenimente", "spectacol", "festival"],
   links: {
@@ -346,7 +346,7 @@ const PARTNERS: Partner[] = [
   category: "DJ",
   priority: 80,
   description:
-    "DJ & producer cu experiență solidă, seturi versatile (club / house / afro / latino) și control bun al energiei pe ring. Potrivit pentru nunți, corporate și party-uri, cu selecție adaptată publicului și momentului. Contact: 0743 566 030.",
+    "DJ & producer cu experiență solidă, seturi versatile (club / house / afro / latino) și control bun al energiei pe ring. Potrivit pentru nunți, corporate și party-uri, cu selecție adaptată publicului și momentului.",
   image: "/parteneri/dj-ralm-iasi.jpg",
   tags: ["dj", "producer", "Iași", "club", "house", "afro", "latin", "party", "evenimente"],
   links: {
@@ -368,7 +368,7 @@ const PARTNERS: Partner[] = [
     since: "2018",
     priority: 2,
     description:
-      "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. Booking: 0742 137 647 • trupasoundcheck@gmail.com.",
+      "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. ",
     image: "/parteneri/soundcheck-band-iasi.jpg",
     tags: ["live", "corporate", "nuntă", "cover band", "jazz", "rock", "disco", "reggae"],
     links: {
@@ -387,7 +387,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 7,
   description:
-    "Ion Paladi este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului. Booking / contact RO: +40755588995.",
+    "Ion Paladi este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului.",
   image: "/parteneri/ion-paladi.jpg",
   tags: ["artist", "muzică populară", "live", "nuntă", "corporate", "festival", "show"],
   links: {
