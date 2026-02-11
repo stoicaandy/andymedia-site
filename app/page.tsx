@@ -8,32 +8,34 @@ export default function Home() {
     <main className="relative min-h-screen text-white">
       <div id="top" />
 
-      <div className="relative z-10 pt-20 md:pt-24">
+      {/* ridicat pe mobil: pt-14 (in loc de pt-20) */}
+      <div className="relative z-10 pt-14 sm:pt-16 md:pt-20">
         {/* HERO */}
-        <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+        {/* pe mobil mai mic: min-h-[84vh] (in loc de 92vh) */}
+        <section className="relative min-h-[84vh] sm:min-h-[88vh] md:min-h-[92vh] flex items-center overflow-hidden">
           <div className="relative z-10 mx-auto max-w-6xl px-8 md:px-10">
             <p className="text-[12px] md:text-sm uppercase tracking-[0.26em] text-zinc-200/85">
               Da! Ai ajuns unde trebuie.
             </p>
 
-            <h1 className="mt-4 max-w-3xl text-2xl md:text-3xl lg:text-4xl font-medium leading-tight text-white/95">
+            <h1 className="mt-3 max-w-3xl text-2xl md:text-3xl lg:text-4xl font-medium leading-tight text-white/95">
               Soluții tehnice complete pentru evenimentul tău.
             </h1>
 
-            <div className="mt-8">
+            <div className="mt-6 md:mt-8">
               <RotatingHeadline />
             </div>
 
-            <p className="mt-6 max-w-3xl text-2xl md:text-3xl lg:text-4xl font-medium leading-tight text-white/90">
+            <p className="mt-5 md:mt-6 max-w-3xl text-2xl md:text-3xl lg:text-4xl font-medium leading-tight text-white/90">
               Oricât de complexe și grandioase îndrăznești tu să visezi.
             </p>
 
-            <p className="mt-4 text-sm md:text-base text-zinc-300/85 tracking-wide">
+            <p className="mt-3 text-sm md:text-base text-zinc-300/85 tracking-wide">
               Sunet • Lumini • LED • Scenă • Broadcast • Live / Studio Records • Booking
             </p>
 
-            {/* CTA BUTTONS (mobile: 2 coloane ca sa nu pice "Artiști" sub tot) */}
-            <div className="mt-10 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
+            {/* CTA BUTTONS (mobile: 2 coloane) */}
+            <div className="mt-7 md:mt-10 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
               <a
                 href="#noutati"
                 className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
@@ -64,7 +66,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-black to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 md:h-28 bg-gradient-to-t from-black to-transparent" />
         </section>
 
         {/* NOUTĂȚI */}
@@ -83,9 +85,8 @@ export default function Home() {
                 </h2>
 
                 <p className="mt-3 text-sm md:text-base text-zinc-300/85 leading-snug max-w-xl">
-                  Producție tehnică pentru evenimente, construită pe control,
-                  claritate și execuție impecabilă. Lucrăm organizat, previzibil
-                  și adaptat fiecărui proiect.
+                  Producție tehnică pentru evenimente, construită pe control, claritate și execuție
+                  impecabilă. Lucrăm organizat, previzibil și adaptat fiecărui proiect.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-4">
