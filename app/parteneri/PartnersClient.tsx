@@ -274,6 +274,25 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/cSpRXk2AifY",
 },
 {
+  id: "fetele-din-botosani",
+  name: "Fetele din Botoșani",
+  city: "Botoșani",
+  category: "Artiști",
+  priority: 12,
+  description:
+    "Fetele din Botoșani — proiect folcloric cunoscut, cu repertoriu autentic moldovenesc și momente live pline de energie. Potrivite pentru nunți, evenimente private, spectacole și festivaluri. Booking: +40 748 710 887.",
+  image: "/parteneri/fetele-din-botosani.jpg",
+  tags: ["folclor", "moldovenesc", "live", "nuntă", "evenimente", "spectacol", "festival"],
+  links: {
+    facebook: "https://www.facebook.com/FeteleDinBotosani/",
+    instagram: "https://www.instagram.com/fetele.din.botosani/",
+    youtube: "https://www.youtube.com/c/FeteledinBoto%C8%99ani",
+    contact:
+      "https://wa.me/40748710887?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/xrUl8_RH4LM",
+},
+{
   id: "dj-ralmm-iasi",
   name: "DJ RALMM",
   city: "Iași",
