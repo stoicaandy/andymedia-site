@@ -98,7 +98,7 @@ const PARTNERS: Partner[] = [
   name: "Alex Maxim (Alexandru Ionuț Maxim)",
   city: "Iași",
   category: "Artiști",
-  priority: 4,
+  priority: 9,
   description:
     "Artist & performer, cunoscut publicului larg din Vocea României (finalist). Voce puternică, interpretare cu impact și prezență scenică. Potrivit pentru evenimente private, corporate și apariții live, cu repertoriu adaptat publicului și momentului.",
   image: "/parteneri/alex-maxim.jpg",
