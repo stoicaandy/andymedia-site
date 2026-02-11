@@ -256,6 +256,30 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/3RcKxlbcXmY",
 },
 {
+  id: "bogdan-alin-ota",
+  name: "Bogdan Alin Ota",
+  city: "Bacău",
+  category: "Artiști",
+  priority: 6,
+  description:
+    "Bogdan Alin Ota — pianist și compozitor de anvergură internațională (crossover / cinematic / new age), recunoscut pentru concerte sold-out și emoția pe care o transmite live. Repertoriu original (albume precum Chronos, Bliss, Revelations) și show premium pentru evenimente corporate, gale și apariții speciale. Booking/Contact: 0741 550 875.",
+  image: "/parteneri/bogdan-ota.jpg",
+  tags: ["pianist", "compozitor", "crossover", "cinematic", "new age", "live", "corporate", "show premium"],
+  links: {
+    website: "https://www.bogdanota.com/",
+    facebook: "https://www.facebook.com/BogdanOtaOfficial/",
+    instagram: "https://www.instagram.com/bogdan_ota/",
+    youtube: "https://www.youtube.com/@BogdanOtaOfficial",
+    spotify: "https://open.spotify.com/artist/1O8tCRHNXK1i6SL7VNcGca",
+    // Apple Music nu are câmp dedicat în tipul vostru; îl punem în "website" de regulă,
+    // dar ca să nu stricăm tipurile, îl punem ca link suplimentar în descriere/website.
+    // Dacă vrei, îți extind eu tipul PartnerLinks cu appleMusic.
+    contact:
+      "https://wa.me/40741550875?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
+  },
+  youtubeEmbed: "https://youtu.be/RwzzIn3UmIA",
+},
+{
   id: "elena-ionescu",
   name: "Elena Ionescu",
   city: "București",
