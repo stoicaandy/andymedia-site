@@ -158,7 +158,7 @@ const PARTNERS: Partner[] = [
   name: "Alina Eremia",
   city: "București",
   category: "Artiști",
-  priority: 8,
+  priority: 6,
   description:
     "Alina Eremia — artistă pop de top din România, cu hituri cunoscute și show live modern, potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/alina-eremia-iasi.jpg",
@@ -178,7 +178,7 @@ const PARTNERS: Partner[] = [
   name: "Carla’s Dreams",
   city: "Chișinău",
   category: "Trupe colaborări",
-  priority: 6,
+  priority: 4,
   description:
     "Carla’s Dreams — proiect muzical de top (MD/RO), cu show live puternic și repertoriu cunoscut. Potrivit pentru evenimente mari (corporate, festival, private premium). Booking România: +40 746 666 313 (booking@forward.ro).",
   image: "/parteneri/carlas-dreams-iasi.jpg",
@@ -199,7 +199,7 @@ const PARTNERS: Partner[] = [
   name: "Proconsul",
   city: "România",
   category: "Trupe colaborări",
-  priority: 7,
+  priority: 5,
   description:
     "Proconsul — una dintre cele mai iubite trupe pop-rock din România, cu un repertoriu cunoscut și un show live potrivit pentru evenimente mari (private, corporate, festival). Booking / management: 0744 831 410.",
   image: "/parteneri/proconsul-iasi.jpg",
@@ -358,7 +358,7 @@ const PARTNERS: Partner[] = [
   name: "Ion Paladi",
   city: "Chișinău",
   category: "Artiști",
-  priority: 4,
+  priority: 7,
   description:
     "Ion Paladi este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului. Booking / contact RO: +40755588995.",
   image: "/parteneri/ion-paladi.jpg",
