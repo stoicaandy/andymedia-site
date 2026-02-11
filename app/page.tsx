@@ -29,30 +29,38 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm md:text-base text-zinc-300/85 tracking-wide">
-              Sunet • Lumini • LED • Scenă • Broadcast • Live / Studio Records • Booking
+              Sunet • Lumini • LED • Scenă • Broadcast • Live / Studio Records • Booking 
             </p>
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            {/* CTA BUTTONS (mai mici, mai finute) */}
+            <div className="mt-10 flex flex-wrap gap-3">
               <a
                 href="#noutati"
-                className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                className="rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-xs md:text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
               >
                 Noutăți
               </a>
 
               <a
                 href="#oferte"
-                className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                className="rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-xs md:text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
               >
                 Oferte
               </a>
 
               <a
                 href="#despre-noi"
-                className="rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
+                className="rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-xs md:text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
               >
                 Despre noi
               </a>
+
+              <Link
+                href="/parteneri"
+                className="rounded-lg border border-amber-300/30 bg-amber-300/10 px-5 py-2.5 text-xs md:text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
+              >
+                Artiști
+              </Link>
             </div>
           </div>
 
