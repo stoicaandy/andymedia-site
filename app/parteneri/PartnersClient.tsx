@@ -76,7 +76,7 @@ const PARTNERS: Partner[] = [
   name: "DJ Marius Voicescu",
   city: "Iași",
   category: "DJ",
-  priority: 5,
+  priority: 54,
   description:
     "DJ & MC pentru evenimente în Iași și în țară — seturi personalizate, flow coerent și energie constantă pe ring. Potrivit pentru nunți, botezuri, corporate și petreceri tematice (retro / video party). Contact: 0741 054 444.",
   image: "/parteneri/marius-voicescu-iasi.jpg",
@@ -117,7 +117,7 @@ const PARTNERS: Partner[] = [
   name: "Ionuț Galani",
   city: "Constanța",
   category: "Artiști",
-  priority: 8,
+  priority: 11,
   description:
     "Ionuț Galani — artist recunoscut pentru show-ul live de muzică grecească, energie ridicată și momente de ring care „prind” imediat. Format potrivit pentru nunți, evenimente private, corporate și seri tematice (Greek night), cu program adaptat publicului. Booking: 0724 966 666.",
   image: "/parteneri/ionut-galani.jpg",
@@ -130,7 +130,7 @@ const PARTNERS: Partner[] = [
     spotify: undefined,
     tiktok: undefined,
     contact:
-      "https://wa.me/40724966666?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+      "https://wa.me/40722226678?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
   },
   youtubeEmbed: "https://youtu.be/NisW5bQqfsI",
 },
@@ -160,7 +160,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 8,
   description:
-    "Alina Eremia — artistă pop de top din România, cu hituri cunoscute și show live modern, potrivit pentru evenimente private, corporate și festivaluri. Booking: 0751 144 109 (Bogdan Niță).",
+    "Alina Eremia — artistă pop de top din România, cu hituri cunoscute și show live modern, potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/alina-eremia-iasi.jpg",
   tags: ["artist", "pop", "live", "evenimente", "corporate", "festival", "București"],
   links: {
@@ -172,6 +172,27 @@ const PARTNERS: Partner[] = [
       "https://wa.me/40751144109?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
   },
   youtubeEmbed: "https://youtu.be/scl2UJnbk9Q",
+},
+{
+  id: "carlas-dreams",
+  name: "Carla’s Dreams",
+  city: "Chișinău",
+  category: "Trupe colaborări",
+  priority: 6,
+  description:
+    "Carla’s Dreams — proiect muzical de top (MD/RO), cu show live puternic și repertoriu cunoscut. Potrivit pentru evenimente mari (corporate, festival, private premium). Booking România: +40 746 666 313 (booking@forward.ro).",
+  image: "/parteneri/carlas-dreams-iasi.jpg",
+  tags: ["trupă", "live", "corporate", "festival", "evenimente", "MD", "RO", "show"],
+  links: {
+    website: "https://www.carlasdreams.com/",
+    facebook: "https://www.facebook.com/carlasdreamss/",
+    instagram: "https://www.instagram.com/carlasdreams/",
+    youtube: "https://www.youtube.com/channel/UCCJAzWoNFWPhIFXo-j17EPw",
+    tiktok: "https://www.tiktok.com/@carlasdreams",
+    contact:
+      "https://wa.me/40746666313?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/Y-aVSs9ftiM",
 },
 {
   id: "proconsul",
@@ -238,7 +259,7 @@ const PARTNERS: Partner[] = [
   name: "DJ RALMM",
   city: "Iași",
   category: "DJ",
-  priority: 6,
+  priority: 53,
   description:
     "DJ & producer cu experiență solidă, seturi versatile (club / house / afro / latino) și control bun al energiei pe ring. Potrivit pentru nunți, corporate și party-uri, cu selecție adaptată publicului și momentului. Contact: 0743 566 030.",
   image: "/parteneri/dj-ralm-iasi.jpg",
@@ -297,7 +318,7 @@ const PARTNERS: Partner[] = [
     name: "DJ Jonny Black",
     city: "Iași",
     category: "DJ",
-    priority: 15,
+    priority: 56,
     description:
       "DJ adaptat publicului și momentului: warm-up corect, peak-time controlat, flow coerent. Focus pe experiență, nu pe “random playlist”.",
     image: "/parteneri/dj-jonny-black-iasi.jpg",
