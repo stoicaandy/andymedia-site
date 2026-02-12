@@ -22,14 +22,14 @@ export const offers: OfferItem[] = [
   },
   {
     id: "oferta2",
-    title: "Oferta 2",
+    title: "Oferta Congres Corporate de la 1150EUR",
     description:
-      "Pachet pentru conferințe/paneluri cu cerințe mai mari, management audio mai complex și posibilitate de extindere. Ideal când ai mai multe momente și vorbitori.",
+      "Instalatie de sonorizare completa , Ecran LED 3/2m , Lumini Teatru ",
     bullets: [
-      "Sistem PA + headroom suplimentar",
-      "Microfoane wireless (extensibil)",
-      "Monitorizare scenă (opțional)",
-      "Înregistrare / livestream (opțional)",
+      "Sistem PA d&b Audiotechnik format din Y10P-2Buc , B6 Subwoofer-2Buc , D20Amp",
+      "Microfoane wireless Audix 4-buc , Un head set DPA",
+      "Monitorizare scenă d&b M4-2Buc",
+      "Operator Sunet cu mixer digital Midas m32",
     ],
     image: "/oferte/oferta2.jpg",
   },
