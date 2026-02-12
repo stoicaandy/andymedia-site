@@ -9,14 +9,14 @@ export type OfferItem = {
 export const offers: OfferItem[] = [
   {
     id: "oferta1",
-    title: "Oferta 1",
+    title: "Lumini Arhitecturale",
     description:
-      "Pachet orientativ, gândit pentru evenimente corporate și prezentări, cu setup curat și eficient. Configurația se adaptează în funcție de spațiu și numărul de participanți.",
+      "Pachet Lumini Arhitecturale de la 250EUR ",
     bullets: [
-      "Sistem PA complet (sală mică/medie)",
-      "2 microfoane wireless",
-      "Mixer + procesare audio",
-      "Cablaj & accesorii necesare",
+      "#33 Par LED",
+      "Flat PAR RGBWA+UV",
+      "18X18W",
+      "20 buc",
     ],
     image: "/oferte/oferta1.jpg",
   },
