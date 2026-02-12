@@ -35,14 +35,14 @@ export const offers: OfferItem[] = [
   },
   {
     id: "oferta3",
-    title: "Oferta 3",
+    title: "WEDDING / PARTY de la 800EUR",
     description:
-      "Pachet orientativ pentru petreceri/nunți: sunet cu impact, plus atmosferă. Se poate adapta ușor pe ring, scenă, momente și program.",
+      "Pachet orientativ pentru petreceri/nunți: sunet cu impact, plus schela lumini. Se poate adapta ușor pe ring, scenă, momente și program.",
     bullets: [
-      "PA + subwoofer (în funcție de spațiu)",
-      "Lumini ambient / efect (opțional)",
-      "Setup ring + cablaj",
-      "Operator (opțional)",
+      "PA d&b Audiotechnik : V10P-2buc , V-Sub-2buc , D80Amp",
+      "Schela Lumini 4-6m, Sharpy Beam230-4buc, ZoomWash-4buc, FlashRGB 4-6buc",
+      "DMX Control Avolites T1 cu laptop",
+      "La cerere se poate modifica/adapta ",
     ],
     image: "/oferte/oferta3.jpg",
   },
