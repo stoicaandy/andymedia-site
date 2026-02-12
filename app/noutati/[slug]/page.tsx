@@ -4,25 +4,30 @@ import { notFound } from "next/navigation";
 import { getNewsBySlug, NEWS } from "@/app/data/news";
 import { SITE } from "@/app/data/site";
 
+// fortam static pentru toate slug-urile (ca sa NU mai fie 404 in productie)
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return NEWS.map((n) => ({ slug: n.slug }));
+}
+
 function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
+
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
       if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
     }
+
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
+
   return href;
 }
-
-// Ca sa existe paginile /noutati/[slug] in build
-export function generateStaticParams() {
-  return NEWS.map((n) => ({ slug: n.slug }));
-}
-export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const item = getNewsBySlug(params.slug);
