@@ -2,12 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { NEWS } from "@/app/data/news";
 
-function absPublicPath(p?: string) {
-  if (!p) return p;
-  const t = p.trim();
-  return t.startsWith("/") ? t : `/${t}`;
-}
-
 export default function NewsSection() {
   const items = [...NEWS].sort((a, b) => (b.date || "").localeCompare(a.date || "")).slice(0, 4);
 
@@ -29,40 +23,39 @@ export default function NewsSection() {
         </p>
 
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {items.map((x) => {
-            const src = absPublicPath(x.src);
-            return (
-              <Link
-                key={x.slug}
-                href={`/noutati/${x.slug}`}
-                className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-amber-300/40 transition"
-              >
-                <div className="relative aspect-[16/9] bg-black/30">
-                  {x.type === "video" && src ? (
-                    <video className="absolute inset-0 h-full w-full object-cover" muted playsInline preload="metadata">
-                      <source src={src} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <Image
-                      src={x.ogImage}
-                      alt={x.title}
-                      fill
-                      className="object-cover opacity-90 group-hover:opacity-100 transition"
-                      sizes="(max-width: 1024px) 100vw, 520px"
-                      priority
-                    />
-                  )}
-                </div>
+          {items.map((x) => (
+            <Link
+              key={x.slug}
+              href={`/noutati/${x.slug}`}
+              className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-amber-300/40 transition"
+            >
+              <div className="relative aspect-[16/9] bg-black/30">
+                <Image
+                  src={x.ogImage}
+                  alt={x.title}
+                  fill
+                  className="object-cover opacity-90 group-hover:opacity-100 transition"
+                  sizes="(max-width: 1024px) 100vw, 520px"
+                  priority
+                />
 
-                <div className="p-5">
-                  <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">{x.date}</div>
-                  <div className="mt-2 text-lg font-medium text-white/95">{x.title}</div>
-                  <div className="mt-2 text-sm text-zinc-300/85">{x.description}</div>
-                  <div className="mt-4 text-sm text-zinc-200/80">Deschide →</div>
-                </div>
-              </Link>
-            );
-          })}
+                {x.type === "video" ? (
+                  <div className="pointer-events-none absolute inset-0 grid place-items-center">
+                    <div className="rounded-full border border-white/30 bg-black/40 px-5 py-3 text-sm text-white/90">
+                      ▶ Play
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="p-5">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">{x.date}</div>
+                <div className="mt-2 text-lg font-medium text-white/95">{x.title}</div>
+                <div className="mt-2 text-sm text-zinc-300/85">{x.description}</div>
+                <div className="mt-4 text-sm text-zinc-200/80">Deschide →</div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

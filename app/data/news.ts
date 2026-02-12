@@ -24,7 +24,11 @@ export type NewsItemBase = {
 
   format?: MediaFormat;
 
+  // IMPORTANT:
+  // slug = URL-ul paginii (trebuie să existe ca rută în /app/noutati/<slug>/page.tsx)
   slug?: string;
+
+  // imaginea de share (OG)
   ogImage?: string; // "/noutati/...."
 
   actions?: NewsAction[];
@@ -55,15 +59,19 @@ export type NewsItem = {
 // =========================
 export const NEWS_BASE: NewsItemBase[] = [
   {
-    id: "Video prezentare",
-    title: "Din 2016 in piata de evenimente",
-    description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018",
+    id: "Din 2017",
+    slug: "din-2017", // 🔥 obligatoriu ca să meargă cu folderul tău /app/noutati/din-2017/page.tsx
+
+    title: "Din 2016 în piața de evenimente",
+    description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018.",
     date: "2018-07-10",
+
+    // pe pagina noutății rulăm video
     type: "video",
     format: "landscape",
-
-    // IMPORTANT: poate fi si fara "/" — il normalizam noi mai jos
     src: "/noutati/video-2017.mp4",
+
+    // în casetă + la share pe Facebook folosim poza asta
     ogImage: "/noutati/din2017.jpg",
 
     actions: [
@@ -104,7 +112,6 @@ export const NEWS: NewsItem[] = NEWS_BASE.map((x) => {
   const slug = x.slug?.trim() ? x.slug.trim() : toSlug(x.id);
   const actions = x.actions?.length ? x.actions : DEFAULT_ACTIONS;
 
-  // normalizam ca sa nu existe niciodata path relativ
   const src = ensureLeadingSlash(x.src);
   const ogImage = ensureLeadingSlash(x.ogImage) ?? `/og/news/${slug}.jpg`;
 
