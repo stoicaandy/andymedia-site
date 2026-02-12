@@ -4,7 +4,7 @@ export type MediaFormat = "landscape" | "portrait";
 
 export type NewsAction = {
   label: string;
-  href: string; // intern sau extern
+  href: string;
   variant?: "primary" | "secondary";
 };
 
@@ -13,23 +13,21 @@ export type NewsItemBase = {
   title: string;
   description: string;
   date: string; // YYYY-MM-DD
-
   type: NewsType;
   provider?: NewsProvider;
 
-  // media
-  src?: string;  // local image/video
-  href?: string; // youtube/tiktok link
+  // media (din public -> începe cu "/")
+  src?: string;
+  href?: string;
   alt?: string;
 
-  // control layout
-  format?: MediaFormat; // portrait/landscape (default landscape)
+  // layout
+  format?: MediaFormat;
 
   // share
   slug?: string;
-  ogImage?: string; // 1200x630 recomandat
+  ogImage?: string;
 
-  // buttons in page
   actions?: NewsAction[];
 };
 
@@ -57,29 +55,25 @@ export type NewsItem = {
 // AICI editezi tu noutățile
 // =========================
 export const NEWS_BASE: NewsItemBase[] = [
-  // 1) IMAGINE LANDSCAPE (ex: 16:9)
-  
-  // 2) VIDEO LOCAL LANDSCAPE (site tour)
   {
-  id: "Video prezentare",
-  title: "Din 2016 in piata de evenimente",
-  description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018",
-  date: "2018-07-10",
-  type: "video",
-  format: "landscape",
-  src: "/video/video-2017.mp4",
-  ogImage: "/video/din2017.jpg",
-  actions: [
-    { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
-    { label: "Oferte", href: "/oferte", variant: "secondary" },
-  ],
-},
+    id: "Video prezentare",
+    title: "Din 2016 in piata de evenimente",
+    description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018",
+    date: "2018-07-10",
+    type: "video",
+    format: "landscape",
 
+    // IMPORTANT: fisierul e in public/noutati/
+    src: "/noutati/video-2017.mp4",
 
-  // 3) VIDEO LOCAL PORTRAIT (ex: 9:16)
-  
-  // 4) YOUTUBE EXTERN (embed în pagină)
- 
+    // OG image in public/noutati/
+    ogImage: "/noutati/din2017.jpg",
+
+    actions: [
+      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
+      { label: "Oferte", href: "/oferte", variant: "secondary" },
+    ],
+  },
 ];
 
 // ===== Helpers (nu umbli aici) =====
@@ -104,7 +98,7 @@ const DEFAULT_ACTIONS: NewsAction[] = [
 
 export const NEWS: NewsItem[] = NEWS_BASE.map((x) => {
   const slug = x.slug?.trim() ? x.slug.trim() : toSlug(x.id);
-  const ogImage = x.ogImage?.trim() ? x.ogImage.trim() : `/og/news/${x.id}.jpg`;
+  const ogImage = x.ogImage?.trim() ? x.ogImage.trim() : `/og/news/${slug}.jpg`;
   const actions = x.actions?.length ? x.actions : DEFAULT_ACTIONS;
 
   return {

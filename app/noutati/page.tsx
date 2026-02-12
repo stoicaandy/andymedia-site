@@ -1,140 +1,41 @@
-import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getNewsBySlug, NEWS } from "@/app/data/news";
-import { SITE } from "@/app/data/site";
+import { NEWS } from "@/app/data/news";
 
-function normalizeYoutubeSrc(href: string) {
-  try {
-    const u = new URL(href);
-    if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
-    if (u.hostname.includes("youtu.be")) {
-      const id = u.pathname.replace("/", "");
-      if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
-    }
-    const v = u.searchParams.get("v");
-    if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
-  } catch {}
-  return href;
-}
+export const metadata = {
+  title: "Noutăți",
+  description: "Noutăți ANDYmedia: proiecte, echipamente noi, materiale media și update-uri.",
+};
 
-// IMPORTANT: ca sa nu fie 404 in productie daca build-ul e static
-export function generateStaticParams() {
-  return NEWS.map((n) => ({ slug: n.slug }));
-}
-export const dynamicParams = false;
-
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const item = getNewsBySlug(params.slug);
-  if (!item) return {};
-
-  const url = `${SITE.url}/noutati/${item.slug}`;
-
-  // FB/OG prefera URL absolut
-  const ogAbs = item.ogImage.startsWith("http") ? item.ogImage : `${SITE.url}${item.ogImage}`;
-
-  return {
-    title: item.title,
-    description: item.description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "article",
-      url,
-      siteName: SITE.brand,
-      title: item.title,
-      description: item.description,
-      locale: "ro_RO",
-      images: [{ url: ogAbs, width: 1200, height: 630, alt: item.title }],
-    },
-  };
-}
-
-function Button({ href, label, primary }: { href: string; label: string; primary?: boolean }) {
-  const isHttp = href.startsWith("http");
-  const cls = primary
-    ? "rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
-    : "rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition";
-
-  return isHttp ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
-      {label}
-    </a>
-  ) : (
-    <Link href={href} className={cls}>
-      {label}
-    </Link>
-  );
-}
-
-export default function NoutatePage({ params }: { params: { slug: string } }) {
-  const item = getNewsBySlug(params.slug);
-  if (!item) notFound();
-
-  const mediaClass =
-    item.format === "portrait"
-      ? "relative aspect-[9/16] w-full bg-black/30"
-      : "relative aspect-[16/9] w-full bg-black/30";
+export default function NoutatiPage() {
+  const items = [...NEWS].sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <main className="relative min-h-screen text-white">
       <div className="relative z-10 pt-24 md:pt-28">
-        <section className="mx-auto max-w-6xl px-8 md:px-10 py-10">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">{item.date}</div>
-
-          <h1 className="mt-2 text-2xl md:text-3xl font-medium leading-tight text-white/95">
-            {item.title}
+        <section className="mx-auto max-w-6xl px-8 md:px-10 py-12">
+          <h1 className="text-2xl md:text-3xl font-medium tracking-wide">
+            Noutăți <span className="text-amber-300">.</span>
           </h1>
 
-          <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">{item.description}</p>
+          <p className="mt-2 text-zinc-300/85 max-w-2xl">
+            Fiecare noutate are pagină proprie cu OG pentru Facebook.
+          </p>
 
-          <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            {item.type === "image" && item.src ? (
-              <div className={mediaClass}>
-                <Image
-                  src={item.src}
-                  alt={item.alt || item.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 1024px"
-                  priority
-                />
-              </div>
-            ) : null}
-
-            {item.type === "video" && item.src ? (
-              <div className={mediaClass}>
-                <video className="absolute inset-0 h-full w-full object-cover" controls playsInline preload="metadata">
-                  <source src={item.src} type="video/mp4" />
-                </video>
-              </div>
-            ) : null}
-
-            {item.type === "embed" && item.provider === "youtube" && item.href ? (
-              <div className="relative aspect-[16/9] w-full bg-black/30">
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src={normalizeYoutubeSrc(item.href)}
-                  title={item.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              </div>
-            ) : null}
-
-            <div className="p-5 md:p-6">
-              <div className="flex flex-wrap gap-3">
-                {item.actions.map((a, idx) => (
-                  <Button key={`${a.href}-${idx}`} href={a.href} label={a.label} primary={a.variant === "primary"} />
-                ))}
-              </div>
-
-              <div className="mt-6">
-                <Link href="/" className="text-sm text-zinc-300/85 hover:text-white transition">
-                  ← Înapoi la prima pagină
-                </Link>
-              </div>
-            </div>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((x) => (
+              <Link
+                key={x.id}
+                href={`/noutati/${x.slug}`}
+                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.06] hover:border-amber-300/40 transition"
+              >
+                <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
+                  {x.date}
+                </div>
+                <div className="mt-2 text-lg font-medium text-white/95">{x.title}</div>
+                <div className="mt-2 text-sm text-zinc-300/85">{x.description}</div>
+                <div className="mt-4 text-sm text-zinc-200/80">Deschide →</div>
+              </Link>
+            ))}
           </div>
         </section>
       </div>

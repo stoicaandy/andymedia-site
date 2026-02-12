@@ -4,31 +4,37 @@ import { notFound } from "next/navigation";
 import { getNewsBySlug, NEWS } from "@/app/data/news";
 import { SITE } from "@/app/data/site";
 
-// IMPORTANT: ca să existe paginile /noutati/[slug] în build (foarte important pe deploy)
-export function generateStaticParams() {
-  return NEWS.map((n) => ({ slug: n.slug }));
-}
-export const dynamicParams = false;
-
 function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
+
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
       if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
     }
+
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
+
   return href;
 }
+
+// IMPORTANT: fara asta poti primi 404 in productie (build static / caching etc.)
+export function generateStaticParams() {
+  return NEWS.map((n) => ({ slug: n.slug }));
+}
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const item = getNewsBySlug(params.slug);
   if (!item) return {};
 
   const url = `${SITE.url}/noutati/${item.slug}`;
+
+  // OG prefera URL absolut la imagine
+  const ogAbs = item.ogImage.startsWith("http") ? item.ogImage : `${SITE.url}${item.ogImage}`;
 
   return {
     title: item.title,
@@ -41,7 +47,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       title: item.title,
       description: item.description,
       locale: "ro_RO",
-      images: [{ url: item.ogImage, width: 1200, height: 630, alt: item.title }],
+      images: [{ url: ogAbs, width: 1200, height: 630, alt: item.title }],
     },
   };
 }
@@ -50,7 +56,7 @@ function Button({ href, label, primary }: { href: string; label: string; primary
   const isHttp = href.startsWith("http");
   const cls = primary
     ? "rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
-    : "rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-amber-300/50 hover:bg-white/10 transition";
+    : "rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition";
 
   if (isHttp) {
     return (
@@ -105,7 +111,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
             {/* LOCAL VIDEO */}
             {item.type === "video" && item.src ? (
               <div className={mediaClass}>
-                <video className="absolute inset-0 h-full w-full object-cover" controls playsInline>
+                <video className="absolute inset-0 h-full w-full object-cover" controls playsInline preload="metadata">
                   <source src={item.src} type="video/mp4" />
                 </video>
               </div>
@@ -128,12 +134,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
             <div className="p-5 md:p-6">
               <div className="flex flex-wrap gap-3">
                 {item.actions.map((a, idx) => (
-                  <Button
-                    key={`${a.href}-${idx}`}
-                    href={a.href}
-                    label={a.label}
-                    primary={a.variant === "primary"}
-                  />
+                  <Button key={`${a.href}-${idx}`} href={a.href} label={a.label} primary={a.variant === "primary"} />
                 ))}
               </div>
 
