@@ -9,9 +9,9 @@ export type OfferItem = {
 export const offers: OfferItem[] = [
   {
     id: "oferta1",
-    title: "Lumini Arhitecturale",
+    title: "Lumini Arhitecturale de la 300EUR",
     description:
-      "Pachet Lumini Arhitecturale de la 250EUR ",
+      "Pachet Lumini Arhitecturale ",
     bullets: [
       "#33 Par LED",
       "Flat PAR RGBWA+UV",
