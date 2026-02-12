@@ -61,20 +61,20 @@ export const NEWS_BASE: NewsItemBase[] = [
   
   // 2) VIDEO LOCAL LANDSCAPE (site tour)
   {
-    id: "Video prezentare",
-    title: "Din 2016 in piata de evenimente",
-    description:
-      "Un clip scurt de prezentare a unui montaj scenotehnic din 2018",
-    date: "2018-07-10",
-    type: "video",
-    format: "landscape",
-    src: "/public/video/video-2017.mp4",
-    ogImage: "/public/video/din2017.jpg",
-    actions: [
-      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
-      { label: "Oferte", href: "/oferte", variant: "secondary" },
-    ],
-  },
+  id: "Video prezentare",
+  title: "Din 2016 in piata de evenimente",
+  description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018",
+  date: "2018-07-10",
+  type: "video",
+  format: "landscape",
+  src: "/video/video-2017.mp4",
+  ogImage: "/video/din2017.jpg",
+  actions: [
+    { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
+    { label: "Oferte", href: "/oferte", variant: "secondary" },
+  ],
+},
+
 
   // 3) VIDEO LOCAL PORTRAIT (ex: 9:16)
   
