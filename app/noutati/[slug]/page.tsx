@@ -1,36 +1,26 @@
-// app/noutati/[slug]/page.tsx
-
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getNewsBySlug, NEWS } from "@/app/data/news";
 import { SITE } from "@/app/data/site";
 
-/**
- * IMPORTANT:
- * Dacă ai output: "export" în next.config.js (static export),
- * fără generateStaticParams() ruta /noutati/[slug] va da 404 în producție.
- */
+// IMPORTANT: ca să existe paginile /noutati/[slug] în build (foarte important pe deploy)
 export function generateStaticParams() {
   return NEWS.map((n) => ({ slug: n.slug }));
 }
-
 export const dynamicParams = false;
 
 function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
-
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
       if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
     }
-
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
-
   return href;
 }
 
@@ -51,31 +41,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       title: item.title,
       description: item.description,
       locale: "ro_RO",
-      images: [
-        {
-          url: item.ogImage,
-          width: 1200,
-          height: 630,
-          alt: item.title,
-        },
-      ],
+      images: [{ url: item.ogImage, width: 1200, height: 630, alt: item.title }],
     },
   };
 }
 
-function Button({
-  href,
-  label,
-  primary,
-}: {
-  href: string;
-  label: string;
-  primary?: boolean;
-}) {
+function Button({ href, label, primary }: { href: string; label: string; primary?: boolean }) {
   const isHttp = href.startsWith("http");
   const cls = primary
     ? "rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
-    : "rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition";
+    : "rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-amber-300/50 hover:bg-white/10 transition";
 
   if (isHttp) {
     return (
@@ -84,7 +59,6 @@ function Button({
       </a>
     );
   }
-
   return (
     <Link href={href} className={cls}>
       {label}
@@ -105,17 +79,13 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
     <main className="relative min-h-screen text-white">
       <div className="relative z-10 pt-24 md:pt-28">
         <section className="mx-auto max-w-6xl px-8 md:px-10 py-10">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
-            {item.date}
-          </div>
+          <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">{item.date}</div>
 
           <h1 className="mt-2 text-2xl md:text-3xl font-medium leading-tight text-white/95">
             {item.title}
           </h1>
 
-          <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">
-            {item.description}
-          </p>
+          <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">{item.description}</p>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
             {/* IMAGE */}
@@ -168,10 +138,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
 
               <div className="mt-6">
-                <Link
-                  href="/noutati"
-                  className="text-sm text-zinc-300/85 hover:text-white transition"
-                >
+                <Link href="/noutati" className="text-sm text-zinc-300/85 hover:text-white transition">
                   ← Înapoi la noutăți
                 </Link>
               </div>
