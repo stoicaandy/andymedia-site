@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { getNewsBySlug, NEWS } from "@/app/data/news";
 import { SITE } from "@/app/data/site";
 
-// fortam static pentru toate slug-urile (ca sa NU mai fie 404 in productie)
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
@@ -16,17 +15,20 @@ function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
-
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
       if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
     }
-
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
-
   return href;
+}
+
+function absPublicPath(p?: string) {
+  if (!p) return p;
+  const t = p.trim();
+  return t.startsWith("/") ? t : `/${t}`;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -78,6 +80,9 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
       ? "relative aspect-[9/16] w-full bg-black/30"
       : "relative aspect-[16/9] w-full bg-black/30";
 
+  // 🔥 asta elimină 404-ul din cauza path-urilor relative
+  const videoSrc = absPublicPath(item.src);
+
   return (
     <main className="relative min-h-screen text-white">
       <div className="relative z-10 pt-24 md:pt-28">
@@ -91,11 +96,10 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
           <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">{item.description}</p>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            {/* IMAGE */}
             {item.type === "image" && item.src ? (
               <div className={mediaClass}>
                 <Image
-                  src={item.src}
+                  src={absPublicPath(item.src)!}
                   alt={item.alt || item.title}
                   fill
                   className="object-cover"
@@ -105,16 +109,14 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
-            {/* LOCAL VIDEO */}
-            {item.type === "video" && item.src ? (
+            {item.type === "video" && videoSrc ? (
               <div className={mediaClass}>
                 <video className="absolute inset-0 h-full w-full object-cover" controls playsInline preload="metadata">
-                  <source src={item.src} type="video/mp4" />
+                  <source src={videoSrc} type="video/mp4" />
                 </video>
               </div>
             ) : null}
 
-            {/* YOUTUBE */}
             {item.type === "embed" && item.provider === "youtube" && item.href ? (
               <div className="relative aspect-[16/9] w-full bg-black/30">
                 <iframe

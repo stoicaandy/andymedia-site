@@ -17,15 +17,15 @@ export type NewsItemBase = {
   type: NewsType;
   provider?: NewsProvider;
 
-  // media (din public -> incepe cu "/")
-  src?: string;
-  href?: string;
+  // media (din public)
+  src?: string;  // "/noutati/...."
+  href?: string; // youtube/tiktok
   alt?: string;
 
   format?: MediaFormat;
 
   slug?: string;
-  ogImage?: string; // din public -> incepe cu "/"
+  ogImage?: string; // "/noutati/...."
 
   actions?: NewsAction[];
 };
@@ -62,10 +62,8 @@ export const NEWS_BASE: NewsItemBase[] = [
     type: "video",
     format: "landscape",
 
-    // IMPORTANT: fiind in public/noutati/
+    // IMPORTANT: poate fi si fara "/" — il normalizam noi mai jos
     src: "/noutati/video-2017.mp4",
-
-    // IMPORTANT: tot in public/noutati/
     ogImage: "/noutati/din2017.jpg",
 
     actions: [
@@ -89,6 +87,13 @@ function toSlug(s: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function ensureLeadingSlash(p?: string) {
+  if (!p) return p;
+  const t = p.trim();
+  if (!t) return undefined;
+  return t.startsWith("/") ? t : `/${t}`;
+}
+
 const DEFAULT_ACTIONS: NewsAction[] = [
   { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
   { label: "Servicii", href: "/servicii", variant: "secondary" },
@@ -97,8 +102,11 @@ const DEFAULT_ACTIONS: NewsAction[] = [
 
 export const NEWS: NewsItem[] = NEWS_BASE.map((x) => {
   const slug = x.slug?.trim() ? x.slug.trim() : toSlug(x.id);
-  const ogImage = x.ogImage?.trim() ? x.ogImage.trim() : `/og/news/${slug}.jpg`;
   const actions = x.actions?.length ? x.actions : DEFAULT_ACTIONS;
+
+  // normalizam ca sa nu existe niciodata path relativ
+  const src = ensureLeadingSlash(x.src);
+  const ogImage = ensureLeadingSlash(x.ogImage) ?? `/og/news/${slug}.jpg`;
 
   return {
     id: x.id,
@@ -109,7 +117,7 @@ export const NEWS: NewsItem[] = NEWS_BASE.map((x) => {
     date: x.date,
     type: x.type,
     provider: x.provider,
-    src: x.src,
+    src,
     href: x.href,
     alt: x.alt,
     format: x.format ?? "landscape",

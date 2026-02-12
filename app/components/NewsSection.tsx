@@ -2,6 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { NEWS } from "@/app/data/news";
 
+function absPublicPath(p?: string) {
+  if (!p) return p;
+  const t = p.trim();
+  return t.startsWith("/") ? t : `/${t}`;
+}
+
 export default function NewsSection() {
   const items = [...NEWS].sort((a, b) => (b.date || "").localeCompare(a.date || "")).slice(0, 4);
 
@@ -19,31 +25,33 @@ export default function NewsSection() {
         </div>
 
         <p className="mt-2 text-zinc-300/85 max-w-2xl">
-          Update-uri, proiecte și materiale media. Fiecare are pagină proprie cu OG pentru Facebook.
+          Update-uri, proiecte și materiale media. Fiecare are pagină proprie (OG).
         </p>
 
-        {items.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-zinc-300/85">
-            Nu există noutăți încă. Adaugă în <code>app/data/news.ts</code>.
-          </div>
-        ) : (
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {items.map((x) => (
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {items.map((x) => {
+            const src = absPublicPath(x.src);
+            return (
               <Link
                 key={x.slug}
                 href={`/noutati/${x.slug}`}
                 className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-amber-300/40 transition"
               >
-                {/* Thumbnail din ogImage */}
                 <div className="relative aspect-[16/9] bg-black/30">
-                  <Image
-                    src={x.ogImage}
-                    alt={x.title}
-                    fill
-                    className="object-cover opacity-90 group-hover:opacity-100 transition"
-                    sizes="(max-width: 1024px) 100vw, 520px"
-                    priority
-                  />
+                  {x.type === "video" && src ? (
+                    <video className="absolute inset-0 h-full w-full object-cover" muted playsInline preload="metadata">
+                      <source src={src} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <Image
+                      src={x.ogImage}
+                      alt={x.title}
+                      fill
+                      className="object-cover opacity-90 group-hover:opacity-100 transition"
+                      sizes="(max-width: 1024px) 100vw, 520px"
+                      priority
+                    />
+                  )}
                 </div>
 
                 <div className="p-5">
@@ -53,9 +61,9 @@ export default function NewsSection() {
                   <div className="mt-4 text-sm text-zinc-200/80">Deschide →</div>
                 </div>
               </Link>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
       </div>
     </section>
   );
