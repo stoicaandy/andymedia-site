@@ -55,14 +55,14 @@ export const portfolioItems: PortfolioItem[] = [
   },
   {
     slug: "portf3-eveniment-x",
-    title: "Zilele Tomesti – Voltaj , Ionut Gallani",
+    title: "Balul absolvirii UMF Iasi",
     location: "Iași",
-    date: "2025-07",
-    category: "Coproductii",
+    date: "2019-07",
+    category: "Productie",
     summary:
-      "O colaborare impecabila cu partenerii nostri Prestige. Multumim Bogdan Ivan!",
-    services: ["Regie Sunet"],
-    tags: ["nuntă", "lumini", "sunet"],
+      "Trupa Soundcheck",
+    services: ["Instalatie PA" , "Lumini&Ecrane LED"], 
+    tags: ["Banchet", "lumini", "sunet" , "LED Screen"],
     media: {
       folder: "portf3",
       photosCount: 5,
@@ -75,9 +75,9 @@ export const portfolioItems: PortfolioItem[] = [
     title: "GALA K1 – Competitie Sportiva",
     location: "Iași",
     date: "2025-07",
-    category: "Nuntă",
+    category: "Productie",
     summary: "O colaborare impecabila cu partenerii nostri Sincroline.",
-    services: ["Regie Sunet"],
+    services: ["Regie Sunet" , "Instalatie PA" , "Ecrane LED" , "Lumini"],
     tags: ["Instalatie PA", "Lumini & Ecrane LED", "Scena - Regie"],
     media: {
       folder: "portf4",
