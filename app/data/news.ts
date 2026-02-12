@@ -69,7 +69,7 @@ export const NEWS_BASE: NewsItemBase[] = [
     type: "video",
     format: "landscape",
     src: "/video/video-2017.mp4",
-    ogImage: "/og/news/site-tour-video.jpg",
+    ogImage: "/video/din2017.jpg",
     actions: [
       { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
       { label: "Oferte", href: "/oferte", variant: "secondary" },
