@@ -21,7 +21,7 @@ function normalizeYoutubeSrc(href: string) {
   return href;
 }
 
-// IMPORTANT: fara asta poti primi 404 in productie (build static / caching etc.)
+// IMPORTANT: fara asta, pe anumite deploy-uri poti primi 404 la dynamic routes
 export function generateStaticParams() {
   return NEWS.map((n) => ({ slug: n.slug }));
 }
@@ -32,8 +32,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!item) return {};
 
   const url = `${SITE.url}/noutati/${item.slug}`;
-
-  // OG prefera URL absolut la imagine
   const ogAbs = item.ogImage.startsWith("http") ? item.ogImage : `${SITE.url}${item.ogImage}`;
 
   return {
@@ -94,7 +92,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
           <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">{item.description}</p>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            {/* IMAGE */}
             {item.type === "image" && item.src ? (
               <div className={mediaClass}>
                 <Image
@@ -108,7 +105,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
-            {/* LOCAL VIDEO */}
             {item.type === "video" && item.src ? (
               <div className={mediaClass}>
                 <video className="absolute inset-0 h-full w-full object-cover" controls playsInline preload="metadata">
@@ -117,7 +113,6 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
-            {/* YOUTUBE */}
             {item.type === "embed" && item.provider === "youtube" && item.href ? (
               <div className="relative aspect-[16/9] w-full bg-black/30">
                 <iframe

@@ -12,21 +12,19 @@ export type NewsItemBase = {
   id: string;
   title: string;
   description: string;
-  date: string; // YYYY-MM-DD
+  date: string;
+
   type: NewsType;
   provider?: NewsProvider;
 
-  // media (din public -> începe cu "/")
-  src?: string;
-  href?: string;
+  src?: string;   // din public -> incepe cu "/"
+  href?: string;  // youtube/tiktok
   alt?: string;
 
-  // layout
   format?: MediaFormat;
 
-  // share
   slug?: string;
-  ogImage?: string;
+  ogImage?: string; // din public -> incepe cu "/"
 
   actions?: NewsAction[];
 };
@@ -63,10 +61,8 @@ export const NEWS_BASE: NewsItemBase[] = [
     type: "video",
     format: "landscape",
 
-    // IMPORTANT: fisierul e in public/noutati/
+    // fiind in public/noutati/...
     src: "/noutati/video-2017.mp4",
-
-    // OG image in public/noutati/
     ogImage: "/noutati/din2017.jpg",
 
     actions: [
