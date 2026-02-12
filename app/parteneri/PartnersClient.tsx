@@ -280,6 +280,26 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/RwzzIn3UmIA",
 },
 {
+  id: "andrei-banuta",
+  name: "Andrei Bănuță",
+  city: "Constanța (Eforie Sud)",
+  category: "Artiști",
+  priority: 6,
+  description:
+    "Andrei Bănuță — una dintre cele mai fresh voci din România, cu piese virale și concerte foarte cerute. Stil modern, emoție în interpretare și energie bună live (ideal pentru evenimente private, corporate și festivaluri).",
+  image: "/parteneri/andrei-banuta-iasi.jpg",
+  tags: ["artist", "live", "pop", "evenimente", "corporate", "festival", "România"],
+  links: {
+    instagram: "https://www.instagram.com/andrei_banuta/",
+    facebook: "https://www.facebook.com/AndreiBanutaOfficial/",
+    youtube: "https://www.youtube.com/@AndreiBanuta.",
+    spotify: "https://open.spotify.com/artist/7rtpTWA4CYQOAvg9GD2Xr2",
+    contact:
+      "https://wa.me/40722179782?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
+  },
+  youtubeEmbed: "https://youtu.be/YsjwcyG15mc",
+},
+{
   id: "elena-ionescu",
   name: "Elena Ionescu",
   city: "București",
