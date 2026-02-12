@@ -1,20 +1,36 @@
+// app/noutati/[slug]/page.tsx
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getNewsBySlug } from "@/app/data/news";
+import { getNewsBySlug, NEWS } from "@/app/data/news";
 import { SITE } from "@/app/data/site";
+
+/**
+ * IMPORTANT:
+ * Dacă ai output: "export" în next.config.js (static export),
+ * fără generateStaticParams() ruta /noutati/[slug] va da 404 în producție.
+ */
+export function generateStaticParams() {
+  return NEWS.map((n) => ({ slug: n.slug }));
+}
+
+export const dynamicParams = false;
 
 function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
+
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
       if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
     }
+
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
+
   return href;
 }
 
@@ -35,12 +51,27 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       title: item.title,
       description: item.description,
       locale: "ro_RO",
-      images: [{ url: item.ogImage, width: 1200, height: 630, alt: item.title }],
+      images: [
+        {
+          url: item.ogImage,
+          width: 1200,
+          height: 630,
+          alt: item.title,
+        },
+      ],
     },
   };
 }
 
-function Button({ href, label, primary }: { href: string; label: string; primary?: boolean }) {
+function Button({
+  href,
+  label,
+  primary,
+}: {
+  href: string;
+  label: string;
+  primary?: boolean;
+}) {
   const isHttp = href.startsWith("http");
   const cls = primary
     ? "rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
@@ -53,6 +84,7 @@ function Button({ href, label, primary }: { href: string; label: string; primary
       </a>
     );
   }
+
   return (
     <Link href={href} className={cls}>
       {label}
@@ -65,7 +97,9 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
   if (!item) notFound();
 
   const mediaClass =
-    item.format === "portrait" ? "relative aspect-[9/16] w-full bg-black/30" : "relative aspect-[16/9] w-full bg-black/30";
+    item.format === "portrait"
+      ? "relative aspect-[9/16] w-full bg-black/30"
+      : "relative aspect-[16/9] w-full bg-black/30";
 
   return (
     <main className="relative min-h-screen text-white">
@@ -102,7 +136,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
             {item.type === "video" && item.src ? (
               <div className={mediaClass}>
                 <video className="absolute inset-0 h-full w-full object-cover" controls playsInline>
-                  <source src={item.src} />
+                  <source src={item.src} type="video/mp4" />
                 </video>
               </div>
             ) : null}
@@ -134,7 +168,10 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
 
               <div className="mt-6">
-                <Link href="/noutati" className="text-sm text-zinc-300/85 hover:text-white transition">
+                <Link
+                  href="/noutati"
+                  className="text-sm text-zinc-300/85 hover:text-white transition"
+                >
                   ← Înapoi la noutăți
                 </Link>
               </div>
