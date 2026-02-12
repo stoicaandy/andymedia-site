@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default function NoutatiPage() {
-  const items = [...NEWS].sort((a, b) => b.date.localeCompare(a.date));
+  const items = [...NEWS].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 
   return (
     <main className="relative min-h-screen text-white">
@@ -18,7 +18,7 @@ export default function NoutatiPage() {
           </h1>
 
           <p className="mt-2 text-zinc-300/85 max-w-2xl">
-            Fiecare noutate are pagină proprie cu OpenGraph pentru Facebook.
+            Fiecare noutate are pagină proprie cu OG pentru Facebook.
           </p>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -28,9 +28,7 @@ export default function NoutatiPage() {
                 href={`/noutati/${x.slug}`}
                 className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.06] hover:border-amber-300/40 transition"
               >
-                <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">
-                  {x.date}
-                </div>
+                <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">{x.date}</div>
                 <div className="mt-2 text-lg font-medium text-white/95">{x.title}</div>
                 <div className="mt-2 text-sm text-zinc-300/85">{x.description}</div>
                 <div className="mt-4 text-sm text-zinc-200/80">Deschide →</div>

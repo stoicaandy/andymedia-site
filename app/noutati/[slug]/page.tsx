@@ -8,20 +8,17 @@ function normalizeYoutubeSrc(href: string) {
   try {
     const u = new URL(href);
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/embed/")) return href;
-
     if (u.hostname.includes("youtu.be")) {
       const id = u.pathname.replace("/", "");
       if (id) return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
     }
-
     const v = u.searchParams.get("v");
     if (v) return `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
   } catch {}
-
   return href;
 }
 
-// IMPORTANT: fara asta, pe anumite deploy-uri poti primi 404 la dynamic routes
+// Ca sa existe paginile /noutati/[slug] in build
 export function generateStaticParams() {
   return NEWS.map((n) => ({ slug: n.slug }));
 }
@@ -56,14 +53,11 @@ function Button({ href, label, primary }: { href: string; label: string; primary
     ? "rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
     : "rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition";
 
-  if (isHttp) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
-        {label}
-      </a>
-    );
-  }
-  return (
+  return isHttp ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+      {label}
+    </a>
+  ) : (
     <Link href={href} className={cls}>
       {label}
     </Link>
@@ -92,6 +86,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
           <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">{item.description}</p>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+            {/* IMAGE */}
             {item.type === "image" && item.src ? (
               <div className={mediaClass}>
                 <Image
@@ -105,6 +100,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
+            {/* LOCAL VIDEO */}
             {item.type === "video" && item.src ? (
               <div className={mediaClass}>
                 <video className="absolute inset-0 h-full w-full object-cover" controls playsInline preload="metadata">
@@ -113,6 +109,7 @@ export default function NoutatePage({ params }: { params: { slug: string } }) {
               </div>
             ) : null}
 
+            {/* YOUTUBE */}
             {item.type === "embed" && item.provider === "youtube" && item.href ? (
               <div className="relative aspect-[16/9] w-full bg-black/30">
                 <iframe

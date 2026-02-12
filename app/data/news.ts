@@ -12,13 +12,14 @@ export type NewsItemBase = {
   id: string;
   title: string;
   description: string;
-  date: string;
+  date: string; // YYYY-MM-DD
 
   type: NewsType;
   provider?: NewsProvider;
 
-  src?: string;   // din public -> incepe cu "/"
-  href?: string;  // youtube/tiktok
+  // media (din public -> incepe cu "/")
+  src?: string;
+  href?: string;
   alt?: string;
 
   format?: MediaFormat;
@@ -61,8 +62,10 @@ export const NEWS_BASE: NewsItemBase[] = [
     type: "video",
     format: "landscape",
 
-    // fiind in public/noutati/...
+    // IMPORTANT: fiind in public/noutati/
     src: "/noutati/video-2017.mp4",
+
+    // IMPORTANT: tot in public/noutati/
     ogImage: "/noutati/din2017.jpg",
 
     actions: [
