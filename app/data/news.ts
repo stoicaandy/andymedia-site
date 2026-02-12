@@ -58,34 +58,17 @@ export type NewsItem = {
 // =========================
 export const NEWS_BASE: NewsItemBase[] = [
   // 1) IMAGINE LANDSCAPE (ex: 16:9)
-  {
-    id: "site-launch",
-    title: "Ne-am dezvoltat site-ul ca să fim mai aproape de parteneri și clienți",
-    description:
-      "Am construit andymedia.ro ca un hub clar: servicii, portofoliu, oferte și contact. Ne ajută să lucrăm mai rapid și mai organizat.",
-    date: "2026-02-10",
-    type: "image",
-    format: "landscape",
-    src: "/noutati/site-launch.jpg",
-    alt: "Preview andymedia.ro",
-    ogImage: "/og/news/site-launch.jpg",
-    actions: [
-      { label: "Vezi servicii", href: "/servicii", variant: "secondary" },
-      { label: "Vezi portofoliu", href: "/portofoliu", variant: "secondary" },
-      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
-    ],
-  },
-
+  
   // 2) VIDEO LOCAL LANDSCAPE (site tour)
   {
-    id: "site-tour-video",
-    title: "Tur rapid: Hero → Servicii → Parteneri (video)",
+    id: "Video prezentare",
+    title: "Din 2016 in piata de evenimente",
     description:
-      "Un clip scurt care arată structura site-ului: ce facem, cu cine lucrăm și cum ceri ofertă.",
-    date: "2026-02-10",
+      "Un clip scurt de prezentare a unui montaj scenotehnic din 2018",
+    date: "2018-07-10",
     type: "video",
     format: "landscape",
-    src: "/video/site-tour.mp4",
+    src: "/video/video-2017.mp4",
     ogImage: "/og/news/site-tour-video.jpg",
     actions: [
       { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
@@ -94,39 +77,9 @@ export const NEWS_BASE: NewsItemBase[] = [
   },
 
   // 3) VIDEO LOCAL PORTRAIT (ex: 9:16)
-  {
-    id: "moment-vertical",
-    title: "Moment din eveniment (vertical)",
-    description:
-      "Clip vertical (9:16) — lumini, energie, detalii. Ideal pentru mobil.",
-    date: "2026-02-06",
-    type: "video",
-    format: "portrait",
-    src: "/video/moment-vertical.mp4",
-    ogImage: "/og/news/moment-vertical.jpg",
-    actions: [
-      { label: "Servicii", href: "/servicii", variant: "secondary" },
-      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
-    ],
-  },
-
+  
   // 4) YOUTUBE EXTERN (embed în pagină)
-  {
-    id: "showreel-youtube",
-    title: "Showreel (YouTube)",
-    description:
-      "Material scurt cu secvențe din proiecte — pentru o privire rapidă asupra stilului nostru.",
-    date: "2026-02-01",
-    type: "embed",
-    provider: "youtube",
-    format: "landscape",
-    href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    ogImage: "/og/news/showreel-youtube.jpg",
-    actions: [
-      { label: "Portofoliu", href: "/portofoliu", variant: "secondary" },
-      { label: "Cere ofertă", href: "/cere-oferta?oferta=custom", variant: "primary" },
-    ],
-  },
+ 
 ];
 
 // ===== Helpers (nu umbli aici) =====
