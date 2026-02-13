@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
 type LeadPayload = {
+  // honeypot
+  hp?: string;
+
   // cere-oferta
   name?: string;
   phone?: string;
@@ -52,9 +55,49 @@ function nl2br(s: string) {
   return escapeHtml(s || "-").replace(/\n/g, "<br/>");
 }
 
+async function sendResendEmail(args: {
+  apiKey: string;
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+  replyTo?: string;
+}) {
+  const { apiKey, from, to, subject, html, replyTo } = args;
+
+  const resendResp = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      subject,
+      html,
+      reply_to: replyTo || undefined,
+    }),
+  });
+
+  if (!resendResp.ok) {
+    const txt = await resendResp.text();
+    return { ok: false as const, error: txt.slice(0, 240) };
+  }
+
+  return { ok: true as const };
+}
+
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as LeadPayload;
+
+    // Honeypot (anti-spam): dacă e completat, ignorăm cererea (nu trimitem email).
+    const hp = safe(body.hp);
+    if (hp) {
+      // silent drop: returnăm OK ca să nu învețe bot-ul că a fost prins
+      return NextResponse.json({ ok: true, message: "OK" });
+    }
 
     const page = safe(body.page) || "site";
 
@@ -75,7 +118,7 @@ export async function POST(req: Request) {
     }
 
     // ----------------------------
-    // 1) Booking Apply (nou)
+    // 1) Booking Apply
     // ----------------------------
     if (page === "booking-apply") {
       const partnerName = safe(body.partnerName);
@@ -110,7 +153,10 @@ export async function POST(req: Request) {
       }
 
       if (contactEmail && !isEmailLike(contactEmail)) {
-        return NextResponse.json({ ok: false, message: "Email invalid." }, { status: 400 });
+        return NextResponse.json(
+          { ok: false, message: "Email invalid." },
+          { status: 400 }
+        );
       }
 
       if (!description) {
@@ -122,7 +168,11 @@ export async function POST(req: Request) {
 
       if (!photoLink) {
         return NextResponse.json(
-          { ok: false, message: "Link-ul către poză este obligatoriu (Drive/WeTransfer etc.)." },
+          {
+            ok: false,
+            message:
+              "Link-ul către poză este obligatoriu (Drive/WeTransfer etc.).",
+          },
           { status: 400 }
         );
       }
@@ -163,7 +213,9 @@ export async function POST(req: Request) {
 
             <tr><td style="padding: 8px 0; vertical-align: top;"><b>Link poză</b></td><td style="padding: 8px 0;"><a href="${escapeHtml(
               photoLink
-            )}" target="_blank" rel="noreferrer noopener">${escapeHtml(photoLink)}</a></td></tr>
+            )}" target="_blank" rel="noreferrer noopener">${escapeHtml(
+        photoLink
+      )}</a></td></tr>
 
             <tr><td style="padding: 8px 0;"><b>Website</b></td><td style="padding: 8px 0;">${escapeHtml(
               website || "-"
@@ -198,25 +250,18 @@ export async function POST(req: Request) {
         </div>
       `;
 
-      const resendResp = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: LEADS_FROM,
-          to: [LEADS_TO],
-          subject,
-          html,
-          reply_to: contactEmail || undefined,
-        }),
+      const sent = await sendResendEmail({
+        apiKey: RESEND_API_KEY,
+        from: LEADS_FROM,
+        to: LEADS_TO,
+        subject,
+        html,
+        replyTo: contactEmail || undefined,
       });
 
-      if (!resendResp.ok) {
-        const txt = await resendResp.text();
+      if (!sent.ok) {
         return NextResponse.json(
-          { ok: false, message: `Eroare la trimitere email: ${txt.slice(0, 240)}` },
+          { ok: false, message: `Eroare la trimitere email: ${sent.error}` },
           { status: 502 }
         );
       }
@@ -228,7 +273,7 @@ export async function POST(req: Request) {
     }
 
     // ----------------------------
-    // 2) Cere ofertă (existing)
+    // 2) Cere ofertă
     // ----------------------------
     {
       const name = safe(body.name);
@@ -241,7 +286,10 @@ export async function POST(req: Request) {
       const offerTitle = safe(body.offerTitle);
 
       if (!name) {
-        return NextResponse.json({ ok: false, message: "Numele este obligatoriu." }, { status: 400 });
+        return NextResponse.json(
+          { ok: false, message: "Numele este obligatoriu." },
+          { status: 400 }
+        );
       }
 
       if (!phone && !email) {
@@ -252,7 +300,10 @@ export async function POST(req: Request) {
       }
 
       if (email && !isEmailLike(email)) {
-        return NextResponse.json({ ok: false, message: "Email invalid." }, { status: 400 });
+        return NextResponse.json(
+          { ok: false, message: "Email invalid." },
+          { status: 400 }
+        );
       }
 
       const subjectParts = [
@@ -299,25 +350,18 @@ export async function POST(req: Request) {
         </div>
       `;
 
-      const resendResp = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: LEADS_FROM,
-          to: [LEADS_TO],
-          subject,
-          html,
-          reply_to: email || undefined,
-        }),
+      const sent = await sendResendEmail({
+        apiKey: RESEND_API_KEY,
+        from: LEADS_FROM,
+        to: LEADS_TO,
+        subject,
+        html,
+        replyTo: email || undefined,
       });
 
-      if (!resendResp.ok) {
-        const txt = await resendResp.text();
+      if (!sent.ok) {
         return NextResponse.json(
-          { ok: false, message: `Eroare la trimitere email: ${txt.slice(0, 240)}` },
+          { ok: false, message: `Eroare la trimitere email: ${sent.error}` },
           { status: 502 }
         );
       }
@@ -328,6 +372,9 @@ export async function POST(req: Request) {
       });
     }
   } catch {
-    return NextResponse.json({ ok: false, message: "Eroare server. Încearcă din nou." }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, message: "Eroare server. Încearcă din nou." },
+      { status: 500 }
+    );
   }
 }
