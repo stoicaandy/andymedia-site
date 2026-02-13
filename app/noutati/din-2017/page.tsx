@@ -60,6 +60,7 @@ export default function Din2017Page() {
                 >
                   Cere ofertă
                 </Link>
+
                 <Link
                   href="/oferte"
                   className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
@@ -69,7 +70,8 @@ export default function Din2017Page() {
               </div>
 
               <div className="mt-6">
-                <Link href="/noutati" className="text-sm text-zinc-300/85 hover:text-white transition">
+                {/* FIX: duce la secțiunea #noutati din homepage */}
+                <Link href="/#noutati" className="text-sm text-zinc-300/85 hover:text-white transition">
                   ← Înapoi la noutăți
                 </Link>
               </div>
