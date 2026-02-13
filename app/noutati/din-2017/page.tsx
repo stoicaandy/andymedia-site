@@ -1,79 +1,80 @@
-import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { SITE } from "@/app/data/site";
+import { NEWS } from "@/app/data/news";
 
-export const metadata: Metadata = {
-  title: "Din 2016 în piața de evenimente",
-  description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018.",
-  alternates: { canonical: "/noutati/din-2017" },
-  openGraph: {
-    type: "article",
-    url: `${SITE.url}/noutati/din-2017`,
-    siteName: SITE.brand,
-    title: "Din 2016 în piața de evenimente",
-    description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018.",
-    locale: "ro_RO",
-    images: [
-      {
-        url: `${SITE.url}/noutati/din2017.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "Din 2017",
-      },
-    ],
-  },
+export const metadata = {
+  title: "Noutăți",
+  description: "Noutăți ANDYmedia: proiecte, echipamente noi, materiale media și update-uri.",
 };
 
-export default function Din2017Page() {
+export default function NoutatiPage() {
+  const items = [...NEWS].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
   return (
     <main className="relative min-h-screen text-white">
       <div className="relative z-10 pt-24 md:pt-28">
-        <section className="mx-auto max-w-6xl px-8 md:px-10 py-10">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">2018-07-10</div>
+        <section className="mx-auto max-w-6xl px-8 md:px-10 py-12">
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-2xl md:text-3xl font-medium tracking-wide">
+              Noutăți <span className="text-amber-300">.</span>
+            </h1>
 
-          <h1 className="mt-2 text-2xl md:text-3xl font-medium leading-tight text-white/95">
-            Din 2016 în piața de evenimente
-          </h1>
+            {/* buton rapid către secțiunea din Home */}
+            <a
+              href="/#noutati"
+              className="text-sm text-zinc-300/85 hover:text-white transition"
+            >
+              Înapoi la Home →
+            </a>
+          </div>
 
-          <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">
-            Un clip scurt de prezentare a unui montaj scenotehnic din 2018.
+          <p className="mt-2 text-zinc-300/85 max-w-2xl">
+            Update-uri, proiecte și materiale media. Fiecare noutate are pagină proprie (share corect).
           </p>
 
-          <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            <div className="relative aspect-[16/9] w-full bg-black/30">
-              <video
-                className="absolute inset-0 h-full w-full object-cover"
-                controls
-                playsInline
-                preload="metadata"
-                poster="/noutati/din2017.jpg"
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((x) => (
+              <Link
+                key={x.slug}
+                href={`/noutati/${x.slug}`}
+                className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-amber-300/40 transition"
               >
-                <source src="/noutati/video-2017.mp4" type="video/mp4" />
-              </video>
-            </div>
+                <div className="relative aspect-[16/9] bg-black/30">
+                  <Image
+                    src={x.ogImage}
+                    alt={x.title}
+                    fill
+                    className="object-cover opacity-90 group-hover:opacity-100 transition"
+                    sizes="(max-width: 1024px) 100vw, 520px"
+                    priority
+                  />
 
-            <div className="p-5 md:p-6">
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/cere-oferta?oferta=custom"
-                  className="rounded-xl border border-amber-300/30 bg-amber-300/10 px-6 py-3 text-sm hover:border-amber-300/60 hover:bg-amber-300/15 transition"
-                >
-                  Cere ofertă
-                </Link>
-                <Link
-                  href="/oferte"
-                  className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
-                >
-                  Oferte
-                </Link>
-              </div>
+                  {x.type === "video" ? (
+                    <div className="pointer-events-none absolute inset-0 grid place-items-center">
+                      <div className="rounded-full border border-white/30 bg-black/40 px-5 py-3 text-sm text-white/90">
+                        ▶ Play
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
 
-              <div className="mt-6">
-                <Link href="/noutati" className="text-sm text-zinc-300/85 hover:text-white transition">
-                  ← Înapoi la noutăți
-                </Link>
-              </div>
-            </div>
+                <div className="p-5">
+                  <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">{x.date}</div>
+                  <div className="mt-2 text-lg font-medium text-white/95">{x.title}</div>
+                  <div className="mt-2 text-sm text-zinc-300/85">{x.description}</div>
+                  <div className="mt-4 text-sm text-zinc-200/80">Deschide →</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-10">
+            <a
+              href="/#noutati"
+              className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm hover:border-amber-300/50 hover:bg-white/10 transition inline-flex"
+            >
+              ← Înapoi la Noutăți (Home)
+            </a>
           </div>
         </section>
       </div>
