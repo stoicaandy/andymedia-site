@@ -118,7 +118,7 @@ const PARTNERS: Partner[] = [
   name: "Ionuț Galani",
   city: "Constanța",
   category: "Artiști",
-  priority: 11,
+  priority: 18,
   description:
     "Ionuț Galani — artist recunoscut pentru show-ul live de muzică grecească, energie ridicată și momente de ring care „prind” imediat. Format potrivit pentru nunți, evenimente private, corporate și seri tematice (Greek night), cu program adaptat publicului.",
   image: "/parteneri/ionut-galani.jpg",
@@ -220,7 +220,7 @@ const PARTNERS: Partner[] = [
   name: "Trupa Atelier",
   city: "București",
   category: "Trupe colaborări",
-  priority: 8,
+  priority: 20,
   description:
     "Trupa Atelier — cover band 100% live pentru nunți, corporate și evenimente private. Repertoriu larg (dance / pop / rock / latino / evergreen / șlagăre românești), cu show dinamic și execuție curată. Booking: 0723 310 310 • Email: contact@trupa-atelier.ro.",
   image: "/parteneri/trupa-atelier.jpg",
@@ -240,7 +240,7 @@ const PARTNERS: Partner[] = [
   name: "Pepe",
   city: "București",
   category: "Artiști",
-  priority: 7,
+  priority: 15,
   description:
     "Pepe — artist cu hituri cunoscute și show live energic, potrivit pentru evenimente private, corporate și festivaluri. Repertoriu pop/latin, interacțiune bună cu publicul și program adaptabil (format eveniment). Booking: 0722 825 860.",
   image: "/parteneri/pepe.jpg",
@@ -260,7 +260,7 @@ const PARTNERS: Partner[] = [
   name: "Bogdan Alin Ota",
   city: "Bacău",
   category: "Artiști",
-  priority: 6,
+  priority: 10,
   description:
     "Bogdan Alin Ota — pianist și compozitor de anvergură internațională (crossover / cinematic / new age), recunoscut pentru concerte sold-out și emoția pe care o transmite live. ",
   image: "/parteneri/bogdan-ota.jpg",
@@ -284,7 +284,7 @@ const PARTNERS: Partner[] = [
   name: "Andrei Bănuță",
   city: "Constanța (Eforie Sud)",
   category: "Artiști",
-  priority: 6,
+  priority: 7,
   description:
     "Andrei Bănuță — una dintre cele mai fresh voci din România, cu piese virale și concerte foarte cerute. Stil modern, emoție în interpretare și energie bună live (ideal pentru evenimente private, corporate și festivaluri).",
   image: "/parteneri/andrei-banuta-iasi.jpg",
@@ -304,7 +304,7 @@ const PARTNERS: Partner[] = [
   name: "Elena Ionescu",
   city: "București",
   category: "Artiști",
-  priority: 10,
+  priority: 14,
   description:
     "Elena Ionescu — artistă pop (ex-Mandinga) cu show live energic și repertoriu potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/elena-ionescu.jpg",
@@ -419,6 +419,46 @@ const PARTNERS: Partner[] = [
       "https://wa.me/40755588995?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
   },
   youtubeEmbed: "https://youtu.be/xNW-Hfz4lo8",
+},
+{
+  id: "viorica-macovei",
+  name: "Viorica Macovei",
+  city: "Bucovina",
+  category: "Artiști",
+  priority: 8,
+  description:
+    "Viorica Macovei — una dintre cele mai apreciate voci ale folclorului bucovinean, iubită pentru autenticitate, emoție și energie pe scenă. Repertoriu bogat (hore, sârbe, cântece de suflet) și prezență scenică puternică, potrivită pentru nunți, spectacole, festivaluri și evenimente private.",
+  image: "/parteneri/viorica-macovei-iasi.jpg",
+  tags: ["folclor", "Bucovina", "live", "nuntă", "evenimente", "spectacol", "festival"],
+  links: {
+    website: "https://vioricamacovei.ro/",
+    facebook: "https://www.facebook.com/oficialvioricamacovei/?locale=ro_RO",
+    instagram: "https://www.instagram.com/oficial_viorica_macovei/",
+    youtube: "https://www.youtube.com/@VioricaMacoveiOficial",
+    contact:
+      "https://wa.me/40744307675?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/d62681XF_Ns",
+},
+{
+  id: "mioara-velicu",
+  name: "Mioara Velicu",
+  city: "Galați",
+  category: "Artiști",
+  priority: 6,
+  description:
+    "Mioara Velicu — legendă a folclorului românesc, voce emblematică și interpretă cu o carieră de peste 6 decenii. Repertoriu autentic, stil inconfundabil și prezență scenică rară, apreciată de generații întregi. Potrivită pentru spectacole, festivaluri și evenimente de gală. Contact (impresariat – numărul cel mai publicat): 0724 648 042. Apple Music: https://music.apple.com/ro/artist/mioara-velicu/1460276156",
+  image: "/parteneri/mioara-velicu-iasi.jpg",
+  tags: ["folclor", "muzică populară", "legendă", "spectacol", "festival", "gală", "live"],
+  links: {
+    facebook: "https://www.facebook.com/mioaravelicuofficial/?locale=ro_RO",
+    instagram: "https://www.instagram.com/mioaravelicu/",
+    youtube: "https://www.youtube.com/@mioaravelicu5751",
+    spotify: "https://open.spotify.com/artist/1HKgbD6noLi48d8pK0eYN0",
+    contact:
+      "https://wa.me/40724648042?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Mul%C8%9Bumesc!",
+  },
+  youtubeEmbed: "https://youtu.be/fsKosMWsUyg",
 },
   {
     id: "dj-jonny-black-iasi",
