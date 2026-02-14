@@ -284,7 +284,7 @@ const PARTNERS: Partner[] = [
   name: "Andrei Bănuță",
   city: "Constanța (Eforie Sud)",
   category: "Artiști",
-  priority: 7,
+  priority: 13,
   description:
     "Andrei Bănuță — una dintre cele mai fresh voci din România, cu piese virale și concerte foarte cerute. Stil modern, emoție în interpretare și energie bună live (ideal pentru evenimente private, corporate și festivaluri).",
   image: "/parteneri/andrei-banuta-iasi.jpg",
@@ -407,7 +407,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 7,
   description:
-    "Ion Paladi este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului.",
+    "Este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului.",
   image: "/parteneri/ion-paladi.jpg",
   tags: ["artist", "muzică populară", "live", "nuntă", "corporate", "festival", "show"],
   links: {
@@ -427,7 +427,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 8,
   description:
-    "Viorica Macovei — una dintre cele mai apreciate voci ale folclorului bucovinean, iubită pentru autenticitate, emoție și energie pe scenă. Repertoriu bogat (hore, sârbe, cântece de suflet) și prezență scenică puternică, potrivită pentru nunți, spectacole, festivaluri și evenimente private.",
+    " Este una dintre cele mai apreciate voci ale folclorului bucovinean, iubită pentru autenticitate, emoție și energie pe scenă. Repertoriu bogat (hore, sârbe, cântece de suflet) și prezență scenică puternică, potrivită pentru nunți, spectacole, festivaluri și evenimente private.",
   image: "/parteneri/viorica-macovei-iasi.jpg",
   tags: ["folclor", "Bucovina", "live", "nuntă", "evenimente", "spectacol", "festival"],
   links: {
@@ -447,7 +447,7 @@ const PARTNERS: Partner[] = [
   category: "Artiști",
   priority: 6,
   description:
-    "Mioara Velicu — legendă a folclorului românesc, voce emblematică și interpretă cu o carieră de peste 6 decenii. Repertoriu autentic, stil inconfundabil și prezență scenică rară, apreciată de generații întregi. Potrivită pentru spectacole, festivaluri și evenimente de gală. Contact (impresariat – numărul cel mai publicat): 0724 648 042. Apple Music: https://music.apple.com/ro/artist/mioara-velicu/1460276156",
+    "Legendă a folclorului românesc, voce emblematică și interpretă cu o carieră de peste 6 decenii. Repertoriu autentic, stil inconfundabil și prezență scenică rară, apreciată de generații întregi. Potrivită pentru spectacole, festivaluri și evenimente de gală. Apple Music: https://music.apple.com/ro/artist/mioara-velicu/1460276156",
   image: "/parteneri/mioara-velicu-iasi.jpg",
   tags: ["folclor", "muzică populară", "legendă", "spectacol", "festival", "gală", "live"],
   links: {
