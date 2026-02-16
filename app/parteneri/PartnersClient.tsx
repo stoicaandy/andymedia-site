@@ -477,7 +477,27 @@ const PARTNERS: Partner[] = [
         "https://wa.me/40757666811?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20tau.%20Te%20rog%20sa-mi%20trimiti%20disponibilitatea%20si%20o%20oferta%20orientativa%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Multumesc!",
     },
   },
-
+  {
+  id: "fara-zahar",
+  name: "Fără Zahăr",
+  city: "Iași",
+  category: "Trupe colaborări",
+  priority: 8,
+  description:
+    "Fără Zahăr — trupă de muzică & umor (satiră socială) cu show live foarte energic și repertoriu cunoscut. Potrivită pentru festivaluri, evenimente corporate și spectacole (public mare), cu momente interactive și entertainment garantat. Booking (număr publicat frecvent pentru impresariat): 0756 011 001.",
+  image: "/parteneri/fara-zahar.jpg",
+  tags: ["trupă", "live", "umor", "satiră", "festival", "corporate", "show", "Iași"],
+  links: {
+    facebook: "https://www.facebook.com/farazahar/",
+    instagram: "https://www.instagram.com/trupafarazahar/",
+    youtube: "https://www.youtube.com/channel/UC5DLUvo7x0Jd0HZw4GoBing",
+    spotify: "https://open.spotify.com/artist/73sGfnuU0aoVWa1oXgBxcu",
+    website: "https://farazahar.bandcamp.com/",
+    contact:
+      "https://wa.me/40756011001?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/vJpHg86tQE0",
+},
   {
     id: "smart-music-iasi",
     name: "Smart Music",
