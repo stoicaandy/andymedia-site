@@ -32,7 +32,7 @@ export default function Din2017Page() {
           <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-300/70">2018-07-10</div>
 
           <h1 className="mt-2 text-2xl md:text-3xl font-medium leading-tight text-white/95">
-            Din 2016 în piața de evenimente
+            Din 2016 în lumea evenimentelor artistice
           </h1>
 
           <p className="mt-3 text-sm md:text-base text-zinc-300/85 max-w-3xl">

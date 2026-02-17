@@ -158,7 +158,7 @@ const serviceBlocks: ServiceBlock[] = [
 
   {
     id: "lumini",
-    title: "Lumini scenice & ambientale (controlate, nu haos)",
+    title: "Lumini scenice & ambientale (controlate)",
     subtitle:
       "Lumina bună nu e despre „aparate multe”. E despre design + control: momente, tranziții, atmosferă.",
     whatClientThinks: "„Niște lumini… orice, să fie.”",
