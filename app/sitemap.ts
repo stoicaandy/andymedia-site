@@ -1,24 +1,27 @@
+// app/sitemap.ts
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.andymedia.ro";
+const BASE = "https://www.andymedia.ro";
 
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+
+  // Pune aici rutele reale ale site-ului tău (cele importante)
   const routes = [
-    "/",                 // home
+    "/",
+    "/despre",
     "/servicii",
     "/portofoliu",
+    "/noutati",
+    "/contact",
     "/parteneri",
     "/echipamente",
-    "/noutati",
-    "/noutati/din-2017", // articol existent acum
-    "/oferte",
-    "/cere-oferta",
-    "/despre-noi",
   ];
 
   return routes.map((path) => ({
-    url: `${baseUrl}${path === "/" ? "" : path}`,
-    changeFrequency: "weekly",
+    url: `${BASE}${path}`,
+    lastModified: now,
+    changeFrequency: path === "/" ? "weekly" : "monthly",
     priority: path === "/" ? 1 : 0.7,
   }));
 }

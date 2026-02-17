@@ -1,8 +1,13 @@
+// app/robots.ts
 import type { MetadataRoute } from "next";
+import { SITE } from "@/app/data/site";
+
+const siteUrl =
+  (process.env.NEXT_PUBLIC_SITE_URL &&
+    process.env.NEXT_PUBLIC_SITE_URL.trim()) ||
+  SITE.url;
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://www.andymedia.ro";
-
   return {
     rules: [
       {
@@ -10,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    sitemap: `${siteUrl.replace(/\/$/, "")}/sitemap.xml`,
+    host: siteUrl.replace(/\/$/, ""),
   };
 }

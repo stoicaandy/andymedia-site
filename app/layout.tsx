@@ -4,15 +4,15 @@ import SiteHeader from "@/app/components/SiteHeader";
 import VideoBackground from "@/app/components/VideoBackground";
 import SiteFooter from "@/app/components/SiteFooter";
 import JsonLd from "@/app/components/JsonLd";
-import { SITE } from "@/app/data/site";
+import { SITE, SITE_URL } from "@/app/data/site";
 
 export const metadata: Metadata = {
-  // IMPORTANT: pentru share corect + OG absolute URLs
-  metadataBase: new URL(SITE.url),
+  // OG + canonical absolute corect (prod / preview)
+  metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "ANDYmedia",
-    template: "%s | ANDYmedia",
+    default: SITE.brand,
+    template: `%s | ${SITE.brand}`,
   },
   description:
     "ANDYmedia — producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    url: SITE.url,
-    siteName: "ANDYmedia",
-    title: "ANDYmedia",
+    url: "/", // se rezolvă absolut din metadataBase
+    siteName: SITE.brand,
+    title: SITE.brand,
     description:
       "Producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
     locale: "ro_RO",
@@ -41,7 +41,6 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  // IMPORTANT: nu bloca zoom-ul global
   userScalable: true,
 };
 
