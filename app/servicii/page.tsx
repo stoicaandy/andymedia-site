@@ -219,7 +219,7 @@ export default function Page() {
         {/* INTRO */}
         <section className="mx-auto max-w-6xl px-8 md:px-10 py-14 md:py-16">
           <h1 className="text-3xl md:text-5xl font-medium leading-tight">
-            Servicii tehnice complete pentru evenimente în Iași și Moldova
+            Servicii tehnice complete pentru evenimente artistice
             <span className="text-amber-300">.</span>
           </h1>
 
