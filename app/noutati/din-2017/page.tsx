@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     type: "article",
     url: `${SITE.url}/noutati/din-2017`,
     siteName: SITE.brand,
-    title: "Din 2016 în piața de evenimente",
+    title: "Din 2016 în industria evenimentelor",
     description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018.",
     locale: "ro_RO",
     images: [

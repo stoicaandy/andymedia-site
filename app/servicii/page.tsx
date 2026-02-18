@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title:
     "Servicii evenimente Iași | Sonorizare d&b, concerte, lumini, LED, DJ, scenă – ANDYmedia",
   description:
-    "Servicii complete pentru evenimente în Iași și Moldova: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), conferințe corporate, concerte și spectacole, lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
+    "Servicii complete pentru evenimente publice si private: sonorizare profesională (d&b audiotechnik), măsurători acustice (Smaart/REW), conferințe corporate, concerte și spectacole, lumini control DMX, ecrane LED cu conținut live (Resolume), DJ adaptat publicului, scenă, operatori, transport, montaj, consultanță și booking artiști. ANDYmedia – Andy Stoica (ANDYmusic).",
   alternates: { canonical: "/servicii" },
   openGraph: {
     title:
