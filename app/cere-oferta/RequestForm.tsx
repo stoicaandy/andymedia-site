@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { offers } from "../data/offers";
 
@@ -31,6 +32,10 @@ export default function RequestForm() {
   const [eventDate, setEventDate] = useState("");
   const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
+
+  // Honeypot (anti-spam, invizibil). Dacă e completat, serverul va ignora trimiterea.
+  const [hp, setHp] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ApiResponse | null>(null);
 
@@ -44,7 +49,7 @@ export default function RequestForm() {
     if (!phone.trim() && !email.trim()) {
       return setResult({
         ok: false,
-        message: "Te rog completează telefon sau email (ideal ambele).",
+        message: "0741659564 office@andymusic.ro.",
       });
     }
 
@@ -54,6 +59,7 @@ export default function RequestForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          // cere-oferta
           name,
           phone,
           email,
@@ -62,6 +68,11 @@ export default function RequestForm() {
           message,
           offerId: ofertaId || undefined,
           offerTitle: selectedOffer?.title || undefined,
+
+          // honeypot
+          hp,
+
+          // meta
           page: "cere-oferta",
         }),
       });
@@ -74,13 +85,18 @@ export default function RequestForm() {
           message: data?.message || "Eroare la trimitere. Încearcă din nou.",
         });
       } else {
-        setResult({ ok: true, message: data?.message || "Cererea a fost trimisă." });
+        setResult({
+          ok: true,
+          message: data?.message || "Cererea a fost trimisă.",
+        });
+
         setName("");
         setPhone("");
         setEmail("");
         setEventDate("");
         setLocation("");
         setMessage("");
+        setHp("");
       }
     } catch {
       setResult({ ok: false, message: "Eroare de rețea. Încearcă din nou." });
@@ -94,6 +110,19 @@ export default function RequestForm() {
       onSubmit={onSubmit}
       className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 md:p-4"
     >
+      {/* Honeypot: invizibil pentru useri, boții îl completează des */}
+      <div className="hidden" aria-hidden="true">
+        <label>
+          Company
+          <input
+            value={hp}
+            onChange={(e) => setHp(e.target.value)}
+            autoComplete="off"
+            tabIndex={-1}
+          />
+        </label>
+      </div>
+
       {/* Oferta selectată — linie mică */}
       <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-zinc-300/80">
         <span className="uppercase tracking-[0.22em] text-zinc-300/60">
@@ -194,12 +223,12 @@ export default function RequestForm() {
           {loading ? "Se trimite..." : "Trimite cererea"}
         </button>
 
-        <a
+        <Link
           href="/#oferte"
           className="rounded-xl border border-white/15 bg-white/5 px-5 py-2 text-sm hover:border-amber-300/50 hover:bg-white/10 transition"
         >
           Înapoi la oferte
-        </a>
+        </Link>
 
         <p className="text-xs text-zinc-400/70">
           Confirmăm rapid disponibilitatea și revenim cu ofertare adaptată.

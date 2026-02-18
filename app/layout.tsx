@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     default: SITE.brand,
     template: `%s | ${SITE.brand}`,
   },
+
   description:
     "ANDYmedia — producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
 
@@ -29,6 +30,22 @@ export const metadata: Metadata = {
     description:
       "Producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
     locale: "ro_RO",
+    images: [
+      {
+        url: "/og/schela-lumini-iasi.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ANDYmedia — schelă lumini și producție tehnică evenimente (Iași)",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.brand,
+    description:
+      "ANDYmedia — producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
+    images: ["/og/schela-lumini-iasi.jpg"],
   },
 
   robots: {
