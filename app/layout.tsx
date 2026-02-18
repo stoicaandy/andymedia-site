@@ -7,7 +7,6 @@ import JsonLd from "@/app/components/JsonLd";
 import { SITE, SITE_URL } from "@/app/data/site";
 
 const OG_IMAGE_PATH = "/og/schela-lumini-iasi.jpg";
-const FB_APP_ID = "1427551195825320";
 
 export const metadata: Metadata = {
   // OG + canonical absolute corect (prod / preview)
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: OG_IMAGE_PATH,
-        secureUrl: OG_IMAGE_PATH, // se rezolvă absolut din metadataBase
+        secureUrl: OG_IMAGE_PATH,
         width: 1200,
         height: 630,
         alt: "ANDYmedia — schelă lumini și producție tehnică evenimente (Iași)",
@@ -53,9 +52,8 @@ export const metadata: Metadata = {
     images: [OG_IMAGE_PATH],
   },
 
-  // Extra meta pentru Facebook (warning fix + compat)
+  // Extra meta pentru compat (fără fb:app_id aici)
   other: {
-    "fb:app_id": FB_APP_ID,
     "og:image:secure_url": new URL(OG_IMAGE_PATH, SITE_URL).toString(),
     "og:image:type": "image/jpeg",
   },
