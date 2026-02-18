@@ -62,7 +62,7 @@ export const NEWS_BASE: NewsItemBase[] = [
     id: "Din 2017",
     slug: "din-2017", // 🔥 obligatoriu ca să meargă cu folderul tău /app/noutati/din-2017/page.tsx
 
-    title: "Din 2016 în piața de evenimente",
+    title: "Din 2016 în industria evenimenttelor",
     description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018.",
     date: "2018-07-10",
 
