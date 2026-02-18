@@ -6,6 +6,8 @@ import SiteFooter from "@/app/components/SiteFooter";
 import JsonLd from "@/app/components/JsonLd";
 import { SITE, SITE_URL } from "@/app/data/site";
 
+const OG_IMAGE_PATH = "/og/schela-lumini-iasi.jpg";
+
 export const metadata: Metadata = {
   // OG + canonical absolute corect (prod / preview)
   metadataBase: new URL(SITE_URL),
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    url: "/", // se rezolvă absolut din metadataBase
+    url: "/",
     siteName: SITE.brand,
     title: SITE.brand,
     description:
@@ -32,10 +34,12 @@ export const metadata: Metadata = {
     locale: "ro_RO",
     images: [
       {
-        url: "/og/schela-lumini-iasi.jpg",
+        url: OG_IMAGE_PATH,
+        secureUrl: OG_IMAGE_PATH, // Next o rezolvă absolut din metadataBase
         width: 1200,
         height: 630,
         alt: "ANDYmedia — schelă lumini și producție tehnică evenimente (Iași)",
+        type: "image/jpeg",
       },
     ],
   },
@@ -45,7 +49,17 @@ export const metadata: Metadata = {
     title: SITE.brand,
     description:
       "ANDYmedia — producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
-    images: ["/og/schela-lumini-iasi.jpg"],
+    images: [OG_IMAGE_PATH],
+  },
+
+  // Extra meta pentru Facebook (nu strică, doar ajută la crawl / compat)
+  other: {
+    // dacă vrei/ai, poți seta și un App ID (opțional):
+    // "fb:app_id": "1234567890",
+
+    // unii crawleri FB sunt mai fericiți când le dai explicit secure_url + type:
+    "og:image:secure_url": new URL(OG_IMAGE_PATH, SITE_URL).toString(),
+    "og:image:type": "image/jpeg",
   },
 
   robots: {
