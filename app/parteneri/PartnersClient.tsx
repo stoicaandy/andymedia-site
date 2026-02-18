@@ -57,7 +57,7 @@ const PARTNERS: Partner[] = [
     category: "Trupe exclusive",
     exclusive: true,
     since: "2021",
-    priority: 1,
+    priority: 2,
     description:
       "Trupă live cu repertoriu versatil (folclor → pop/evergreen). Show disciplinat, energie de scenă și flow bun pentru public mixt. ",
     image: "/parteneri/trupa-de-weekend-iasi.jpg",
@@ -99,7 +99,7 @@ const PARTNERS: Partner[] = [
   name: "Alex Maxim (Alexandru Ionuț Maxim)",
   city: "Iași",
   category: "Artiști",
-  priority: 9,
+  priority: 39,
   description:
     "Artist & performer, cunoscut publicului larg din Vocea României (finalist). Voce puternică, interpretare cu impact și prezență scenică. Potrivit pentru evenimente private, corporate și apariții live, cu repertoriu adaptat publicului și momentului.",
   image: "/parteneri/alex-maxim.jpg",
@@ -118,7 +118,7 @@ const PARTNERS: Partner[] = [
   name: "Ionuț Galani",
   city: "Constanța",
   category: "Artiști",
-  priority: 18,
+  priority: 38,
   description:
     "Ionuț Galani — artist recunoscut pentru show-ul live de muzică grecească, energie ridicată și momente de ring care „prind” imediat. Format potrivit pentru nunți, evenimente private, corporate și seri tematice (Greek night), cu program adaptat publicului.",
   image: "/parteneri/ionut-galani.jpg",
@@ -140,7 +140,7 @@ const PARTNERS: Partner[] = [
   name: "Ioana Ignat",
   city: "București",
   category: "Artiști",
-  priority: 9,
+  priority: 15,
   description:
     "Ioana Ignat — artistă pop cu hituri cunoscute și prezență scenică puternică. Show live potrivit pentru evenimente private, corporate și concerte, cu repertoriu adaptat publicului și momentului.",
   image: "/parteneri/ioana-ignat.jpg",
@@ -159,7 +159,7 @@ const PARTNERS: Partner[] = [
   name: "Alina Eremia",
   city: "București",
   category: "Artiști",
-  priority: 6,
+  priority: 12,
   description:
     "Alina Eremia — artistă pop de top din România, cu hituri cunoscute și show live modern, potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/alina-eremia-iasi.jpg",
@@ -179,7 +179,7 @@ const PARTNERS: Partner[] = [
   name: "Carla’s Dreams",
   city: "Chișinău",
   category: "Trupe colaborări",
-  priority: 4,
+  priority: 10,
   description:
     "Carla’s Dreams — proiect muzical de top (MD/RO), cu show live puternic și repertoriu cunoscut. Potrivit pentru evenimente mari (corporate, festival, private premium).",
   image: "/parteneri/carlas-dreams-iasi.jpg",
@@ -200,7 +200,7 @@ const PARTNERS: Partner[] = [
   name: "Proconsul",
   city: "România",
   category: "Trupe colaborări",
-  priority: 5,
+  priority: 11,
   description:
     "Proconsul — una dintre cele mai iubite trupe pop-rock din România, cu un repertoriu cunoscut și un show live potrivit pentru evenimente mari (private, corporate, festival).",
   image: "/parteneri/proconsul-iasi.jpg",
@@ -220,7 +220,7 @@ const PARTNERS: Partner[] = [
   name: "Trupa Atelier",
   city: "București",
   category: "Trupe colaborări",
-  priority: 20,
+  priority: 30,
   description:
     "Trupa Atelier — cover band 100% live pentru nunți, corporate și evenimente private. Repertoriu larg (dance / pop / rock / latino / evergreen / șlagăre românești), cu show dinamic și execuție curată. Booking: 0723 310 310 • Email: contact@trupa-atelier.ro.",
   image: "/parteneri/trupa-atelier.jpg",
@@ -260,7 +260,7 @@ const PARTNERS: Partner[] = [
   name: "Bogdan Alin Ota",
   city: "Bacău",
   category: "Artiști",
-  priority: 10,
+  priority: 14,
   description:
     "Bogdan Alin Ota — pianist și compozitor de anvergură internațională (crossover / cinematic / new age), recunoscut pentru concerte sold-out și emoția pe care o transmite live. ",
   image: "/parteneri/bogdan-ota.jpg",
@@ -304,7 +304,7 @@ const PARTNERS: Partner[] = [
   name: "Elena Ionescu",
   city: "București",
   category: "Artiști",
-  priority: 14,
+  priority: 16,
   description:
     "Elena Ionescu — artistă pop (ex-Mandinga) cu show live energic și repertoriu potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/elena-ionescu.jpg",
@@ -345,7 +345,7 @@ const PARTNERS: Partner[] = [
   name: "Fetele din Botoșani",
   city: "Botoșani",
   category: "Artiști",
-  priority: 12,
+  priority: 24,
   description:
     "Fetele din Botoșani — proiect folcloric cunoscut, cu repertoriu autentic moldovenesc și momente live pline de energie. Potrivite pentru nunți, evenimente private, spectacole și festivaluri.",
   image: "/parteneri/fetele-din-botosani.jpg",
@@ -386,7 +386,7 @@ const PARTNERS: Partner[] = [
     category: "Trupe exclusive",
     exclusive: true,
     since: "2018",
-    priority: 2,
+    priority: 1,
     description:
       "Grup de muzicieni licențiați din Iași, pentru publicul care vrea să vadă și să audă «altceva». De la jazz la disco, de la rock la reggae, din anii ’30 până azi — show-ul surprinde de fiecare dată, vizual și auditiv. ",
     image: "/parteneri/soundcheck-band-iasi.jpg",
@@ -405,7 +405,7 @@ const PARTNERS: Partner[] = [
   name: "Ion Paladi",
   city: "Chișinău",
   category: "Artiști",
-  priority: 7,
+  priority: 20,
   description:
     "Este unul dintre cei mai cunoscuți artiști de muzică populară din Republica Moldova, apreciat pentru repertoriul autentic, vocea inconfundabilă și show-ul live energic. Ideal pentru nunți, evenimente corporate și festivaluri, cu program adaptat publicului și momentului.",
   image: "/parteneri/ion-paladi.jpg",
@@ -425,7 +425,7 @@ const PARTNERS: Partner[] = [
   name: "Viorica Macovei",
   city: "Bucovina",
   category: "Artiști",
-  priority: 8,
+  priority: 23,
   description:
     " Este una dintre cele mai apreciate voci ale folclorului bucovinean, iubită pentru autenticitate, emoție și energie pe scenă. Repertoriu bogat (hore, sârbe, cântece de suflet) și prezență scenică puternică, potrivită pentru nunți, spectacole, festivaluri și evenimente private.",
   image: "/parteneri/viorica-macovei-iasi.jpg",
@@ -445,7 +445,7 @@ const PARTNERS: Partner[] = [
   name: "Mioara Velicu",
   city: "Galați",
   category: "Artiști",
-  priority: 6,
+  priority: 22,
   description:
     "Legendă a folclorului românesc, voce emblematică și interpretă cu o carieră de peste 6 decenii. Repertoriu autentic, stil inconfundabil și prezență scenică rară, apreciată de generații întregi. Potrivită pentru spectacole, festivaluri și evenimente de gală. Apple Music: https://music.apple.com/ro/artist/mioara-velicu/1460276156",
   image: "/parteneri/mioara-velicu-iasi.jpg",
@@ -482,7 +482,7 @@ const PARTNERS: Partner[] = [
   name: "Fără Zahăr",
   city: "Iași",
   category: "Trupe colaborări",
-  priority: 8,
+  priority: 17,
   description:
     "Fără Zahăr — trupă de muzică & umor (satiră socială) cu show live foarte energic și repertoriu cunoscut. Potrivită pentru festivaluri, evenimente corporate și spectacole (public mare), cu momente interactive și entertainment garantat. Booking (număr publicat frecvent pentru impresariat): 0756 011 001.",
   image: "/parteneri/fara-zahar.jpg",
