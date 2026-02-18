@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SITE } from "@/app/data/site";
 
 export const metadata: Metadata = {
-  title: "Din 2016 în piața de evenimente",
+  title: "Din 2016 în industria de evenimente",
   description: "Un clip scurt de prezentare a unui montaj scenotehnic din 2018.",
   alternates: { canonical: "/noutati/din-2017" },
   openGraph: {
