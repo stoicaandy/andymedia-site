@@ -42,12 +42,12 @@ export const portfolioItems: PortfolioItem[] = [
 
   {
     slug: "portf2-eveniment-x",
-    title: "Concert De Craciun – Pepe , Mioara Velicu , Mirela Vaida",
+    title: "Concert De Craciun – Pepe , Viorica Macovei , Fuego",
     location: "Ion Neculce",
-    date: "2025-08",
+    date: "2024-12",
     category: "Producție",
     summary:
-      "O colaborare impecabila cu partenerii nostri Prestige. Multumim Bogdan Ivan!",
+      "Un concert de Craciun pe care l-am orgnizat 2 ani la rand. Multumim pentru incredere Ion Neculce!",
     services: ["Instalatie PA", "Lumini& Ecrane LED", "Scena - Regie"],
     tags: ["broadcast", "led", "workflow"],
     media: {
