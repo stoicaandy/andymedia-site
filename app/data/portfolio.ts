@@ -1,9 +1,12 @@
 export type PortfolioMediaAuto = {
   folder: string;        // ex: "portf1"
   photosCount: number;   // ex: 4 => 1.jpg..4.jpg
-  hasVideo?: boolean;    // dacă există video.mp4 în folder (rulat direct în card)
+
+  hasVideo?: boolean;    // dacă există video (local sau extern)
   poster?: boolean;      // dacă există poster.jpg în folder (pentru video)
-  youtubeId?: string;    // ✅ dacă vrei YouTube DOAR în lightbox (ex: "dQw4w9WgXcQ")
+
+  videoUrl?: string;     // ✅ MP4 extern (ex: https://www.andymusic.ro/scena-iasi.mp4)
+  youtubeId?: string;    // ✅ YouTube DOAR în lightbox (ex: "dQw4w9WgXcQ")
 };
 
 export type PortfolioItem = {
@@ -36,6 +39,7 @@ export const portfolioItems: PortfolioItem[] = [
       poster: false,
     },
   },
+
   {
     slug: "portf2-eveniment-x",
     title: "Concert De Craciun – Pepe , Mioara Velicu , Mirela Vaida",
@@ -51,18 +55,21 @@ export const portfolioItems: PortfolioItem[] = [
       photosCount: 5,
       hasVideo: true,
       poster: false,
+
+      // ✅ MP4 extern (rulează direct în card)
+      videoUrl: "https://www.andymusic.ro/scena-iasi.mp4",
     },
   },
+
   {
     slug: "portf3-eveniment-x",
     title: "Balul absolvirii UMF Iasi",
     location: "Iași",
     date: "2019-07",
     category: "Productie",
-    summary:
-      "Trupa Soundcheck",
-    services: ["Instalatie PA" , "Lumini&Ecrane LED"], 
-    tags: ["Banchet", "lumini", "sunet" , "LED Screen"],
+    summary: "Trupa Soundcheck",
+    services: ["Instalatie PA", "Lumini&Ecrane LED"],
+    tags: ["Banchet", "lumini", "sunet", "LED Screen"],
     media: {
       folder: "portf3",
       photosCount: 5,
@@ -70,6 +77,7 @@ export const portfolioItems: PortfolioItem[] = [
       poster: false,
     },
   },
+
   {
     slug: "portf4-eveniment-x",
     title: "GALA K1 – Competitie Sportiva",
@@ -77,17 +85,16 @@ export const portfolioItems: PortfolioItem[] = [
     date: "2025-07",
     category: "Productie",
     summary: "O colaborare impecabila cu partenerii nostri Sincroline.",
-    services: ["Regie Sunet" , "Instalatie PA" , "Ecrane LED" , "Lumini"],
+    services: ["Regie Sunet", "Instalatie PA", "Ecrane LED", "Lumini"],
     tags: ["Instalatie PA", "Lumini & Ecrane LED", "Scena - Regie"],
     media: {
       folder: "portf4",
       photosCount: 5,
       hasVideo: false,
-
-      // ✅ EXEMPLU: dacă vrei YouTube DOAR în lightbox
-      // youtubeId: "dQw4w9WgXcQ",
-
       poster: false,
+
+      // ✅ exemplu YouTube DOAR în lightbox:
+      // youtubeId: "dQw4w9WgXcQ",
     },
   },
 ];

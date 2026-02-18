@@ -24,7 +24,10 @@ function pauseAllOtherPortfolioVideos(current: HTMLVideoElement) {
 
 export default function PortfolioCard({ item, priority = false, onOpenGallery }: Props) {
   const base = `/portofoliu/${item.media.folder}`;
-  const videoSrc = `${base}/video.mp4`;
+
+  // ✅ video poate fi local sau extern
+  const videoSrc = item.media.videoUrl ?? `${base}/video.mp4`;
+
   const posterSrc = item.media.poster ? `${base}/poster.jpg` : `${base}/1.jpg`;
 
   const photos = useMemo(() => {
@@ -39,14 +42,14 @@ export default function PortfolioCard({ item, priority = false, onOpenGallery }:
     [photos, item.title]
   );
 
-  const hasLocalVideo = !!item.media.hasVideo;
+  const hasVideoInCard = !!item.media.hasVideo; // poate fi local sau extern
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPortraitVideo, setIsPortraitVideo] = useState(false);
 
   const THUMBS_MAX = 6;
   const thumbs = useMemo(() => {
-    const arr = photos.slice(1); // thumbs 2..N
+    const arr = photos.slice(1);
     const shown = arr.slice(0, THUMBS_MAX);
     const remaining = arr.length - shown.length;
     return { shown, remaining };
@@ -58,7 +61,7 @@ export default function PortfolioCard({ item, priority = false, onOpenGallery }:
       <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
         <div className="relative w-full pt-[56.25%]">
           <div className="absolute inset-0">
-            {hasLocalVideo ? (
+            {hasVideoInCard ? (
               <video
                 ref={videoRef}
                 data-portfolio-video="1"
@@ -66,7 +69,6 @@ export default function PortfolioCard({ item, priority = false, onOpenGallery }:
                 poster={posterSrc}
                 controls
                 playsInline
-                // ✅ important: mobile perf
                 preload={priority ? "metadata" : "none"}
                 className={[
                   "h-full w-full",
@@ -96,18 +98,18 @@ export default function PortfolioCard({ item, priority = false, onOpenGallery }:
               </div>
 
               <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/85">
-                {hasLocalVideo ? "VIDEO" : "FOTO"} • {item.media.photosCount} foto
+                {hasVideoInCard ? "VIDEO" : "FOTO"} • {item.media.photosCount} foto
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* THUMBS — keep lazy, but no per-card lightbox anymore */}
+      {/* THUMBS */}
       {photos.length > 1 && (
         <div className="mt-3 grid grid-cols-6 gap-2">
           {thumbs.shown.map((src, i) => {
-            const realIndex = i + 1; // thumb 0 = photo[1]
+            const realIndex = i + 1;
             return (
               <button
                 key={src}
