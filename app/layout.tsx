@@ -5,6 +5,7 @@ import VideoBackground from "@/app/components/VideoBackground";
 import SiteFooter from "@/app/components/SiteFooter";
 import JsonLd from "@/app/components/JsonLd";
 import { SITE, SITE_URL } from "@/app/data/site";
+import { Analytics } from "@vercel/analytics/react";
 
 const OG_IMAGE_PATH = "/og/schela-lumini-iasi.jpg";
 
@@ -80,6 +81,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
+
+        {/* Vercel Analytics */}
+        <Analytics />
       </body>
     </html>
   );
