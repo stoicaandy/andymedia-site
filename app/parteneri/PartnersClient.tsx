@@ -381,6 +381,26 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/xrUl8_RH4LM",
 },
 {
+  id: "nemuritorii",
+  name: "Nemuritorii",
+  city: "România",
+  category: "Trupe colaborări",
+  priority: 26,
+  description:
+    "Nemuritorii — proiect live cu vibe de petrecere și repertoriu care prinde rapid la public (show energic, potrivit pentru evenimente private, corporate și festivaluri). Se adaptează bine pe momente și generează atmosferă de ring. ",
+  image: "/parteneri/nemuritorii.jpg",
+  tags: ["trupă", "live", "party", "evenimente", "corporate", "festival", "show", "România"],
+  links: {
+    facebook: "https://www.facebook.com/nemuritoriioficial/?locale=ro_RO",
+    youtube: "https://www.youtube.com/@NemuritoriiOfficial",
+    spotify: "https://open.spotify.com/artist/4vHs31tvGMxY9iukoRaDcp",
+    instagram: "https://www.instagram.com/nemuritorii_official/",
+    contact:
+      "https://wa.me/40740527699?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/qqlVVbsI8Ns",
+},
+{
   id: "dj-ralmm-iasi",
   name: "DJ RALMM",
   city: "Iași",
