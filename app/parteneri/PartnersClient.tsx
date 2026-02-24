@@ -140,7 +140,7 @@ const PARTNERS: Partner[] = [
   name: "Ioana Ignat",
   city: "București",
   category: "Artiști",
-  priority: 15,
+  priority: 18,
   description:
     "Ioana Ignat — artistă pop cu hituri cunoscute și prezență scenică puternică. Show live potrivit pentru evenimente private, corporate și concerte, cu repertoriu adaptat publicului și momentului.",
   image: "/parteneri/ioana-ignat.jpg",
@@ -240,7 +240,7 @@ const PARTNERS: Partner[] = [
   name: "Pepe",
   city: "București",
   category: "Artiști",
-  priority: 15,
+  priority: 16,
   description:
     "Pepe — artist cu hituri cunoscute și show live energic, potrivit pentru evenimente private, corporate și festivaluri. Repertoriu pop/latin, interacțiune bună cu publicul și program adaptabil (format eveniment). Booking: 0722 825 860.",
   image: "/parteneri/pepe.jpg",
@@ -325,7 +325,7 @@ const PARTNERS: Partner[] = [
   name: "Elena Ionescu",
   city: "București",
   category: "Artiști",
-  priority: 16,
+  priority: 17,
   description:
     "Elena Ionescu — artistă pop (ex-Mandinga) cu show live energic și repertoriu potrivit pentru evenimente private, corporate și festivaluri.",
   image: "/parteneri/elena-ionescu.jpg",
