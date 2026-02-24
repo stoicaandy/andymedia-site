@@ -256,6 +256,27 @@ const PARTNERS: Partner[] = [
   youtubeEmbed: "https://youtu.be/3RcKxlbcXmY",
 },
 {
+  id: "nico",
+  name: "NICO",
+  city: "Ploiești",
+  category: "Artiști",
+  priority: 15,
+  description:
+    "NICO — una dintre cele mai puternice voci din România, artistă cu carieră solidă și prestație live impecabilă. Repertoriu pop / soul cu impact, potrivit pentru evenimente corporate, festivaluri și apariții speciale, cu interpretare matură și prezență scenică puternică.",
+  image: "/parteneri/nico-iasi.jpg",
+  tags: ["artist", "live", "pop", "soul", "evenimente", "corporate", "festival", "show"],
+  links: {
+    website: "https://www.nicomusic.ro/",
+    facebook: "https://www.facebook.com/nicomateiofficial/?locale=ro_RO",
+    youtube: "https://www.youtube.com/@nicomusicromania",
+    spotify: "https://open.spotify.com/artist/3v8u4oR0xMUsv3tP8K5Q2S",
+    instagram: "https://www.instagram.com/nicomateiofficial/",
+    contact:
+      "https://wa.me/40722456483?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Mul%C8%9Bumesc%21",
+  },
+  youtubeEmbed: "https://youtu.be/px67CT-_BSs",
+},
+{
   id: "bogdan-alin-ota",
   name: "Bogdan Alin Ota",
   city: "Bacău",
