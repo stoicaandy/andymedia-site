@@ -10,7 +10,6 @@ import { Analytics } from "@vercel/analytics/react";
 const OG_IMAGE_PATH = "/og/schela-lumini-iasi.jpg";
 
 export const metadata: Metadata = {
-  // OG + canonical absolute corect (prod / preview)
   metadataBase: new URL(SITE_URL),
 
   title: {
@@ -21,13 +20,10 @@ export const metadata: Metadata = {
   description:
     "ANDYmedia — producție tehnică pentru evenimente: sunet, lumini, LED, scenă, broadcast. Execuție stabilă, fără stres.",
 
-  alternates: {
-    canonical: "/",
-  },
+  // IMPORTANT: NU pune canonical aici (altfel se moștenește greșit pe toate paginile)
 
   openGraph: {
     type: "website",
-    url: "/",
     siteName: SITE.brand,
     title: SITE.brand,
     description:
@@ -53,7 +49,6 @@ export const metadata: Metadata = {
     images: [OG_IMAGE_PATH],
   },
 
-  // Extra meta pentru compat (fără fb:app_id aici)
   other: {
     "og:image:secure_url": new URL(OG_IMAGE_PATH, SITE_URL).toString(),
     "og:image:type": "image/jpeg",
@@ -81,8 +76,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
-
-        {/* Vercel Analytics */}
         <Analytics />
       </body>
     </html>

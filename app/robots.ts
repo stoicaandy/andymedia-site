@@ -1,21 +1,9 @@
-// app/robots.ts
 import type { MetadataRoute } from "next";
-import { SITE } from "@/app/data/site";
-
-const siteUrl =
-  (process.env.NEXT_PUBLIC_SITE_URL &&
-    process.env.NEXT_PUBLIC_SITE_URL.trim()) ||
-  SITE.url;
+import { SITE_URL } from "@/app/data/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-      },
-    ],
-    sitemap: `${siteUrl.replace(/\/$/, "")}/sitemap.xml`,
-    host: siteUrl.replace(/\/$/, ""),
+    rules: [{ userAgent: "*", allow: "/" }],
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Portofoliu | ANDYmedia",
   description:
     "Portofoliu ANDYmedia: evenimente corporate, nunți, spectacole, conferințe. Sonorizare, lumini, LED, DJ, broadcast – Iași și la nivel național.",
+  alternates: { canonical: "/portofoliu" },
+  openGraph: {
+    title: "Portofoliu | ANDYmedia",
+    description:
+      "Portofoliu ANDYmedia: evenimente corporate, nunți, spectacole, conferințe. Sonorizare, lumini, LED, DJ, broadcast – Iași și la nivel național.",
+    url: "/portofoliu",
+    type: "website",
+    locale: "ro_RO",
+  },
 };
 
 export default function Page() {
