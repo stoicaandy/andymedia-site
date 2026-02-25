@@ -188,7 +188,7 @@ const PARTNERS: Partner[] = [
     website: "https://www.carlasdreams.com/",
     facebook: "https://www.facebook.com/carlasdreamss/",
     instagram: "https://www.instagram.com/carlasdreams/",
-    youtube: "https://www.youtube.com/channel/UCCJAzWoNFWPhIFXo-j17EPw",
+    youtube: "https://www.youtube.com/@CarlasDreamsOfficial",
     tiktok: "https://www.tiktok.com/@carlasdreams",
     contact:
       "https://wa.me/40746666313?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Fora%C8%99%2Finterval).%20Mul%C8%9Bumesc%21",
