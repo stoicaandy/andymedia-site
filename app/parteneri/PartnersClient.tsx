@@ -268,9 +268,10 @@ const PARTNERS: Partner[] = [
   links: {
     website: "https://www.nicomusic.ro/",
     facebook: "https://www.facebook.com/nicomateiofficial/?locale=ro_RO",
-    youtube: "https://www.youtube.com/@nicomusicromania",
-    spotify: "https://open.spotify.com/artist/3v8u4oR0xMUsv3tP8K5Q2S",
-    instagram: "https://www.instagram.com/nicomateiofficial/",
+    youtube: "www.youtube.com/@nicomatei",
+    spotify: "https://open.spotify.com/artist/44l7AurZtAVbIdB81Y7IGZ",
+    instagram: "https://www.instagram.com/nicomusic.ro/",
+    tiktok: "https://www.tiktok.com/@nicomatei",
     contact:
       "https://wa.me/40722456483?text=Salut%21%20ANDYmedia%20a%20recomandat%20contactul%20dumneavoastr%C4%83.%20V%C4%83%20rog%20s%C4%83-mi%20trimite%C8%9Bi%20disponibilitatea%20%C8%99i%20o%20ofert%C4%83%20orientativ%C4%83%20pentru%20eveniment%20(data%2Foras%2Finterval).%20Mul%C8%9Bumesc%21",
   },
