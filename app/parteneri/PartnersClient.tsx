@@ -291,7 +291,7 @@ const PARTNERS: Partner[] = [
     website: "https://www.bogdanota.com/",
     facebook: "https://www.facebook.com/BogdanOtaOfficial/",
     instagram: "https://www.instagram.com/bogdan_ota/",
-    youtube: "https://www.youtube.com/@BogdanOtaOfficial",
+    youtube: "https://www.youtube.com/@BogdanOta",
     spotify: "https://open.spotify.com/artist/1O8tCRHNXK1i6SL7VNcGca",
     // Apple Music nu are câmp dedicat în tipul vostru; îl punem în "website" de regulă,
     // dar ca să nu stricăm tipurile, îl punem ca link suplimentar în descriere/website.
