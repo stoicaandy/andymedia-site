@@ -268,7 +268,7 @@ const PARTNERS: Partner[] = [
   links: {
     website: "https://www.nicomusic.ro/",
     facebook: "https://www.facebook.com/nicomateiofficial/?locale=ro_RO",
-    youtube: "www.youtube.com/@nicomatei",
+    youtube: "http://www.youtube.com/@nicomatei",
     spotify: "https://open.spotify.com/artist/44l7AurZtAVbIdB81Y7IGZ",
     instagram: "https://www.instagram.com/nicomusic.ro/",
     tiktok: "https://www.tiktok.com/@nicomatei",
