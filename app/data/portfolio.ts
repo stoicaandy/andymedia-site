@@ -90,11 +90,15 @@ export const portfolioItems: PortfolioItem[] = [
     media: {
       folder: "portf4",
       photosCount: 5,
-      hasVideo: false,
+
+      // ✅ activează video în card + folosește link extern
+      hasVideo: true,
+      videoUrl: "https://www.andymusic.ro/gala-k1-iasi.mp4",
+
       poster: false,
 
-      // ✅ exemplu YouTube DOAR în lightbox:
-      // youtubeId: "dQw4w9WgXcQ",
+      // ✅ dacă vrei un poster dedicat: pune public/portofoliu/portf4/poster.jpg și schimbă:
+      // poster: true,
     },
   },
 ];
